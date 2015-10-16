@@ -1,6 +1,6 @@
 {
   "name": "GapminderWorldVizabi",
-  "version": "0.0.2",
+  "version": "0.8.3",
   "description": "Gapminder World Vizabi",
   "repository": {
     "type": "git",
@@ -50,6 +50,6 @@
     "morgan": "1.6.1",
     "node-bourbon": "4.2.3",
     "redis": "2.1.0",
-    "vizabi": "0.8.2-1"
+    "vizabi": "0.8.3"
   }
 }
