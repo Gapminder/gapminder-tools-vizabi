@@ -204,11 +204,11 @@ module.exports = function (app) {
   app.use('/api/static/data', compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
   /* APP Routes */
   app.get('/', function (req, res) {
-    return res.sendfile('./client/dist' + BASEURL + 'redirect.html');
+    return res.sendFile(path.resolve('./client/dist' + BASEURL + 'redirect.html'));
   });
 
   app.get('*', function (req, res) {
-    return res.sendfile('./client/dist' + BASEURL + 'index.html');
+    return res.sendFile(path.resolve('./client/dist' + BASEURL + 'index.html'));
     // load the single view file
   });
 };
