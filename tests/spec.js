@@ -1,9 +1,4 @@
 describe('tools', function () {
- /* beforeEach(function() {
-    module('app')
-  });*/
-
-
   afterEach(function () {
     browser.manage().logs().get('browser').then(function (browserLog) {
       for (var i = 0; i < browserLog.length; i++) {
@@ -12,12 +7,12 @@ describe('tools', function () {
     });
   });
 
-  it('bubbles', function () {
+  it('bubbles & mountain', function () {
+    var browser2 = browser.forkNewDriverInstance();
+    var browser3 = browser.forkNewDriverInstance();
     browser.get('http://localhost:8080/tools/bubbles');
-  });
-
-  it('mountain', function () {
-    browser.get('http://localhost:8080/tools/mountain');
+    browser2.get('http://localhost:8080/tools/mountain');
+    browser3.get('http://localhost:8080/tools');
   });
 
 
