@@ -4,7 +4,7 @@ FROM ubuntu:14.04
 RUN apt-get update
 
 # tools
-RUN apt-get install linux-libc-dev
+RUN apt-get install -y linux-libc-dev libkrb5-dev
 RUN apt-get install -y curl python-virtualenv
 
 # ruby and sass
