@@ -7,44 +7,43 @@ var webdriverio = require('webdriverio');
 
 
 var caps = {
-  name: 'gapminder.org',
+  name: 'Gapminder',
   build: '1.0',
 
-  browser_api_name: 'FF38',
+  browser_api_name: 'Chrome45x64',
   os_api_name: 'Mac10.10',
 
-  screen_resolution: '1600x1200',
+  screen_resolution: '1024x768',
   record_video: "true",
   record_network: "true",
-  record_snapshot: "true",
+  record_snapshot: "false",
 
-  browserName: "firefox",
+  browserName: "chrome",
   username: "natali.abyss@gmail.com",
   password: "uc97483600d000c1"
 };
 
-/*var options = {
+var options = {
   host: 'hub.crossbrowsertesting.com',
   port: 80,
   desiredCapabilities: caps
 };
-//*/ var options = {desiredCapabilities: {browserName: 'firefox'}};
+// var options = {desiredCapabilities: {browserName: 'firefox'}};
 
 var client = webdriverio.remote(options);
 
 client
   .init()
-  //.url('http://www.gapminder.org/tools/')
+  .url('http://www.gapminder.org/tools/')
   .url('http://www.gapminder.org/tools/bubbles')
-  //.url('http://www.gapminder.org/tools/mountain')
-
+  .url('http://www.gapminder.org/tools/mountain')
 
   .log('browser').then(function (browserLog) {
-    console.log('log1', browserLog.value.length);
+    console.log('log length:', browserLog.value.length);
 
     for (var i = 0; i < browserLog.value.length; i++) {
-      expect(browserLog.value[i].message).to.not.match(/Error/);
       //expect(browserLog.value[i].message).to.match(/^((?!Error)[\s\S])*$/);
+      expect(browserLog.value[i].message).to.not.match(/Error/);
     }
   })
 
