@@ -147,7 +147,7 @@ var wConfig = {
         }
       ]
     },
-    devtool: 'eval',
+    devtool: 'sourcemaps',
     proxy: {
       '*/api/*': 'http://localhost:' + (process.env.PORT || '3001')
     }
@@ -156,4 +156,118 @@ var wConfig = {
 
 wConfig.pushPlugins();
 
-module.exports = wConfig;
+var chromeAppConf = {
+  debug: true,
+  profile: true,
+  cache: true,
+  devtool:'sourcemaps',
+  context: path.join(__dirname, './chrome-app/src'),
+  entry: {
+    'vizabi-tools': './js/app.js',
+    angular: ['angular', 'angular-route', 'angular-touch', 'd3']
+  },
+  output: {
+    path: './chrome-app/dist/tools',
+    publicPath: config.publicPath,
+    filename: 'components/[name]-[hash:6].js',
+    chunkFilename: 'components/[name]-[hash:6].js'
+  },
+  resolve: {
+    root: [absSrc],
+    modulesDirectories: ['./components', 'node_modules'],
+    extensions: ['', '.js', '.png', '.gif', '.jpg']
+  },
+  module: {
+    //noParse: new RegExp(require.resolve("vizabi"), 'ig'),
+    loaders: [
+      {
+        test: /vizabi\.js/,
+        loader: 'imports?this=>window,d3'
+      },
+      {
+        test: /\.scss/,
+        //loader: 'style!css!sass?includePaths[]=' + bourbon
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc + '!sass-loader?includePaths[]=' + bourbon)
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc)
+        //loader: 'style!css'//?root=' + absSrc
+      },
+      {
+        test: /.*\.(gif|png|jpe?g)$/i,
+        loaders: [
+          'file?hash=sha512&digest=hex&name=[path][name].[ext]',
+          'image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}'
+        ]
+      },
+      {
+        test: /\.html$/,
+        loader: 'html?name=[path][name].[ext]&root=' + absSrc
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream'
+      },
+      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file?name=[path][name].[ext]'},
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'
+      }
+    ]
+  },
+  plugins: [
+    new Clean(['./chrome-app/dist/tools']),
+    new webpack.DefinePlugin({
+      _isDev: !isProduction
+    }),
+    new ExtractTextPlugin('[name]-[hash:6].css'),
+    new HtmlWebpackPlugin({
+      filename: config.index,
+      template: path.join('./chrome-app/src', config.template),
+      chunks: ['angular', 'vizabi-tools'],
+      minify: false
+    }),
+    new HtmlWebpackPlugin({
+      filename: '404.html',
+      template: path.join('./chrome-app/src', '404.html'),
+      chunks: ['angular', 'vizabi-tools'],
+      minify: false
+    })
+  ],
+  stats: {colors: true, progress: true, children: false}
+  //devServer: {
+  //  contentBase: './chrome-ap/dist/tools',
+  //  publicPath: config.publicPath,
+  //  noInfo: true,
+  //  hot: true,
+  //  inline: true,
+  //  historyApiFallback: {
+  //    index: config.index,
+  //    logger: console.log.bind(console),
+  //    verbose: true,
+  //    rewrites: [
+  //      {
+  //        from: /^\/$|^\/tools.*$/,
+  //        to: function(context) {
+  //          return '/tools/';
+  //        }
+  //      }
+  //    ]
+  //  },
+  //  devtool: 'sourcemaps',
+  //  proxy: {
+  //    '*/api/*': 'http://localhost:' + (process.env.PORT || '3001')
+  //  }
+  //}
+};
+
+module.exports = [wConfig, chromeAppConf];
