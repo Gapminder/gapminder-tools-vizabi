@@ -10,5 +10,5 @@ exports.config = {
     'browserName': 'firefox'
   }],
 
-  specs: ['spec.js']
+  specs: ['protractorSpec.js']
 };

@@ -5,13 +5,12 @@ var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var expect = require('chai').expect;
 var webdriverio = require('webdriverio');
 
-
 var caps = {
   name: 'Gapminder',
   build: '1.0',
 
   browser_api_name: 'Chrome45x64',
-  os_api_name: 'Mac10.10',
+  os_api_name: 'Mac10.11',
 
   screen_resolution: '1024x768',
   record_video: "true",

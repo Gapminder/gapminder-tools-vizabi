@@ -15,5 +15,4 @@ describe('tools', function () {
     browser3.get('http://localhost:8080/tools');
   });
 
-
 });
