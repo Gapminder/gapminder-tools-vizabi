@@ -29,6 +29,10 @@ sudo apt-get install redis-server
  ```bash
  npm i -g webpack webpack-dev-server
  ```
+- Install electron
+```bash
+npm i electron-prebuilt -g
+```
 
 ## Installation
 
@@ -36,6 +40,7 @@ sudo apt-get install redis-server
 2. Make sure mongoDB is running: `mongo`
 3. Start the server: `npm start`
 4. View in browser at `http://localhost:8080/tools/`
+5. Run electron app: `npm run electron`
 
 ## Development
 
@@ -50,6 +55,22 @@ MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-de
 # second terminal
 npm run dev
 # open http://localhost:8080/tools/bubbles
+```
+6. Run electron app with environment
+```bash
+# 1) one terminal or from webstorm
+MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
+
+# 2) second terminal - one of 3 variants for running electron app
+# 2.1) OR (development, by default port = 3001, host_url = http://localhost, load_url = '')
+npm run electron-dev
+
+# 2.2) OR (for using custom environment)
+npm run build
+NODE_ENV=development electron .
+
+# 2.3) OR (for production, check load_url OR port + host_url variables)
+npm run electron
 ```
 
 ###Troubleshooting:
