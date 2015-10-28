@@ -56,6 +56,19 @@ npm run dev
 
 If an error for redis is displayed, make sure it's running: `redis-cli`
 
+## Chrome app
+
+### Create build
+`npm run build` - creates static dev build in `./chrome-app` directory
+
+### Run app in Chrome
+1. Create build
+2. Open `chrome://flags` page, find "Experimental Extension APIs", and click its "Enable" link. Restart Chrome
+3. Open `chrome://extensions/` page
+4. Find `Developer mode checkbox` and select it
+5. Click the Load unpacked extension button, navigate to your app's folder and click OK
+6. Run the app on `chrome://extensions/` page
+
 ## Update vizabi
 ```bash
 npm i vizabi@latest -S
