@@ -9,6 +9,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 
 var bourbon = require('node-bourbon').includePaths;
+var _ = require('lodash');
 
 var config = {
   template: 'index.html',
@@ -17,6 +18,9 @@ var config = {
   dest: './client/dist/tools',
   publicPath: '/tools/'
 };
+
+var chromeAppPaths = _.clone(config);
+chromeAppPaths.dest = './chrome-app/tools';
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -156,4 +160,33 @@ var wConfig = {
 
 wConfig.pushPlugins();
 
-module.exports = wConfig;
+var chromeAppConfig = _.clone(wConfig);
+chromeAppConfig.devServer = null;
+chromeAppConfig.output = {
+  path: path.join(__dirname, chromeAppPaths.dest),
+  publicPath: chromeAppPaths.publicPath,
+  filename: 'components/[name]-[hash:6].js',
+  chunkFilename: 'components/[name]-[hash:6].js'
+};
+//use sourcemaps because we cant use eval in chrome app
+chromeAppConfig.devtool = 'sourcemaps';
+chromeAppConfig.plugins = [
+  new Clean([chromeAppPaths.dest]),
+  new webpack.DefinePlugin({
+    _isDev: !isProduction
+  }),
+  new ExtractTextPlugin('[name]-[hash:6].css'),
+  new HtmlWebpackPlugin({
+    filename: config.index,
+    template: path.join(config.src, config.template),
+    chunks: ['angular', 'vizabi-tools'],
+    minify: false
+  }),
+  new HtmlWebpackPlugin({
+    filename: '404.html',
+    template: path.join(config.src, '404.html'),
+    chunks: ['angular', 'vizabi-tools'],
+    minify: false
+  })
+];
+module.exports = [wConfig, chromeAppConfig];

@@ -1,0 +1,20 @@
+{
+  "name": "Gapminder-tools-vizabi",
+  "description": "",
+  "version": "0.1",
+  "offline_enabled": true,
+  "manifest_version": 2,
+  "permissions": [
+    "http://localhost:3001/*"
+  ],
+  "sandbox": {
+    "pages": ["./tools/index.html"]
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  }
+}
+
+
