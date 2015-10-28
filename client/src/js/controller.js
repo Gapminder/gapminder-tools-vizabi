@@ -3,8 +3,12 @@ var Vizabi = require('vizabi');
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
-      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
+      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', 'config',
+      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, config) {
+        console.log('start controller');
+        console.log(config);
+
+
         var placeholder = document.getElementById('vizabi-placeholder');
         $scope.loadingError = false;
         $scope.tools = {};
@@ -12,13 +16,16 @@ module.exports = function (app) {
         $scope.relatedItems = [];
 
         //there are errors in Vizabi, I think because we have to use Hashbang mode in order to navigation works
+        //@todo: remove it when bug would be fixed
+        if (!config.isChromeApp) {
+          //start off by getting all items
+          vizabiItems.getItems().then(function (items) {
+            $scope.tools = items;
+            $scope.validTools = Object.keys($scope.tools);
+            updateGraph();
+          });
+        }
 
-        //start off by getting all items
-        //vizabiItems.getItems().then(function (items) {
-        //  $scope.tools = items;
-        //  $scope.validTools = Object.keys($scope.tools);
-        //  updateGraph();
-        //});
 
         var prevSlug = null;
         $scope.$root.$on('$routeChangeStart', function(event, state){

@@ -9,6 +9,7 @@ var ngTouch = require('angular-touch');
 require('./vizabi-ws-reader');
 var app = angular.module('gapminderTools', [ngRoute, ngTouch], ['$provide', function($provide) {
   //@see: https://github.com/angular/angular.js/issues/11932
+
   $provide.decorator('$window', function($delegate) {
     $delegate.history = null;
     return $delegate;

@@ -117,6 +117,9 @@ var wOptions = {
       template: path.join(config.src, '404.html'),
       chunks: ['angular', 'vizabi-tools'],
       minify: true
+    }),
+    new webpack.DefinePlugin({
+      IS_CHROME_APP: false
     })
   ],
   pushPlugins: function () {
@@ -187,6 +190,9 @@ var chromeAppOptions = {
       template: path.join(config.src, '404.html'),
       chunks: ['angular', 'vizabi-tools'],
       minify: false
+    }),
+    new webpack.DefinePlugin({
+      IS_CHROME_APP: true
     })
   ]
 };

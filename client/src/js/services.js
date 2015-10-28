@@ -77,7 +77,7 @@ module.exports = function (app) {
 
 
   app
-    .factory("vizabiItems", ['$http', function ($http) {
+    .factory("vizabiItems", ['$http', 'config', function ($http, config) {
 
       return {
         /**
@@ -88,7 +88,7 @@ module.exports = function (app) {
           //in chrome app we have to use full url, (or maybe use interceptor?)
           //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
           //if not - use only path (e.g. /api/item)
-          return $http.get('http://localhost:3001/tools/api/item')
+          return $http.get(config.apiUrl + '/item')
             .then(function (result) {
               var items = {}, i, s;
               for (i = 0, s = result.data.length; i < s; i++) {
@@ -103,8 +103,8 @@ module.exports = function (app) {
 
   app
     .factory('menuFactory', [
-      '$location', '$q', '$http',
-      function ($location, $q, $http) {
+      '$location', '$q', '$http', 'config',
+      function ($location, $q, $http, config) {
 
         return {
           cached: [],
@@ -118,7 +118,7 @@ module.exports = function (app) {
             //in chrome app we have to use full url, (or maybe use interceptor?)
             //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
             //if not - use only path (e.g. /api/item)
-            return $http.get('http://localhost:3001/tools/api/menu')
+            return $http.get(config.apiUrl + '/menu')
               .then(function (result) {
                 if (result.status === 200) {
                   _this.cached = result.data.children;
