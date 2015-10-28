@@ -85,7 +85,10 @@ module.exports = function (app) {
          */
         getItems: function () {
           //return the promise directly.
-          return $http.get(baseHref + 'api/item')
+          //in chrome app we have to use full url, (or maybe use interceptor?)
+          //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
+          //if not - use only path (e.g. /api/item)
+          return $http.get('http://localhost:3001/tools/api/item')
             .then(function (result) {
               var items = {}, i, s;
               for (i = 0, s = result.data.length; i < s; i++) {
@@ -112,7 +115,10 @@ module.exports = function (app) {
           getMenu: function () {
             //return the promise directly.
             var _this = this;
-            return $http.get(baseHref + 'api/menu')
+            //in chrome app we have to use full url, (or maybe use interceptor?)
+            //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
+            //if not - use only path (e.g. /api/item)
+            return $http.get('http://localhost:3001/tools/api/menu')
               .then(function (result) {
                 if (result.status === 200) {
                   _this.cached = result.data.children;
