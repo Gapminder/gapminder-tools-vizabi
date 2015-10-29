@@ -60,5 +60,13 @@ If an error for redis is displayed, make sure it's running: `redis-cli`
 ```bash
 npm i vizabi@latest -S
 ```
-###Obs:
-*if you change default configuration for mongoDB, you need to configure `server/app/config/database.js` accordingly*
+## Enviropments
+
+**Develop**
+http://dev-tools.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
+
+**Stage**
+https://stage-tools.gapminderdev.org/ - released once every week, usually
+
+**Production (live)**
+http://www.gapminder.org/tools/
