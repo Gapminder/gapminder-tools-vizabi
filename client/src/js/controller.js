@@ -8,7 +8,6 @@ module.exports = function (app) {
         console.log('start controller');
         console.log(config);
 
-
         var placeholder = document.getElementById('vizabi-placeholder');
         $scope.loadingError = false;
         $scope.tools = {};
@@ -17,14 +16,14 @@ module.exports = function (app) {
 
         //there are errors in Vizabi, I think because we have to use Hashbang mode in order to navigation works
         //@todo: remove it when bug would be fixed
-        if (!config.isChromeApp) {
+        //if (!config.isChromeApp) {
           //start off by getting all items
           vizabiItems.getItems().then(function (items) {
             $scope.tools = items;
             $scope.validTools = Object.keys($scope.tools);
             updateGraph();
           });
-        }
+        //}
 
 
         var prevSlug = null;

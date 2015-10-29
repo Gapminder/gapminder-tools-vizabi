@@ -39,8 +39,8 @@ module.exports = function (app) {
   }
 
   app
-    .factory("vizabiFactory", [
-      function () {
+    .factory("vizabiFactory", ['config',
+      function (config) {
         return {
           /**
            * Render Vizabi
@@ -51,12 +51,26 @@ module.exports = function (app) {
           render: function (tool, placeholder, options) {
             var loc = window.location.toString();
             var hash = null;
-            if (loc.indexOf('#') >= 0) {
-              hash = loc.substring(loc.indexOf('#') + 1);
+            console.log('loc:', loc);
+            if (config.isChromeApp) {
+              var pos = -1;
+              var  hashtagCount = 0;
+              while ((pos = loc.indexOf('#', pos + 1)) !== -1) {
+                hashtagCount++;
+              }
+              if (hashtagCount >= 2) {
+                hash = loc.substring(loc.lastIndexOf('#') + 1);
+              }
+            } else {
+              if (loc.indexOf('#') >= 0) {
+                hash = loc.substring(loc.indexOf('#') + 1);
+              }
             }
 
             if (hash) {
+              console.log('hash:', hash);
               var str = encodeURI(decodeURIComponent(hash));
+              console.log('str:', str);
               var state = urlon.parse(str);
               options.language = {};
               options.language.id = state.id || 'en';
