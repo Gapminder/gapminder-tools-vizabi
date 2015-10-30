@@ -23,6 +23,7 @@ var chromeAppPaths = _.clone(config);
 chromeAppPaths.dest = './chrome-app/tools';
 
 var isProduction = process.env.NODE_ENV === 'production';
+var isElectronApp = process.env.IS_ELECTRON_APP;
 
 var absSrc = path.join(__dirname, config.src);
 var absDest = path.join(__dirname, config.dest);
@@ -103,7 +104,8 @@ var wOptions = {
   plugins: [
     new Clean([config.dest]),
     new webpack.DefinePlugin({
-      _isDev: !isProduction
+      _isDev: !isProduction,
+      _isElectronApp: isElectronApp
     }),
     new ExtractTextPlugin('[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
@@ -118,9 +120,6 @@ var wOptions = {
       chunks: ['angular', 'vizabi-tools'],
       minify: true
     }),
-    new webpack.DefinePlugin({
-      IS_CHROME_APP: false
-    })
   ],
   pushPlugins: function () {
     if (!isProduction) {
@@ -190,9 +189,6 @@ var chromeAppOptions = {
       template: path.join(config.src, '404.html'),
       chunks: ['angular', 'vizabi-tools'],
       minify: false
-    }),
-    new webpack.DefinePlugin({
-      IS_CHROME_APP: true
     })
   ]
 };

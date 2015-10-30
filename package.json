@@ -14,7 +14,7 @@
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "prestart": "npm run build",
     "start": "node server/server.js",
-    "electron-dev": "npm run build && NODE_ENV=development electron .",
+    "electron-dev": "IS_ELECTRON_APP=true npm run build && NODE_ENV=development electron .",
     "electron": "npm run deploy && NODE_ENV=production electron ."
   },
   "devDependencies": {
