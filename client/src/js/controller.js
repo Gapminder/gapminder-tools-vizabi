@@ -14,17 +14,12 @@ module.exports = function (app) {
         $scope.validTools = [];
         $scope.relatedItems = [];
 
-        //there are errors in Vizabi, I think because we have to use Hashbang mode in order to navigation works
-        //@todo: remove it when bug would be fixed
-        //if (!config.isChromeApp) {
-          //start off by getting all items
-          vizabiItems.getItems().then(function (items) {
-            $scope.tools = items;
-            $scope.validTools = Object.keys($scope.tools);
-            updateGraph();
-          });
-        //}
-
+        //start off by getting all items
+        vizabiItems.getItems().then(function (items) {
+          $scope.tools = items;
+          $scope.validTools = Object.keys($scope.tools);
+          updateGraph();
+        });
 
         var prevSlug = null;
         $scope.$root.$on('$routeChangeStart', function(event, state){
@@ -71,12 +66,20 @@ module.exports = function (app) {
 
             Vizabi.clearInstances();
 
+            if (config.isChromeApp) {
+              //set protocol
+              tool.opts.data.path = 'http:' + tool.opts.data.path;
+              for (var i=0; i < tool.relateditems.length; i++) {
+                tool.relateditems[i].image = 'http:'+tool.relateditems[i].image;
+              }
+            }
             $scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts);
             $scope.relatedItems = tool.relateditems;
             $scope.$apply();
 
             //send to google analytics
-            $window.ga('send', 'pageview', {page: $location.url()});
+            //@todo:does ga needed in chrome/electron?
+            //$window.ga('send', 'pageview', {page: $location.url()});
           });
         }
 
