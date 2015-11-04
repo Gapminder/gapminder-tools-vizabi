@@ -13,7 +13,7 @@
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "prestart": "npm run build",
     "start": "node server/server.js",
-    "webdriver": "SELENIUM_REMOTE_URL='http://localhost:4444/wd/hub' node ./tests/selenium.config.js"
+    "test": "protractor ./tests/protractor.conf.js || true"
   },
   "devDependencies": {
     "chai": "3.4.0",
