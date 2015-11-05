@@ -39,8 +39,8 @@ module.exports = function (app) {
   }
 
   app
-    .factory("vizabiFactory", ['config',
-      function (config) {
+    .factory("vizabiFactory", ['config', '$location',
+      function (config, $location) {
         return {
           /**
            * Render Vizabi
@@ -80,8 +80,14 @@ module.exports = function (app) {
             options.bind = options.bind || {};
             options.bind.historyUpdate = onHistoryUpdate;
             function onHistoryUpdate(eventName, state) {
+              if (config.isChromeApp) {
+                return;
+              }
               formatDates(state);
               window.location.hash = urlon.stringify(state);
+              //if hash must be in chrome app - it should be done like this,
+              //because window.location is unsupported in chrome app
+              //$location.hash(urlon.stringify(state));
             }
 
             return Vizabi(tool, placeholder, options);
@@ -99,9 +105,6 @@ module.exports = function (app) {
          */
         getItems: function () {
           //return the promise directly.
-          //in chrome app we have to use full url, (or maybe use interceptor?)
-          //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
-          //if not - use only path (e.g. /api/item)
           return $http.get(config.apiUrl + '/item')
             .then(function (result) {
               var items = {}, i, s;

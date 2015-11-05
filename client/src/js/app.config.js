@@ -19,6 +19,7 @@ module.exports = function (app) {
           +currentImgSrcSanitizationWhitelist.toString().slice(-1);
 
         $compileProvider.imgSrcSanitizationWhitelist(newImgSrcSanitizationWhiteList);
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
       }
 
       $routeProvider
