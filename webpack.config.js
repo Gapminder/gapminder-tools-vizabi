@@ -36,7 +36,8 @@ var baseConfig = {
   context: path.join(__dirname, config.src),
   entry: {
     'vizabi-tools': './js/app.js',
-    angular: ['angular', 'angular-route', 'angular-touch', 'd3']
+    angular: ['angular', 'angular-route', 'angular-touch', 'd3'],
+    ga: './js/ga/ga.js'
   },
   output: {
     path: absDest,
@@ -181,12 +182,6 @@ var chromeAppOptions = {
     new HtmlWebpackPlugin({
       filename: config.index,
       template: path.join(config.src, config.template),
-      chunks: ['angular', 'vizabi-tools'],
-      minify: false
-    }),
-    new HtmlWebpackPlugin({
-      filename: '404.html',
-      template: path.join(config.src, '404.html'),
       chunks: ['angular', 'vizabi-tools'],
       minify: false
     })

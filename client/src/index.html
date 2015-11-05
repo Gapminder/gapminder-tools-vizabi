@@ -21,8 +21,14 @@
     <div class="menu-mobile" ng-click="navCollapsed = !navCollapsed"  ng-class="navCollapsed ? 'open' : '' ">
       <div class="icon"></div>
     </div>
-    <ul class="nav navbar-nav navbar-nav-left desktop" nav-expandable="" items="expandedItems"></ul>
-    <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
+    <ul class="nav navbar-nav navbar-nav-left desktop"
+        nav-expandable=""
+        ng-if="isWeb"
+        items="expandedItems"></ul>
+    <ul class="nav navbar-nav navbar-nav-left mobile"
+        ng-if="navCollapsed && isWeb"
+        nav-expandable=""
+        items="expandedItems"></ul>
   </div>
 
   <!--Content-->
@@ -30,7 +36,8 @@
 
   <!--More-->
   <div class="more">
-    <div class="related">
+    <div ng-if="isWeb"
+         class="related">
       <h2 class="heading-2">Related</h2>
       <ul class="related-items">
         <li class="related-item" ng-repeat="(key, related) in relatedItems track by $index">
@@ -74,21 +81,5 @@
 {% for (var chunk in o.htmlWebpackPlugin.files.js) { %}
 <script src="{%=o.htmlWebpackPlugin.files.js[chunk]%}"  charset="utf-8"></script>
 {% } %}
-
-<!--Inline JavaScript will not be executed in chrome app-->
-<!--<script>-->
-  <!--(function (i, s, o, g, r, a, m) {-->
-    <!--i['GoogleAnalyticsObject'] = r;-->
-    <!--i[r] = i[r] || function () {-->
-        <!--(i[r].q = i[r].q || []).push(arguments)-->
-      <!--}, i[r].l = 1 * new Date();-->
-    <!--a = s.createElement(o), m = s.getElementsByTagName(o)[0];-->
-    <!--a.async = 1;-->
-    <!--a.src = g;-->
-    <!--m.parentNode.insertBefore(a, m)-->
-  <!--})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');-->
-  <!--ga('create', 'UA-67908993-1', 'auto');-->
-<!--</script>-->
-
 </body>
 </html>

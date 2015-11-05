@@ -18,6 +18,7 @@ module.exports = function (app) {
           $scope.tools = {};
           $scope.validTools = [];
           $scope.relatedItems = [];
+          $scope.isWeb = !config.isElectronApp && !config.isChromeApp;
 
           //start off by getting all items
           vizabiItems.getItems().then(function (items) {
@@ -96,8 +97,11 @@ module.exports = function (app) {
             $scope.$apply();
 
             //send to google analytics
-            //@todo:does ga needed in chrome/electron?
-            //$window.ga('send', 'pageview', {page: $location.url()});
+            if (!config.isChromeApp && !config.isElectronApp) {
+              console.log('----------send to google');
+              $window.ga('send', 'pageview', {page: $location.url()});
+            }
+
           });
         }
 
