@@ -40,7 +40,9 @@ module.exports = function (app) {
             if (config.isChromeApp) {
               init();
             } else {
-              window.location.reload();
+              setTimeout(function () {
+                window.location.reload();
+              }, 1);
             }
             return;
           }
@@ -55,7 +57,13 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            window.location.reload();
+            if (config.isChromeApp) {
+              init();
+            } else {
+              setTimeout(function () {
+                window.location.reload();
+              }, 1);
+            }
             return;
           }
           console.log(window.location.hash);

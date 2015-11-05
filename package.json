@@ -1,10 +1,10 @@
 {
-  "name": "GapminderWorldVizabi",
+  "name": "GapminderToolsPage",
   "version": "0.8.3",
-  "description": "Gapminder World Vizabi",
+  "description": "Gapminder Tools Page",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gapminder/vizabi-gapminderworld"
+    "url": "http://gapminder.org/tools"
   },
   "author": "Arthur Camara",
   "main": ".electron.js",
@@ -54,6 +54,6 @@
     "morgan": "1.6.1",
     "node-bourbon": "4.2.3",
     "redis": "2.2.5",
-    "vizabi": "0.8.5"
+    "vizabi": "^0.8.6"
   }
 }
