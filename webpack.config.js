@@ -112,13 +112,13 @@ var wOptions = {
     new HtmlWebpackPlugin({
       filename: config.index,
       template: path.join(config.src, config.template),
-      chunks: ['angular', 'vizabi-tools'],
+      chunks: ['angular', 'vizabi-tools', 'ga'],
       minify: true
     }),
     new HtmlWebpackPlugin({
       filename: '404.html',
       template: path.join(config.src, '404.html'),
-      chunks: ['angular', 'vizabi-tools'],
+      chunks: ['angular', 'vizabi-tools', 'ga'],
       minify: true
     }),
   ],

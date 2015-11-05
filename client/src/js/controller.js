@@ -106,7 +106,6 @@ module.exports = function (app) {
 
             //send to google analytics
             if (!config.isChromeApp && !config.isElectronApp) {
-              console.log('----------send to google');
               $window.ga('send', 'pageview', {page: $location.url()});
             }
 
