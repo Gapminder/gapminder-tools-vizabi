@@ -18,5 +18,7 @@ pids
 logs
 results
 
+chrome-app/tools/*
+
 npm-debug.log
 node_modules
