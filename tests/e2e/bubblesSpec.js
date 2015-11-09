@@ -1,14 +1,16 @@
 describe('tools', function () {
   afterEach(function () {
+    browser.ignoreSynchronization = false;
     browser.manage().logs().get('browser').then(function (browserLog) {
       for (var i = 0; i < browserLog.length; i++) {
-        expect(browserLog[i].message).not.toMatch(/Error/);
+        expect(browserLog[i].message).not.toMatch(/^(Error)$/);
       }
     });
   });
 
   it('bubbles', function () {
-    browser.get('http://gapminder.org/tools/bubbles');
+    browser.ignoreSynchronization = true;
+    browser.get('http://gapminder.org/tools/bubbles', 30000);
   });
 
 });

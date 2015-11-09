@@ -2,8 +2,8 @@ exports.config = {
 
   sauceUser: "NataliSol",
   sauceKey: "b09d8f7f-01cd-403b-a8e5-84fdf39d0efd",
-
-  // seleniumAddress: 'http://localhost:4444/wd/hub',
+  //public: "public",
+  //seleniumAddress: 'http://localhost:4444/wd/hub',
   // sauceSeleniumAddress: 'http://localhost:4445/wd/hub',
 
   /*
@@ -13,9 +13,18 @@ exports.config = {
   multiCapabilities: [
     {
       browserName: "Android",
+      shardTestFiles: true,
       platform: "Linux",
       version: "4.3",
       name: "Android 4.3"
+    },
+    {
+      browserName: "Android",
+      shardTestFiles: true,
+      platform: "Linux",
+      version: "5.0",
+      name: "Android 5.0"
+
     },
     {
       browserName: "Android",
@@ -55,19 +64,23 @@ exports.config = {
       name: "Firefox OS X"
     },
     {
-      browserName: "iPhone",
-      platform: "OS X 10.8",
-      version: "6.1"
+      browserName: "Firefox",
+      platform: "Windows 7",
+      version: "41.0",
+      name: "Firefox Win 7"
     },
+
     {
       browserName: "iPhone",
       platform: "OS X 10.9",
-      version: "7.1"
+      version: "7.1",
+      name: "iPhone 7.1"
     },
     {
       browserName: "iPhone",
       platform: "OS X 10.10",
-      version: "8.1"
+      version: "8.1",
+      name: "iPhone 8.1"
     },
     {
       browserName: "iphone",
@@ -77,25 +90,31 @@ exports.config = {
     },
     {
       browserName: "opera",
-      platform: "Windows 7"
+      platform: "Windows 7",
+      name: "opera Win 7"
     },
     {
       browserName: "opera",
-      platform: "Linux"
+      platform: "Linux",
+      name: "opera Linux"
     },
     {
       browserName: "Safari",
       platform: "OS X 10.9",
-      version: "7"
+      version: "7",
+      name: "Safari 7"
     },
     {
       browserName: "Safari",
       platform: "OS X 10.10",
       version: "8",
+      name: "Safari 8",
       idleTimeout: 1000,
       commandTimeout: 600
     }
+
   ],
 
-  specs: ['./e2e/**/*Spec.js']
+   specs: ['./e2e/bubblesSpec.js']
+  //specs: ['./e2e/**/*Spec.js']
 };
