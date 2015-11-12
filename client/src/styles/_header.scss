@@ -13,11 +13,11 @@
     }
 
     &:after {
-        content: 'alpha version';
+        content: 'pre-alpha version';
         color: #FC6B38;
         display: block;
         position: absolute;
-        bottom: -40px;
+        bottom: 14px;
         z-index: 100;
         /* font-size: 12px; */
         right: 70px;
