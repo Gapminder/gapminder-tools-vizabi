@@ -1,7 +1,7 @@
 exports.config = {
 
-  sauceUser: "NataliSol",
-  sauceKey: "b09d8f7f-01cd-403b-a8e5-84fdf39d0efd",
+   sauceUser: "NataliSol",
+   sauceKey: "b09d8f7f-01cd-403b-a8e5-84fdf39d0efd",
   // seleniumAddress: 'http://localhost:4444/wd/hub',
 
   multiCapabilities: [
@@ -96,6 +96,7 @@ exports.config = {
       platform: "OS X 10.9",
       version: "7",
       name: "Safari 7",
+      maxDuration: 10800,
       idleTimeout: 1000,
       commandTimeout: 600,
       public: 'public',
@@ -106,20 +107,107 @@ exports.config = {
       platform: "OS X 10.10",
       version: "8",
       name: "Safari 8",
+      shardTestFiles: true,
+      maxDuration: 10800,
       idleTimeout: 1000,
       commandTimeout: 600,
       public: 'public',
       build: "build-14"
     },
     {
+      browserName: "Safari",
+      platform: "OS X 10.11",
+      version: "9.0",
+      name: "Safari 9",
+      shardTestFiles: true,
+      maxDuration: 10800,
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      build: "build-18"
+    },
+    {
+      browserName: 'Safari',
+      'appiumVersion': '1.4.14',
+      deviceName: 'iPhone 6',
+      deviceOrientation: 'portrait',
+      shardTestFiles: true,
+      platformVersion: '8.0',
+      platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      name: "iPhone v8.0"
+    },
+    {
       browserName: 'Safari',
       'appiumVersion': '1.4.13',
       deviceName: 'iPhone 6',
+      shardTestFiles: true,
       deviceOrientation: 'portrait',
       platformVersion: '8.1',
       platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
       public: 'public',
       name: "iPhone v8.1"
+    },
+    {
+      browserName: 'Safari',
+      'appiumVersion': '1.4.14',
+      deviceName: 'iPhone 6',
+      shardTestFiles: true,
+      deviceOrientation: 'portrait',
+      platformVersion: '8.2',
+      maxDuration: 10800,
+      platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      name: "iPhone v8.2"
+    },
+    {
+      browserName: 'Safari',
+      'appiumVersion': '1.4.14',
+      deviceName: 'iPhone 6',
+      shardTestFiles: true,
+      deviceOrientation: 'portrait',
+      platformVersion: '8.3',
+      platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      name: "iPhone v8.3"
+    },
+    {
+      browserName: 'Safari',
+      'appiumVersion': '1.4.14',
+      deviceName: 'iPhone 6',
+      shardTestFiles: true,
+      deviceOrientation: 'portrait',
+      platformVersion: '8.4',
+      duration: 400000,
+      platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      name: "iPhone v8.4"
+    }
+  ],
+  desiredCapabilities: [
+    {
+      browserName: 'Safari',
+      'appiumVersion': '1.4.14',
+      deviceName: 'iPhone 6',
+      shardTestFiles: true,
+      deviceOrientation: 'portrait',
+      platformVersion: '9.0',
+      maxDuration: 10800,
+      platformName: 'iOS',
+      idleTimeout: 1000,
+      commandTimeout: 600,
+      public: 'public',
+      name: "iPhone v9.0"
     }
   ],
   allScriptsTimeout: 11000,

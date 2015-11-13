@@ -3,7 +3,7 @@ describe('tools', function () {
     browser.ignoreSynchronization = false;
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
-      if (browser.browserName === 'safari' || browser.browserName === 'iOS') {
+      if (browser.browserName === 'iOS') {
         browser.manage().logs().get('crashlog').then(function (browserLog) {
           for (var i = 0; i < browserLog.length; i++) {
             expect(browserLog[i].message).not.toMatch(/^(Error)$/);
@@ -22,7 +22,10 @@ describe('tools', function () {
 
   it('bubbles', function () {
     browser.ignoreSynchronization = true;
-    browser.get('http://gapminder.org/tools/bubbles');
+    browser.sleep(5000);
+    //browser.get('http://gapminder.org/tools/bubbles');
+    browser.get('http://gapminder.org/tools/');
+    browser.sleep(5000);
   });
 
 });
