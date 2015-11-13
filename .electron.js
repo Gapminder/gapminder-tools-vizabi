@@ -33,12 +33,14 @@ app.on('ready', function() {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadUrl(LOAD_URL + '/tools/index.html');
+  //mainWindow.loadUrl(LOAD_URL + '/tools/index.html');
+  //mainWindow.loadUrl('./client/dist/tools/index.html');
+  mainWindow.loadUrl('file://' + __dirname + '/client/dist/tools/electronIndex.html');
 
   // Open the DevTools.
-  if (process.env.NODE_ENV === 'development') {
+  //if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools();
-  }
+  //}
 
   mainWindow.focus();
 

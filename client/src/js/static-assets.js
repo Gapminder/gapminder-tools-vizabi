@@ -19,3 +19,11 @@ require('../public/images/icons/menu/workshops.png');
 // tools
 require('../public/images/tools/bubblechart.png');
 require('../public/images/tools/mountainchart.png');
+
+if (typeof _isElectronApp !== 'undefined' && _isElectronApp) {
+  //json
+  require('../public/fixtures/mc_precomputed_shapes.json');
+  require('../public/fixtures/waffles/metadata.json');
+  require('../public/fixtures/translation/en.json');
+
+}

@@ -1,6 +1,6 @@
 'use strict';
 /*eslint no-process-env:0*/
-
+//@todo: app separate config object for ElectronApp
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
 var webpack = require('webpack');
@@ -41,14 +41,14 @@ var baseConfig = {
   },
   output: {
     path: absDest,
-    publicPath: config.publicPath,
+    publicPath: isElectronApp ? './' : config.publicPath,
     filename: 'components/[name]-[hash:6].js',
     chunkFilename: 'components/[name]-[hash:6].js'
   },
   resolve: {
     root: [absSrc],
     modulesDirectories: ['./components', 'node_modules'],
-    extensions: ['', '.js', '.png', '.gif', '.jpg']
+    extensions: ['', '.js', '.png', '.gif', '.jpg', '.json']
   },
   module: {
     //noParse: new RegExp(require.resolve("vizabi"), 'ig'),
@@ -94,10 +94,15 @@ var baseConfig = {
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'
+      },
+      {
+        test: /\.json(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=application/json'
       }
     ]
   },
-  stats: {colors: true, progress: true, children: false}
+  stats: {colors: true, progress: true, children: false},
+  target: isElectronApp ? 'atom' : 'web'
 };
 
 var wOptions = {
@@ -112,6 +117,12 @@ var wOptions = {
     new HtmlWebpackPlugin({
       filename: config.index,
       template: path.join(config.src, config.template),
+      chunks: ['angular', 'vizabi-tools', 'ga'],
+      minify: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'electronIndex.html',
+      template: path.join(config.src, 'electronIndex.html'),
       chunks: ['angular', 'vizabi-tools', 'ga'],
       minify: true
     }),

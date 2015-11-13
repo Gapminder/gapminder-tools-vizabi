@@ -90,6 +90,18 @@ module.exports = function (app) {
               //$location.hash(urlon.stringify(state));
             }
 
+            var fs = require('fs');
+            var path = require('path');
+            var graphData = JSON.parse(fs.readFileSync(path.join('client/src/public/convertcsv.json'), 'utf8'));
+
+            for (var i = 0; i < graphData.length; i++) {
+              graphData[i].time = graphData[i].time + '';
+            }
+
+            options.data.data = graphData;
+            options.data.reader = 'inline';
+            delete options.data.path;
+            console.log(options);
             return Vizabi(tool, placeholder, options);
           }
         };
@@ -104,15 +116,28 @@ module.exports = function (app) {
          * Get All Items
          */
         getItems: function () {
+          var promiseCb =  function  (result) {
+            var items = {}, i, s;
+            for (i = 0, s = result.data.length; i < s; i++) {
+              items[result.data[i].slug] = result.data[i];
+            }
+            return items;
+          };
+
+          if (config.isElectronApp) {
+            var promise = new Promise(function(resolve) {
+              var result = {
+                data: itemXhrResult
+              };
+              resolve(result);
+            });
+
+            return promise.then(promiseCb);
+          }
+
           //return the promise directly.
           return $http.get(config.apiUrl + '/item')
-            .then(function (result) {
-              var items = {}, i, s;
-              for (i = 0, s = result.data.length; i < s; i++) {
-                items[result.data[i].slug] = result.data[i];
-              }
-              return items;
-            });
+            .then(promiseCb);
         }
       };
 
@@ -137,6 +162,8 @@ module.exports = function (app) {
             //if not - use only path (e.g. /api/item)
             return $http.get(config.apiUrl + '/menu')
               .then(function (result) {
+                console.log('/menu result');
+                console.log(JSON.stringify(result.data));
                 if (result.status === 200) {
                   _this.cached = result.data.children;
                 }
@@ -162,3 +189,218 @@ module.exports = function (app) {
         };
       }]);
 };
+
+//temp data for Electron app
+var itemXhrResult = [
+  {
+    "_id":"55f70fd5dbbfabe3d6a2753f",
+    "description":"This graph shows the amount of people in the world across each income level.",
+    "opts":{
+      "data":{
+        "path":"//waffles.gapminderdev.org/api/graphs/stats/vizabi-tools",
+        "reader":"graph"
+      },
+      "ui":{
+        "buttons":[
+          "find",
+          "colors",
+          "stack",
+          "axesmc",
+          "show",
+          "fullscreen"
+        ],
+        "buttons_expand":[
+          "colors",
+          "find",
+          "stack"
+        ]
+      }
+    },
+    "tool":"MountainChart",
+    "slug":"mountain",
+    "category":"Tools",
+    //"image":"/tools/public/images/tools/mountainchart.png",
+    "image":"public/images/tools/mountainchart.png",
+    "title":"Mountain Chart",
+    "relateditems":[
+      {
+        "_id":"5600af4a188967b26265a73f",
+        "_relatedTo":[
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/how-many-are-rich-and-how-many-are-poor/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=399&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — Most are in between",
+        "title":"How many are rich and how many are poor?",
+        "__v":0
+      },
+      {
+        "_id":"560061d4fc0d7c00002110a4",
+        "title":"How Reliable is the World Population Forecast?",
+        "subtitle":"Short answer — Very reliable",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=136&preset=160x96&title=media&extension=.jpg",
+        "link":"http://www.gapminder.org/answers/how-reliable-is-the-world-population-forecast/",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ]
+      },
+      {
+        "_id":"5600ad4c188967b26265a73b",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/will-saving-poor-children-lead-to-overpopulation/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=409&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — No. The opposite.",
+        "title":"Will saving poor children lead to overpopulation?",
+        "__v":0
+      },
+      {
+        "_id":"5600ae2b188967b26265a73c",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/how-does-income-relate-to-life-expectancy/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=318&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — Rich people live longer",
+        "title":" How Does Income Relate to Life Expectancy?",
+        "__v":0
+      },
+      {
+        "_id":"5600ae64188967b26265a73d",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/how-did-babies-per-woman-change-in-the-world/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=125&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — It dropped",
+        "title":"How Did Babies per Woman Change in the World?",
+        "__v":0
+      },
+      {
+        "_id":"5600aedc188967b26265a73e",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/posters/gapminder-world-2013/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=209&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"This chart compares Life Expectancy & GDP per capita of 182 nations in 2013.",
+        "title":"Gapminder World Poster 2013",
+        "__v":0
+      }
+    ],
+    "__v":5
+  },
+  {
+    "_id":"55f71e8ccdedc1ff074e9f6d",
+    "description":"This graph shows how long people live and how much money they earn. Click the play button to see how countries have developed since 1800.",
+    "opts":{
+      "data":{
+        "path":"//waffles.gapminderdev.org/api/graphs/stats/vizabi-tools",
+        "reader":"graph"
+      },
+      "ui":{
+        "buttons":[
+          "find",
+          "axes",
+          "size",
+          "colors",
+          "trails",
+          "lock",
+          "moreoptions",
+          "fullscreen"
+        ],
+        "buttons_expand":[
+          "colors",
+          "find",
+          "size"
+        ]
+      }
+    },
+    "tool":"BubbleChart",
+    "relateditems":[
+      {
+        "_id":"5600aedc188967b26265a73e",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/posters/gapminder-world-2013/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=209&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"This chart compares Life Expectancy & GDP per capita of 182 nations in 2013.",
+        "title":"Gapminder World Poster 2013",
+        "__v":0
+      },
+      {
+        "_id":"5600ad4c188967b26265a73b",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/will-saving-poor-children-lead-to-overpopulation/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=409&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — No. The opposite.",
+        "title":"Will saving poor children lead to overpopulation?",
+        "__v":0
+      },
+      {
+        "_id":"560061d4fc0d7c00002110a4",
+        "title":"How Reliable is the World Population Forecast?",
+        "subtitle":"Short answer — Very reliable",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=136&preset=160x96&title=media&extension=.jpg",
+        "link":"http://www.gapminder.org/answers/how-reliable-is-the-world-population-forecast/",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ]
+      },
+      {
+        "_id":"5600782dabde580e33c79e24",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d"
+        ],
+        "link":"http://www.gapminder.org/answers/how-did-the-world-population-change/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=247&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"First slowly. Then fast.",
+        "title":"How Did The World Population Change?",
+        "__v":0
+      },
+      {
+        "_id":"5600ae2b188967b26265a73c",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/how-does-income-relate-to-life-expectancy/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=318&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — Rich people live longer",
+        "title":" How Does Income Relate to Life Expectancy?",
+        "__v":0
+      },
+      {
+        "_id":"5600ae64188967b26265a73d",
+        "_relatedTo":[
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link":"http://www.gapminder.org/answers/how-did-babies-per-woman-change-in-the-world/",
+        "image":"//cms.gapminder.org/files-api/p3media/file/image?id=125&preset=160x96&title=media&extension=.jpg",
+        "subtitle":"Short answer — It dropped",
+        "title":"How Did Babies per Woman Change in the World?",
+        "__v":0
+      }
+    ],
+    "slug":"bubbles",
+    //"image":"/tools/public/images/tools/bubblechart.png",
+    "image": "public/images/tools/bubblechart.png",
+    "category":"Tools",
+    "title":"Bubble Chart",
+    "__v":4
+  }
+];
+var menuXhrResult;
