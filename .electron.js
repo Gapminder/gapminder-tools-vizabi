@@ -38,9 +38,9 @@ app.on('ready', function() {
   mainWindow.loadUrl('file://' + __dirname + '/client/dist/tools/electronIndex.html');
 
   // Open the DevTools.
-  //if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools();
-  //}
+  }
 
   mainWindow.focus();
 
