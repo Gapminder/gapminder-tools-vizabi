@@ -90,29 +90,35 @@ module.exports = function (app) {
               //$location.hash(urlon.stringify(state));
             }
 
-            var fs = require('fs');
-            var path = require('path');
 
-            //path for packaged - resources/app
-            var graphData = JSON.parse(fs.readFileSync(path.join(config.electronPath,'client/src/public/data/convertcsv.json'), 'utf8'));
-            var geoData = JSON.parse(fs.readFileSync(path.join(config.electronPath, 'client/src/public/data/geo.json'), 'utf8'));
-            var geoHash  = {};
-            for (var j = 0; j < geoData.length; j++) {
-              geoHash[geoData[j].geo]= geoData[j];
+            if (config.isElectronApp) {
+              var fs = require('fs');
+              var path = require('path');
+
+              //path for packaged - resources/app
+              var graphData = JSON.parse(fs.readFileSync(path.join(config.electronPath,'client/src/public/data/convertcsv.json'), 'utf8'));
+              var geoData = JSON.parse(fs.readFileSync(path.join(config.electronPath, 'client/src/public/data/geo.json'), 'utf8'));
+              var geoHash  = {};
+              for (var j = 0; j < geoData.length; j++) {
+                geoHash[geoData[j].geo]= geoData[j];
+              }
+
+              for (var i = 0; i < graphData.length; i++) {
+                graphData[i].time = graphData[i].time + '';
+                graphData[i]['geo.name'] = geoHash[graphData[i].geo]['geo.name']
+                graphData[i]['geo.cat'] = geoHash[graphData[i].geo]['geo.cat']
+                graphData[i]['geo.region'] = geoHash[graphData[i].geo]['geo.region']
+              }
+
+              options.data.data = graphData;
+              options.data.reader = 'inline';
+              delete options.data.path;
+              //console.log(options);
+              return Vizabi(tool, placeholder, options);
+            } else {
+              return Vizabi(tool, placeholder, options);
             }
 
-            for (var i = 0; i < graphData.length; i++) {
-              graphData[i].time = graphData[i].time + '';
-              graphData[i]['geo.name'] = geoHash[graphData[i].geo]['geo.name']
-              graphData[i]['geo.cat'] = geoHash[graphData[i].geo]['geo.cat']
-              graphData[i]['geo.region'] = geoHash[graphData[i].geo]['geo.region']
-            }
-
-            options.data.data = graphData;
-            options.data.reader = 'inline';
-            delete options.data.path;
-            //console.log(options);
-            return Vizabi(tool, placeholder, options);
           }
         };
       }]);
