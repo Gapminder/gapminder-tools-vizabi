@@ -22,7 +22,7 @@ require('../public/images/tools/mountainchart.png');
 
 if (typeof _isElectronApp !== 'undefined' && _isElectronApp) {
   //json
-  require('../public/fixtures/mc_precomputed_shapes.json');
+  require('../public/fixtures/data/mc_precomputed_shapes.json');
   require('../public/fixtures/waffles/metadata.json');
   require('../public/fixtures/translation/en.json');
 

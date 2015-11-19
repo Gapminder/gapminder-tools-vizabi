@@ -13,6 +13,8 @@ if (typeof _isElectronApp !== 'undefined' && _isElectronApp) {
   var remote = require('remote');
   var app = remote.require('app');
   var electronPath = app.getAppPath();
+  
+  Vizabi._globals.gapminder_paths.baseUrl ="/work/projects/gapminder/src/gapminder-tools-vizabi/client/dist/tools/public/fixtures/";
 
   Vizabi.Tool.define("preload", function(promise) {
     console.log('preload start');
