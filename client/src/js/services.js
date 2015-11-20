@@ -115,6 +115,61 @@ module.exports = function (app) {
               delete options.data.path;
               //console.log(options);
               return Vizabi(tool, placeholder, options);
+            } else if (config.isChromeApp) {
+              var graphData, geoData;
+              var xhr = new XMLHttpRequest();
+              xhr.responseType = "json";
+              xhr.open('GET', chrome.runtime.getURL('data/convertcsv.json'), true);
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                  graphData = xhr.response;
+
+                  var xhrGeoData = new XMLHttpRequest();
+                  xhrGeoData.responseType = "json";
+                  xhrGeoData.open('GET', chrome.runtime.getURL('data/geo.json'), true);
+                  xhrGeoData.onreadystatechange = function () {
+                    if (xhrGeoData.readyState == XMLHttpRequest.DONE && xhrGeoData.status == 200) {
+                      geoData = xhrGeoData.response;
+                      console.log('all data are grabbed');
+
+
+                      var geoHash  = {};
+                      for (var j = 0; j < geoData.length; j++) {
+                        geoHash[geoData[j].geo]= geoData[j];
+                      }
+
+                      for (var i = 0; i < graphData.length; i++) {
+                        graphData[i].time = graphData[i].time + '';
+                        graphData[i]['geo.name'] = geoHash[graphData[i].geo]['geo.name']
+                        graphData[i]['geo.cat'] = geoHash[graphData[i].geo]['geo.cat']
+                        graphData[i]['geo.region'] = geoHash[graphData[i].geo]['geo.region']
+                      }
+
+                      options.data.data = graphData;
+                      options.data.reader = 'inline';
+                      delete options.data.path;
+                      //console.log(options);
+                      return Vizabi(tool, placeholder, options);
+
+
+
+                    } else if (xhrGeoData.readyState == XMLHttpRequest.DONE) {
+                      console.log('can\'t load color table - ' + colorTableName);
+                    }
+                  };
+                  xhrGeoData.send();
+
+                } else if (xhr.readyState == XMLHttpRequest.DONE) {
+                  console.log('can\'t load data');
+                }
+              };
+              xhr.send();
+
+
+
+
+
+
             } else {
               return Vizabi(tool, placeholder, options);
             }
@@ -140,7 +195,7 @@ module.exports = function (app) {
             return items;
           };
 
-          if (config.isElectronApp) {
+          if (config.isElectronApp || config.isChromeApp) {
             var promise = new Promise(function(resolve) {
               var result = {
                 data: itemXhrResult
