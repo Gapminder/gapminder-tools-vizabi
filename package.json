@@ -50,6 +50,6 @@
     "morgan": "1.6.1",
     "node-bourbon": "4.2.3",
     "redis": "2.2.5",
-    "vizabi": "^0.8.8"
+    "vizabi": "^0.8.9"
   }
 }
