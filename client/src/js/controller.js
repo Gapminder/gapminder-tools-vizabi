@@ -1,10 +1,11 @@
 var Vizabi = require('vizabi');
+var async = require('async');
 
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
-      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', 'config',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, config) {
+      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', 'config', 'readerService',
+      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, config, readerService) {
         console.log('start controller');
         console.log(config);
 
@@ -12,6 +13,46 @@ module.exports = function (app) {
         var prevSlug = null;
 
         init();
+
+        if (config.isElectronApp) {
+          console.log('is electron app');
+          var path = require('path');
+          var remote = require('remote');
+          var app = remote.require('app');
+          var electronPath = app.getAppPath();
+
+          Vizabi._globals.gapminder_paths.baseUrl = path.join(electronPath, 'client/dist/tools/public/fixtures/');
+
+          Vizabi.Tool.define("preload", function(promise) {
+            console.log('preload start');
+            var vizabiContext = this;
+            async.parallel([
+                function(callback){
+                  readerService.getFile({
+                    path: path.join(electronPath, 'client/dist/tools/public/fixtures/waffles/metadata.json'),
+                    type: 'json'
+                  }, callback);
+                },
+                function(callback){
+                  readerService.getFile({
+                    path: path.join(electronPath, 'client/src/public/fixtures/translation/en.json'),
+                    type: 'json'
+                  }, callback);
+                }
+              ],
+              function(err, results){
+                // the results array will equal ['one','two'] even though
+                if (err) {
+                  return console.log('load vizabi config files failed');
+                }
+                Vizabi._globals.metadata = JSON.parse(results[0]);
+                vizabiContext.model.language.strings.set(vizabiContext.model.language.id, JSON.parse(results[1]));
+                Vizabi._globals.metadata.indicatorsArray = ["gini", "gdp_per_cap", "u5mr"];
+                promise.resolve();
+              });
+            return promise;
+          });
+        }
 
         function init() {
           $scope.loadingError = false;
@@ -37,7 +78,7 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            if (config.isChromeApp) {
+            if (config.isChromeApp || config.isElectronApp) {
               init();
             } else {
               setTimeout(function () {
@@ -57,7 +98,7 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            if (config.isChromeApp) {
+            if (config.isChromeApp || config.isElectronApp) {
               init();
             } else {
               setTimeout(function () {
@@ -70,7 +111,7 @@ module.exports = function (app) {
         });
 
         $scope.url = function(url) {
-          if (config.isChromeApp) {
+          if (config.isChromeApp || config.isElectronApp) {
             $location.path(url);
           } else {
             $window.location.href = url;
@@ -93,7 +134,7 @@ module.exports = function (app) {
 
             Vizabi.clearInstances();
 
-            if (config.isChromeApp) {
+            if (config.isChromeApp || config.isElectronApp) {
               //set protocol
               tool.opts.data.path = 'http:' + tool.opts.data.path;
               for (var i=0; i < tool.relateditems.length; i++) {

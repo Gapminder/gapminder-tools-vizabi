@@ -20,3 +20,5 @@ require('./app.config')(app);
 require('./controller')(app);
 require('./directives')(app);
 require('./services')(app);
+require('./combineDataService')(app);
+require('./readerService')(app);

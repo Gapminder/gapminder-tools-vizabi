@@ -95,9 +95,8 @@ var baseConfig = {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'
       },
-      {
-        test: /\.json(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=application/json'
+      { test: /\.json$/,
+        loader: "file?name=[path][name].[ext]?[hash]"
       }
     ]
   },

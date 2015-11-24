@@ -1,6 +1,7 @@
 var d3 = require('d3');
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
+var async = require('async');
 
 module.exports = function (app) {
   var bases = document.getElementsByTagName('base');
@@ -39,8 +40,8 @@ module.exports = function (app) {
   }
 
   app
-    .factory("vizabiFactory", ['config',
-      function (config) {
+    .factory("vizabiFactory", ['config', 'readerService', 'combineDataService',
+      function (config, readerService, combineDataService) {
         return {
           /**
            * Render Vizabi
@@ -80,7 +81,7 @@ module.exports = function (app) {
             options.bind = options.bind || {};
             options.bind.historyUpdate = onHistoryUpdate;
             function onHistoryUpdate(eventName, state) {
-              if (config.isChromeApp) {
+              if (config.isChromeApp || config.isElectronApp) {
                 return;
               }
               formatDates(state);
@@ -90,90 +91,32 @@ module.exports = function (app) {
               //$location.hash(urlon.stringify(state));
             }
 
-
-            if (config.isElectronApp) {
-              var fs = require('fs');
+            if (config.isElectronApp || config.isElectronApp) {
+              var dataPath;
               var path = require('path');
-
-              //path for packaged - resources/app
-              var graphData = JSON.parse(fs.readFileSync(path.join(config.electronPath,'client/src/public/data/convertcsv.json'), 'utf8'));
-              var geoData = JSON.parse(fs.readFileSync(path.join(config.electronPath, 'client/src/public/data/geo.json'), 'utf8'));
-              var geoHash  = {};
-              for (var j = 0; j < geoData.length; j++) {
-                geoHash[geoData[j].geo]= geoData[j];
+              if (config.isElectronApp) {
+                dataPath = path.join(config.electronPath,'client/src/public/data/convertcsv.json');
+              } else if (config.isElectronApp) {
+                dataPath = chrome.runtime.getURL('data/convertcsv.json');
               }
 
-              for (var i = 0; i < graphData.length; i++) {
-                graphData[i].time = graphData[i].time + '';
-                graphData[i]['geo.name'] = geoHash[graphData[i].geo]['geo.name']
-                graphData[i]['geo.cat'] = geoHash[graphData[i].geo]['geo.cat']
-                graphData[i]['geo.region'] = geoHash[graphData[i].geo]['geo.region']
-              }
-
-              options.data.data = graphData;
-              options.data.reader = 'inline';
-              delete options.data.path;
-              //console.log(options);
-              return Vizabi(tool, placeholder, options);
-            } else if (config.isChromeApp) {
-              var graphData, geoData;
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "json";
-              xhr.open('GET', chrome.runtime.getURL('data/convertcsv.json'), true);
-              xhr.onreadystatechange = function () {
-                if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                  graphData = xhr.response;
-
-                  var xhrGeoData = new XMLHttpRequest();
-                  xhrGeoData.responseType = "json";
-                  xhrGeoData.open('GET', chrome.runtime.getURL('data/geo.json'), true);
-                  xhrGeoData.onreadystatechange = function () {
-                    if (xhrGeoData.readyState == XMLHttpRequest.DONE && xhrGeoData.status == 200) {
-                      geoData = xhrGeoData.response;
-                      console.log('all data are grabbed');
-
-
-                      var geoHash  = {};
-                      for (var j = 0; j < geoData.length; j++) {
-                        geoHash[geoData[j].geo]= geoData[j];
-                      }
-
-                      for (var i = 0; i < graphData.length; i++) {
-                        graphData[i].time = graphData[i].time + '';
-                        graphData[i]['geo.name'] = geoHash[graphData[i].geo]['geo.name']
-                        graphData[i]['geo.cat'] = geoHash[graphData[i].geo]['geo.cat']
-                        graphData[i]['geo.region'] = geoHash[graphData[i].geo]['geo.region']
-                      }
-
-                      options.data.data = graphData;
-                      options.data.reader = 'inline';
-                      delete options.data.path;
-                      //console.log(options);
-                      return Vizabi(tool, placeholder, options);
-
-
-
-                    } else if (xhrGeoData.readyState == XMLHttpRequest.DONE) {
-                      console.log('can\'t load color table - ' + colorTableName);
-                    }
-                  };
-                  xhrGeoData.send();
-
-                } else if (xhr.readyState == XMLHttpRequest.DONE) {
-                  console.log('can\'t load data');
+              readerService.getFile({
+                  type: 'json',
+                  path: dataPath
+                },
+                function(err, graphData) {
+                  graphData = JSON.parse(graphData);
+                  combineDataService.combine(graphData, function(err, graphData) {
+                    options.data.data = graphData;
+                    options.data.reader = 'inline';
+                    delete options.data.path;
+                    return Vizabi(tool, placeholder, options);
+                  });
                 }
-              };
-              xhr.send();
-
-
-
-
-
-
+              );
             } else {
               return Vizabi(tool, placeholder, options);
             }
-
           }
         };
       }]);
