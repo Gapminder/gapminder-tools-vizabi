@@ -50,6 +50,7 @@ module.exports = function (app) {
            * @return {Object}
            */
           render: function (tool, placeholder, options) {
+
             var loc = window.location.toString();
             var hash = null;
             console.log('loc:', loc);
@@ -91,30 +92,40 @@ module.exports = function (app) {
               //$location.hash(urlon.stringify(state));
             }
 
-            if (config.isElectronApp || config.isElectronApp) {
+            if (config.isElectronApp || config.isChromeApp) {
+            //if (false) {
               var dataPath;
-              var path = require('path');
               if (config.isElectronApp) {
+                var path = require('path');
                 dataPath = path.join(config.electronPath,'client/src/public/data/convertcsv.json');
-              } else if (config.isElectronApp) {
+              } else if (config.isChromeApp) {
                 dataPath = chrome.runtime.getURL('data/convertcsv.json');
               }
-
+              console.log('datapath:', dataPath);
               readerService.getFile({
                   type: 'json',
                   path: dataPath
                 },
                 function(err, graphData) {
-                  graphData = JSON.parse(graphData);
+
+                  if (typeof graphData === 'string') {
+                    graphData = JSON.parse(graphData);
+                  }
+
                   combineDataService.combine(graphData, function(err, graphData) {
-                    options.data.data = graphData;
-                    options.data.reader = 'inline';
-                    delete options.data.path;
+                    console.log(2);
+                    //options.data.data = JSON.stringify([graphData]);
+                    options.data.reader = 'json';
+                    //delete options.data.path;
+                    options.data.path = chrome.runtime.getURL('data/2.json');
+                    console.log(options);
                     return Vizabi(tool, placeholder, options);
                   });
                 }
               );
             } else {
+              //options.data.path = chrome.runtime.getURL('data/basic-indicators.json');
+              //options.data.reader = 'json';
               return Vizabi(tool, placeholder, options);
             }
           }

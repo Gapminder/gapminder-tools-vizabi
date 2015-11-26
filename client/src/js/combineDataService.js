@@ -6,7 +6,10 @@ module.exports = function (app) {
         //relative path
         combine: function (graphData, cb) {
           this.getGeoData(function(err, geoData) {
-            geoData = JSON.parse(geoData);
+            if (typeof geoData === 'string') {
+              geoData = JSON.parse(geoData);
+            }
+
             var geoHash  = {};
             for (var j = 0; j < geoData.length; j++) {
               geoHash[geoData[j].geo]= geoData[j];
