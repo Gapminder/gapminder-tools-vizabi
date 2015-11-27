@@ -9,6 +9,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 
 var bourbon = require('node-bourbon').includePaths;
+var _ = require('lodash');
 
 var config = {
   template: 'index.html',
@@ -18,19 +19,25 @@ var config = {
   publicPath: '/tools/'
 };
 
+var chromeAppPaths = _.clone(config);
+chromeAppPaths.dest = './chrome-app/tools';
+
 var isProduction = process.env.NODE_ENV === 'production';
+var isElectronApp = process.env.IS_ELECTRON_APP;
 
 var absSrc = path.join(__dirname, config.src);
 var absDest = path.join(__dirname, config.dest);
-var wConfig = {
+
+var baseConfig = {
   debug: true,
   profile: true,
   cache: true,
-  devtool: isProduction ? 'sourcemaps' : 'eval',
+  devtool: 'sourcemaps',
   context: path.join(__dirname, config.src),
   entry: {
     'vizabi-tools': './js/app.js',
-    angular: ['angular', 'angular-route', 'angular-touch', 'd3']
+    angular: ['angular', 'angular-route', 'angular-touch', 'd3'],
+    ga: './js/ga/ga.js'
   },
   output: {
     path: absDest,
@@ -90,24 +97,30 @@ var wConfig = {
       }
     ]
   },
+  stats: {colors: true, progress: true, children: false}
+};
+
+var wOptions = {
+  devtool: isProduction ? 'sourcemaps' : 'eval',
   plugins: [
     new Clean([config.dest]),
     new webpack.DefinePlugin({
-      _isDev: !isProduction
+      _isDev: !isProduction,
+      _isElectronApp: isElectronApp
     }),
     new ExtractTextPlugin('[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
       filename: config.index,
       template: path.join(config.src, config.template),
-      chunks: ['angular', 'vizabi-tools'],
+      chunks: ['angular', 'vizabi-tools', 'ga'],
       minify: true
     }),
     new HtmlWebpackPlugin({
       filename: '404.html',
       template: path.join(config.src, '404.html'),
-      chunks: ['angular', 'vizabi-tools'],
+      chunks: ['angular', 'vizabi-tools', 'ga'],
       minify: true
-    })
+    }),
   ],
   pushPlugins: function () {
     if (!isProduction) {
@@ -127,7 +140,6 @@ var wConfig = {
       })
     ]);
   },
-  stats: {colors: true, progress: true, children: false},
   devServer: {
     contentBase: config.dest,
     publicPath: config.publicPath,
@@ -154,6 +166,32 @@ var wConfig = {
   }
 };
 
+var chromeAppOptions = {
+  output: {
+    path: path.join(__dirname, chromeAppPaths.dest),
+    publicPath: chromeAppPaths.publicPath,
+    filename: 'components/[name]-[hash:6].js',
+    chunkFilename: 'components/[name]-[hash:6].js'
+  },
+  plugins: [
+    new Clean([chromeAppPaths.dest]),
+    new webpack.DefinePlugin({
+      _isDev: !isProduction
+    }),
+    new ExtractTextPlugin('[name]-[hash:6].css'),
+    new HtmlWebpackPlugin({
+      filename: config.index,
+      template: path.join(config.src, config.template),
+      chunks: ['angular', 'vizabi-tools'],
+      minify: false
+    })
+  ]
+};
+
+//if you want deep merge - use _.merge please
+var wConfig = _.extend({}, baseConfig, wOptions);
+var chromeAppConfig = _.extend({}, baseConfig, chromeAppOptions);
+
 wConfig.pushPlugins();
 
-module.exports = wConfig;
+module.exports = [wConfig, chromeAppConfig];

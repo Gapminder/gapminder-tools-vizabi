@@ -11,6 +11,7 @@ var gzipStatic = require('connect-gzip-static');
 var path = require('path');
 // configuration ===============================================================
 // connect to mongoDB database
+
 mongoose.connect(database.url);
 
 // log every request to the console

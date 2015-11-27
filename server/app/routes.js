@@ -200,8 +200,10 @@ module.exports = function (app) {
 
   // one day
   app.use('/api/static/local_data', compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
+  app.use('/tools/api/static/local_data', compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
 
   app.use('/api/static/data', compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
+  app.use('/tools/api/static/data', compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
   /* APP Routes */
   app.get('/', function (req, res) {
     return res.sendFile(path.resolve('./client/dist' + BASEURL + 'redirect.html'));

@@ -39,8 +39,8 @@ module.exports = function (app) {
   }
 
   app
-    .factory("vizabiFactory", [
-      function () {
+    .factory("vizabiFactory", ['config', '$location',
+      function (config, $location) {
         return {
           /**
            * Render Vizabi
@@ -51,12 +51,26 @@ module.exports = function (app) {
           render: function (tool, placeholder, options) {
             var loc = window.location.toString();
             var hash = null;
-            if (loc.indexOf('#') >= 0) {
-              hash = loc.substring(loc.indexOf('#') + 1);
+            console.log('loc:', loc);
+            if (config.isChromeApp) {
+              var pos = -1;
+              var  hashtagCount = 0;
+              while ((pos = loc.indexOf('#', pos + 1)) !== -1) {
+                hashtagCount++;
+              }
+              if (hashtagCount >= 2) {
+                hash = loc.substring(loc.lastIndexOf('#') + 1);
+              }
+            } else {
+              if (loc.indexOf('#') >= 0) {
+                hash = loc.substring(loc.indexOf('#') + 1);
+              }
             }
 
             if (hash) {
+              console.log('hash:', hash);
               var str = encodeURI(decodeURIComponent(hash));
+              console.log('str:', str);
               var state = urlon.parse(str);
               options.language = {};
               options.language.id = state.id || 'en';
@@ -66,8 +80,14 @@ module.exports = function (app) {
             options.bind = options.bind || {};
             options.bind.historyUpdate = onHistoryUpdate;
             function onHistoryUpdate(eventName, state) {
+              if (config.isChromeApp) {
+                return;
+              }
               formatDates(state);
               window.location.hash = urlon.stringify(state);
+              //if hash must be in chrome app - it should be done like this,
+              //because window.location is unsupported in chrome app
+              //$location.hash(urlon.stringify(state));
             }
 
             return Vizabi(tool, placeholder, options);
@@ -77,7 +97,7 @@ module.exports = function (app) {
 
 
   app
-    .factory("vizabiItems", ['$http', function ($http) {
+    .factory("vizabiItems", ['$http', 'config', function ($http, config) {
 
       return {
         /**
@@ -85,7 +105,7 @@ module.exports = function (app) {
          */
         getItems: function () {
           //return the promise directly.
-          return $http.get(baseHref + 'api/item')
+          return $http.get(config.apiUrl + '/item')
             .then(function (result) {
               var items = {}, i, s;
               for (i = 0, s = result.data.length; i < s; i++) {
@@ -100,8 +120,8 @@ module.exports = function (app) {
 
   app
     .factory('menuFactory', [
-      '$location', '$q', '$http',
-      function ($location, $q, $http) {
+      '$location', '$q', '$http', 'config',
+      function ($location, $q, $http, config) {
 
         return {
           cached: [],
@@ -112,7 +132,10 @@ module.exports = function (app) {
           getMenu: function () {
             //return the promise directly.
             var _this = this;
-            return $http.get(baseHref + 'api/menu')
+            //in chrome app we have to use full url, (or maybe use interceptor?)
+            //also we can use some global var(defined by webpack), so if it is true - use full url( get it from manifest),
+            //if not - use only path (e.g. /api/item)
+            return $http.get(config.apiUrl + '/menu')
               .then(function (result) {
                 if (result.status === 200) {
                   _this.cached = result.data.children;

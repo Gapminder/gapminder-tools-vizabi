@@ -3,24 +3,32 @@ var Vizabi = require('vizabi');
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
-      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
+      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', 'config',
+      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, config) {
+        console.log('start controller');
+        console.log(config);
+
         var placeholder = document.getElementById('vizabi-placeholder');
-
-        $scope.loadingError = false;
-        $scope.tools = {};
-        $scope.validTools = [];
-        $scope.relatedItems = [];
-
-        //start off by getting all items
-        vizabiItems.getItems().then(function (items) {
-          $scope.tools = items;
-          $scope.validTools = Object.keys($scope.tools);
-          updateGraph();
-        });
-
         var prevSlug = null;
-        $scope.$root.$on('$routeChangeStart', function(event, state){
+
+        init();
+
+        function init() {
+          $scope.loadingError = false;
+          $scope.tools = {};
+          $scope.validTools = [];
+          $scope.relatedItems = [];
+          $scope.isWeb = !config.isElectronApp && !config.isChromeApp;
+
+          //start off by getting all items
+          vizabiItems.getItems().then(function (items) {
+            $scope.tools = items;
+            $scope.validTools = Object.keys($scope.tools);
+            updateGraph();
+          });
+        }
+
+        $scope.$root.$on('$routeChangeStart', function(event, state, current){
           var newSlug = state.params.slug;
           if (!prevSlug) {
             prevSlug = newSlug;
@@ -29,9 +37,13 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            setTimeout(function () {
-              window.location.reload();
-            }, 1);
+            if (config.isChromeApp) {
+              init();
+            } else {
+              setTimeout(function () {
+                window.location.reload();
+              }, 1);
+            }
             return;
           }
           console.log(window.location.hash);
@@ -45,13 +57,26 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            setTimeout(function () {
-              window.location.reload();
-            }, 1);
+            if (config.isChromeApp) {
+              init();
+            } else {
+              setTimeout(function () {
+                window.location.reload();
+              }, 1);
+            }
             return;
           }
           console.log(window.location.hash);
         });
+
+        $scope.url = function(url) {
+          if (config.isChromeApp) {
+            $location.path(url);
+          } else {
+            $window.location.href = url;
+          }
+        };
+
         function updateGraph() {
           var validTools = $scope.validTools;
           if (validTools.length === 0) return;
@@ -68,12 +93,22 @@ module.exports = function (app) {
 
             Vizabi.clearInstances();
 
+            if (config.isChromeApp) {
+              //set protocol
+              tool.opts.data.path = 'http:' + tool.opts.data.path;
+              for (var i=0; i < tool.relateditems.length; i++) {
+                tool.relateditems[i].image = 'http:'+tool.relateditems[i].image;
+              }
+            }
             $scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts);
             $scope.relatedItems = tool.relateditems;
             $scope.$apply();
 
             //send to google analytics
-            $window.ga('send', 'pageview', {page: $location.url()});
+            if (!config.isChromeApp && !config.isElectronApp) {
+              $window.ga('send', 'pageview', {page: $location.url()});
+            }
+
           });
         }
 
