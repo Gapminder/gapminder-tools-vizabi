@@ -6,18 +6,19 @@ module.exports = function (app) {
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         var placeholder = document.getElementById('vizabi-placeholder');
-
         $scope.loadingError = false;
         $scope.tools = {};
         $scope.validTools = [];
         $scope.relatedItems = [];
 
+        //there are errors in Vizabi, I think because we have to use Hashbang mode in order to navigation works
+
         //start off by getting all items
-        vizabiItems.getItems().then(function (items) {
-          $scope.tools = items;
-          $scope.validTools = Object.keys($scope.tools);
-          updateGraph();
-        });
+        //vizabiItems.getItems().then(function (items) {
+        //  $scope.tools = items;
+        //  $scope.validTools = Object.keys($scope.tools);
+        //  updateGraph();
+        //});
 
         var prevSlug = null;
         $scope.$root.$on('$routeChangeStart', function(event, state){
