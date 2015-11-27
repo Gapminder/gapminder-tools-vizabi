@@ -93,36 +93,41 @@ module.exports = function (app) {
             }
 
             if (config.isElectronApp || config.isChromeApp) {
-            //if (false) {
-              var dataPath;
-              if (config.isElectronApp) {
-                var path = require('path');
-                dataPath = path.join(config.electronPath,'client/src/public/data/convertcsv.json');
-              } else if (config.isChromeApp) {
-                dataPath = chrome.runtime.getURL('data/convertcsv.json');
-              }
-              console.log('datapath:', dataPath);
-              readerService.getFile({
-                  type: 'json',
-                  path: dataPath
-                },
-                function(err, graphData) {
-
-                  if (typeof graphData === 'string') {
-                    graphData = JSON.parse(graphData);
-                  }
-
-                  combineDataService.combine(graphData, function(err, graphData) {
-                    console.log(2);
-                    //options.data.data = JSON.stringify([graphData]);
-                    options.data.reader = 'json';
-                    //delete options.data.path;
-                    options.data.path = chrome.runtime.getURL('data/2.json');
-                    console.log(options);
-                    return Vizabi(tool, placeholder, options);
-                  });
-                }
-              );
+              options.data.reader = 'json';
+              //delete options.data.path;
+              options.data.path = chrome.runtime.getURL('data/2.json');
+              console.log(options);
+              return Vizabi(tool, placeholder, options);
+              //
+              //var dataPath;
+              //if (config.isElectronApp) {
+              //  var path = require('path');
+              //  dataPath = path.join(config.electronPath,'client/src/public/data/convertcsv.json');
+              //} else if (config.isChromeApp) {
+              //  dataPath = chrome.runtime.getURL('data/convertcsv.json');
+              //}
+              //console.log('datapath:', dataPath);
+              //readerService.getFile({
+              //    type: 'json',
+              //    path: dataPath
+              //  },
+              //  function(err, graphData) {
+              //
+              //    if (typeof graphData === 'string') {
+              //      graphData = JSON.parse(graphData);
+              //    }
+              //
+              //    combineDataService.combine(graphData, function(err, graphData) {
+              //      console.log(2);
+              //      //options.data.data = JSON.stringify([graphData]);
+              //      options.data.reader = 'json';
+              //      //delete options.data.path;
+              //      options.data.path = chrome.runtime.getURL('data/2.json');
+              //      console.log(options);
+              //      return Vizabi(tool, placeholder, options);
+              //    });
+              //  }
+              //);
             } else {
               //options.data.path = chrome.runtime.getURL('data/basic-indicators.json');
               //options.data.reader = 'json';
