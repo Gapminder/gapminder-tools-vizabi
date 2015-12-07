@@ -30,7 +30,7 @@ module.exports = function (app) {
             prevSlug = newSlug;
             // and here we go, one more hack
             setTimeout(function () {
-              window.location.reload();
+              window.location.href = window.location.href;
             }, 1);
             return;
           }
@@ -46,7 +46,7 @@ module.exports = function (app) {
             prevSlug = newSlug;
             // and here we go, one more hack
             setTimeout(function () {
-              window.location.reload();
+              window.location.href = window.location.href;
             }, 1);
             return;
           }
