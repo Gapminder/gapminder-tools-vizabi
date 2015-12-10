@@ -203,8 +203,7 @@ module.exports = function (app) {
 
   // TODO add validation !
   app.use('/api/static/data/translation/:language.json', compression(), function (req, res) {
-    var currentLanguage = req.cookies.currentLanguage;
-    request(translationConfig(req.cookies.currentLanguage || req.params.language), function (error, response, body) {
+    request(translationConfig(req.cookies.currentLanguage || 'en-US'), function (error, response, body) {
       var content = JSON.parse(body);
       if (!_.has(content, 'fields.json')) {
         return;
