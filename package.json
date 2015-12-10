@@ -52,6 +52,6 @@
     "node-bourbon": "4.2.3",
     "redis": "2.2.5",
     "request": "^2.66.0",
-    "vizabi": "^0.8.8"
+    "vizabi": "^0.9.1"
   }
 }

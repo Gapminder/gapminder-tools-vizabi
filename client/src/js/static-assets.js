@@ -19,3 +19,4 @@ require('../public/images/icons/menu/workshops.png');
 // tools
 require('../public/images/tools/bubblechart.png');
 require('../public/images/tools/mountainchart.png');
+require('../public/images/tools/bubblemap.png');

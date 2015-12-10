@@ -10,7 +10,7 @@
 .related {
   @include breakpoint(not-small) {
     float: left;
-    width: 66%;
+    width: 63%;
   }
 }
 .about {
@@ -18,7 +18,7 @@
   @include breakpoint(not-small) {
     padding-left: 20px;
     float: right;
-    width: 33%;
+    width: 37%;
     &:after {
       clear: both;
     }
@@ -124,6 +124,11 @@
         display: block;
         color: #808285;
         position: relative;
+
+      @include breakpoint(large) {
+        float: left;
+        width: 50%;
+      }
         & > a {
             @include transition(all 0.1s);
             @include border-radius(3px);
@@ -135,9 +140,10 @@
             text-decoration: none;
             max-width: 400px;
             margin-bottom: 40px;
+          width: 90%;
 
-            @include breakpoint(large) {
-              width: 80%;
+          @include breakpoint(large) {
+              width: 90%;
             }
 
             .title {
