@@ -23,6 +23,11 @@
     </div>
     <ul class="nav navbar-nav navbar-nav-left desktop" nav-expandable="" items="expandedItems"></ul>
     <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
+    <div style="float: right">
+      <select ng-model="language"
+              ng-options="v for v in ['en-US', 'pl', 'sv']">
+      </select>
+    </div>
   </div>
 
   <!--Content-->

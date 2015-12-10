@@ -3,8 +3,8 @@ var Vizabi = require('vizabi');
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
-      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
+      '$scope', '$http', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
+      function ($scope, $http, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         var placeholder = document.getElementById('vizabi-placeholder');
 
         $scope.loadingError = false;
@@ -91,5 +91,18 @@ module.exports = function (app) {
             scrollTo(element, to, duration - 10, cb);
           }, 10);
         }
+
+        $scope.$watch('language', function(){
+          if ($scope.language !== undefined) {
+            $http.post('/api/set-force-language/', {
+              language: $scope.language
+            }).then(
+              function() {
+                console.log('should reload');
+                $window.location.reload();
+              }
+            )
+          }
+        })
       }]);
 };

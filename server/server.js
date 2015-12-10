@@ -6,6 +6,7 @@ var port = process.env.PORT || 3001;         // set the port
 var database = require('./config/database');       // load the database config
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var gzipStatic = require('connect-gzip-static');
 var path = require('path');
@@ -17,6 +18,8 @@ mongoose.connect(database.url);
 app.use(morgan('dev'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({'extended': 'true'}));
+
+app.use(cookieParser());
 // parse application/json
 app.use(bodyParser.json());
 //parse as json IE

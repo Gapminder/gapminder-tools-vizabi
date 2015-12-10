@@ -203,13 +203,19 @@ module.exports = function (app) {
 
   // TODO add validation !
   app.use('/api/static/data/translation/:language.json', compression(), function (req, res) {
-    request(translationConfig(req.params.language), function (error, response, body) {
+    var currentLanguage = req.cookies.currentLanguage;
+    request(translationConfig(req.cookies.currentLanguage || req.params.language), function (error, response, body) {
       var content = JSON.parse(body);
       if (!_.has(content, 'fields.json')) {
         return;
       }
       res.send(content.fields.json);
     });
+  });
+
+  app.use('/api/set-force-language/', function(req, res){
+    res.cookie('currentLanguage',req.body.language, { maxAge: 900000, httpOnly: true });
+    res.send();
   });
 
   // one day
