@@ -1,5 +1,6 @@
 var Vizabi = require('vizabi');
 
+
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
@@ -92,17 +93,24 @@ module.exports = function (app) {
           }, 10);
         }
 
-        $scope.$watch('language', function(){
-          if ($scope.language !== undefined) {
+        $scope.setLanguage = function(language) {
+          console.log(language, localStorage.getItem('currentLanguage'));
+          if (localStorage.getItem('currentLanguage') !== language) {
             $http.post('/api/set-force-language/', {
               language: $scope.language
             }).then(
               function() {
-                console.log('should reload');
+                localStorage.setItem('currentLanguage', language);
                 $window.location.reload();
               }
             )
           }
-        })
+        };
+
+        if (!localStorage.getItem('currentLanguage')) {
+          localStorage.setItem('currentLanguage', 'en-US');
+        }
+        $scope.language = localStorage.getItem('currentLanguage');
+        $scope.setLanguage($scope.language);
       }]);
 };
