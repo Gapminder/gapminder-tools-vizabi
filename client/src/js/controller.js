@@ -94,7 +94,6 @@ module.exports = function (app) {
         }
 
         $scope.setLanguage = function(language) {
-          console.log(language, localStorage.getItem('currentLanguage'));
           if (localStorage.getItem('currentLanguage') !== language) {
             $http.post('/api/set-force-language/', {
               language: $scope.language
