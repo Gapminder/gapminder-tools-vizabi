@@ -10,11 +10,11 @@ mongoose.model('RelatedItem', {
 });
 
 mongoose.model('Item', {
-	title : {type : String, default: ''},
-	category : {type : String, default: ''},
-	description : {type : String, default: ''},
+  title : {type : String, default: ''},
+  category : {type : String, default: ''},
+  description : {type : String, default: ''},
   image : {type : String, default: ''},
-	tool : {type : String, default: 'BubbleChart'},
-	opts : {type : Object, default: {}},
+  tool : {type : String, default: 'BubbleChart'},
+  opts : {type : Object, default: {}},
   relateditems : [{ type: Schema.Types.ObjectId, ref: 'RelatedItem' }]
 });
