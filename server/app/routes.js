@@ -14,8 +14,11 @@ require('./models');
 var Item = mongoose.model('Item');
 var Menu = mongoose.model('Menu');
 var BASEURL = '/tools/';
+
+var http = require('http');
 var url = require('url');
-var proxyMiddleware = require('proxy-middleware');
+var request = require('request');
+
 var WSHostUrl = config.EXTERNAL_HOST + ':' + config.EXTERNAL_PORT ;
 var staticUrl = config.HOST + ':' + config.PORT;
 
@@ -136,8 +139,15 @@ module.exports = function (app) {
     'dont-panic-poverty-geo-properties.csv': '/api/vizabi/geo_properties.csv'
   };
 
+  function proxyMiddleware(url) {
+    return function (req, res, next) {
+      req.pipe(request(url +_.values(req.params) )).pipe(res);
+    }
+
+  }
+
   _.forEach(valueKey, function (value, key) {
-    app.get('/api/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(url.parse(WSHostUrl + value)));
+    app.get('/api/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
   });
 
   /* APP Routes */
