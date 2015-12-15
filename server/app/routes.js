@@ -26,12 +26,6 @@ module.exports = function (app) {
   var router = express.Router();
   /* API Routes */
 
-  var stub = function (req, res, next) {
-    console.log(req.query);
-    return next();
-  };
-
-
   function getAll(res, model, populate) {
     var found = model.find().lean(true);
     if (populate) {
@@ -90,46 +84,8 @@ module.exports = function (app) {
       });
   });
 
-  //insert a related item to the database
-  app.post('/related', function (req, res) {
-
-    var relatedTo = req.body._relatedTo.split(",").map(function (id) {
-      return ObjectId(id);
-    });
-
-    RelatedItem.create({
-      title: req.body.title,
-      subtitle: req.body.subtitle,
-      image: req.body.image,
-      link: req.body.link,
-      _relatedTo: relatedTo
-    }, function (err, related_item) {
-      if (err) {
-        return res.send(err);
-      }
-
-      var new_id = related_item._id;
-      var items = related_item._relatedTo;
-      var s = items.length;
-      for (var i = 0; i < s; i++) {
-        Item.findOne({"_id": ObjectId(items[i])}, function (err, item) {
-          item.relateditems = item.relateditems.map(function (id) {
-            return ObjectId(id);
-          });
-          item.relateditems.push(new_id);
-          item.save();
-        });
-      }
-
-      return getRelatedItem(res, new_id);
-    });
-  });
-
   var base = path.join(BASEURL, 'api');
   app.use(base, router);
-
-  // one day
-  app.use('/api/static/local_data', stub, compression(), cache.route({expire: 86400}), express.static(path.join(__dirname, '/fixtures')));
 
   var valueKey = {
     'translation/:lang': '/api/vizabi/translation/',
