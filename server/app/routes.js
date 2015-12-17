@@ -19,7 +19,7 @@ var http = require('http');
 var url = require('url');
 var request = require('request');
 
-var WSHostUrl = config.EXTERNAL_HOST + ':' + config.EXTERNAL_PORT ;
+var WSHostUrl = config.WS_HOST + ':' + config.WS_PORT ;
 var staticUrl = config.HOST + ':' + config.PORT;
 
 module.exports = function (app) {
