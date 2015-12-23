@@ -52,6 +52,22 @@ npm run dev
 # open http://localhost:8080/tools/bubbles
 ```
 
+## Connect vizabi-tools with WS
+1. WS_HOST = `waffle-server env host`
+2. WS_PORT = `waffle-server env port `
+
+For example: `WS_HOST=http://ws.gapminderdev.org WS_PORT=3000  npm start`
+
+## List of waffle environments:
+
+​### dev
+`http://ws.gapminderdev.org:3000/`
+​### stage​
+`http://stage-ws.gapminderdev.org/`
+​### prod​
+`http://waffles.gapminderdev.org/`
+
+
 ###Troubleshooting:
 
 If an error for redis is displayed, make sure it's running: `redis-cli`
