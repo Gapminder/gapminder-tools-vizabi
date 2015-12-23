@@ -3,8 +3,8 @@ var path = require('path');
 var config = {
   PORT: 3001,
   HOST: 'http://localhost',
-  EXTERNAL_PORT:   process.env.PORT || 3000,
-  EXTERNAL_HOST: process.env.HOST || 'http://localhost'
+  WS_PORT: process.env.WS_PORT || 3000,
+  WS_HOST: process.env.WS_HOST || 'http://localhost'
 };
 
 module.exports = config;
