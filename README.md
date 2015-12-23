@@ -60,15 +60,16 @@ For example: `WS_HOST=http://ws.gapminderdev.org WS_PORT=3000  npm start`
 
 ## List of waffle environments:
 
-​### dev
+### dev
 `http://ws.gapminderdev.org:3000/`
-​### stage​
+
+### stage
 `http://stage-ws.gapminderdev.org/`
-​### prod​
+
+### prod
 `http://waffles.gapminderdev.org/`
 
-
-###Troubleshooting:
+### Troubleshooting:
 
 If an error for redis is displayed, make sure it's running: `redis-cli`
 
