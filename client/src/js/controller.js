@@ -34,7 +34,6 @@ module.exports = function (app) {
             }, 1);
             return;
           }
-          console.log(window.location.hash);
         });
         $scope.$root.$on('$routeUpdate', function(event, state){
           var newSlug = state.params.slug;
@@ -50,7 +49,6 @@ module.exports = function (app) {
             }, 1);
             return;
           }
-          console.log(window.location.hash);
         });
         function updateGraph() {
           var validTools = $scope.validTools;
