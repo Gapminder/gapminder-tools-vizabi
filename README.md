@@ -43,20 +43,18 @@ sudo apt-get install redis-server
 2. `npm run build` - creates static dev build of UI
 3. `npm run deploy` - creates static, production ready UI files
 4. `npm start` - starts API and `npm run build`
-5. On daily basis you will likely use
+5.  Specify port and host:
+- WS_HOST = `waffle-server env host` || localhost
+- WS_PORT = `waffle-server env port ` || 3000
+
+6. On daily basis you will likely use
 ```bash
 # one terminal or from webstorm
-MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
+WS_HOST=http://ws.gapminderdev.org WS_PORT=3000 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
 # second terminal
 npm run dev
 # open http://localhost:8080/tools/bubbles
 ```
-
-## Connect vizabi-tools with WS
-1. WS_HOST = `waffle-server env host`
-2. WS_PORT = `waffle-server env port `
-
-For example: `WS_HOST=http://ws.gapminderdev.org WS_PORT=3000  npm start`
 
 ## List of waffle environments:
 
