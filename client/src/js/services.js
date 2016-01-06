@@ -64,10 +64,10 @@ module.exports = function (app) {
             }
 
             options.bind = options.bind || {};
-            options.bind.historyUpdate = onHistoryUpdate;
-            function onHistoryUpdate(eventName, state) {
-              formatDates(state);
-              window.location.hash = urlon.stringify(state);
+            options.bind.persistentChange = onPersistentChange;
+            function onPersistentChange(evt, minState) {
+              formatDates(minState);
+              window.location.hash = urlon.stringify(minState);
             }
 
             return Vizabi(tool, placeholder, options);
