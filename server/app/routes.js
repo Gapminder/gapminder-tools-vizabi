@@ -19,7 +19,7 @@ var http = require('http');
 var url = require('url');
 var request = require('request');
 
-var WSHostUrl = config.WS_HOST + ':' + config.WS_PORT ;
+var WSHostUrl = config.WS_HOST + ':' + config.WS_PORT;
 var staticUrl = config.HOST + ':' + config.PORT;
 
 module.exports = function (app) {
@@ -84,9 +84,6 @@ module.exports = function (app) {
       });
   });
 
-  var base = path.join(BASEURL, 'api');
-  app.use(base, router);
-
   var valueKey = {
     'translation/:lang': '/api/vizabi/translation/',
     'waffles/metadata.json': '/api/vizabi/metadata.json',
@@ -97,14 +94,16 @@ module.exports = function (app) {
 
   function proxyMiddleware(url) {
     return function (req, res, next) {
-      req.pipe(request(url +_.values(req.params) )).pipe(res);
-    }
-
+      req.pipe(request(url + _.values(req.params))).pipe(res);
+    };
   }
 
   _.forEach(valueKey, function (value, key) {
-    app.get('/api/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
+    router.get('/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
   });
+
+  var base = path.join(BASEURL, 'api');
+  app.use(base, router);
 
   /* APP Routes */
   app.get('/', function (req, res) {
