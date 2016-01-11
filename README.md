@@ -50,7 +50,7 @@ sudo apt-get install redis-server
 6. On daily basis you will likely use
 ```bash
 # one terminal or from webstorm
-WS_HOST=http://ws.gapminderdev.org WS_PORT=3000 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
+WS_HOST=http://waffle-server-no-proxy.gapminderdev.org WS_PORT=80 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
 # second terminal
 npm run dev
 # open http://localhost:8080/tools/bubbles
@@ -59,13 +59,13 @@ npm run dev
 ## List of waffle environments:
 
 ### dev
-`http://ws.gapminderdev.org:3000/`
+`http://waffle-server-dev.gapminderdev.org`
 
 ### stage
-`http://stage-ws.gapminderdev.org/`
+`http://waffle-server-stage.gapminderdev.org/`
 
 ### prod
-`http://waffles.gapminderdev.org/`
+`http://waffle-server.gapminderdev.org/`
 
 ### Troubleshooting:
 
