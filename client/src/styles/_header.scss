@@ -14,20 +14,20 @@
 
     &:after {
         content: 'pre-alpha version';
-        color: #FC6B38;
+        color: #ff1313;
         display: block;
         position: absolute;
-        bottom: 14px;
+        bottom: 11px;
         z-index: 100;
-        /* font-size: 12px; */
         right: 70px;
         opacity: 0.6;
+        font-size: 24px;
 
         @include breakpoint(small) {
-            top: 7px;
+            top: 5px;
             bottom: auto;
-            font-size: 12px;
-            right: 53px;
+            font-size: 13.5px;
+            right: 43px;
         }
     }
 }
