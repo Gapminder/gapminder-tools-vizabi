@@ -78,10 +78,11 @@ npm i vizabi@latest -S
 ## Enviropments
 
 **Develop**
-http://dev-tools.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
+http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
 
 **Stage**
-https://stage-tools.gapminderdev.org/ - released once every week, usually
+https://tools-stage.gapminderdev.org/ - released once every week, usually
 
 **Production (live)**
+https://tools-prod.gapminderdev.org/ 
 http://www.gapminder.org/tools/
