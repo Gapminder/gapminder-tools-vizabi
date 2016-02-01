@@ -1,5 +1,11 @@
 module.exports = function (app) {
-  app
+    app.run(function ($browser) {
+      $browser.baseHref = function () {
+        return "/tools/"
+      };
+    });
+
+    app
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
       $routeProvider

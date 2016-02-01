@@ -102,7 +102,7 @@ module.exports = function (app) {
     router.get('/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
   });
 
-  var base = path.join(BASEURL, 'api');
+  var base = BASEURL + 'api';
   app.use(base, router);
 
   /* APP Routes */
