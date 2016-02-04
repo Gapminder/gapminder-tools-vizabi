@@ -9,35 +9,6 @@ module.exports = function (app) {
     baseHref = bases[0].href;
   }
 
-  function formatDate(date, unit) {
-    var timeFormats = {
-      "year": d3.time.format("%Y"),
-      "month": d3.time.format("%Y-%m"),
-      "week": d3.time.format("%Y-W%W"),
-      "day": d3.time.format("%Y-%m-%d"),
-      "hour": d3.time.format("%Y-%m-%d %H"),
-      "minute": d3.time.format("%Y-%m-%d %H:%M"),
-      "second": d3.time.format("%Y-%m-%d %H:%M:%S")
-    };
-    return timeFormats[unit](date);
-  }
-
-  function formatDates(state) {
-    // Format date objects according to the unit
-    if(state && state.time) {
-      var unit = state.time.unit || "year";
-      if(typeof state.time.value === 'object') {
-        state.time.value = formatDate(state.time.value, unit);
-      }
-      if(typeof state.time.start === 'object') {
-        state.time.start = formatDate(state.time.start, unit);
-      }
-      if(typeof state.time.end === 'object') {
-        state.time.end = formatDate(state.time.end, unit);
-      }
-    }
-  }
-
   app
     .factory("vizabiFactory", [
       function () {
@@ -57,17 +28,14 @@ module.exports = function (app) {
 
             if (hash) {
               var str = encodeURI(decodeURIComponent(hash));
-              var state = urlon.parse(str);
-              options.language = {};
-              options.language.id = state.id || 'en';
-              options.state = state;
+              var urlOptions = urlon.parse(str);
+              Vizabi.utils.extend(options, urlOptions);
             }
 
             options.bind = options.bind || {};
             options.bind.persistentChange = onPersistentChange;
-            function onPersistentChange(evt, minState) {
-              formatDates(minState);
-              window.location.hash = urlon.stringify(minState);
+            function onPersistentChange(evt, minModel) {
+              window.location.hash = urlon.stringify(minModel);
             }
 
             return Vizabi(tool, placeholder, options);
