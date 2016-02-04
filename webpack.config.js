@@ -30,7 +30,7 @@ var wConfig = {
   context: path.join(__dirname, config.src),
   entry: {
     'vizabi-tools': './js/app.js',
-    angular: ['angular', 'angular-route', 'angular-touch', 'd3']
+    angular: ['angular', 'angular-route', 'angular-touch', 'd3', 'vizabi-interpolators']
   },
   output: {
     path: absDest,
@@ -91,6 +91,9 @@ var wConfig = {
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      VizabiInterpolators: 'vizabi-interpolators'
+    }),
     new Clean([config.dest]),
     new webpack.DefinePlugin({
       _isDev: !isProduction
