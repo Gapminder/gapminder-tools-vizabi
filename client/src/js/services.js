@@ -34,7 +34,9 @@ module.exports = function (app) {
 
             options.bind = options.bind || {};
             options.bind.persistentChange = onPersistentChange;
+            
             function onPersistentChange(evt, minModel) {
+              minModel = Vizabi.utils.diffObject(minModel, options);
               window.location.hash = urlon.stringify(minModel);
             }
 
