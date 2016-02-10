@@ -52,6 +52,6 @@
     "redis": "2.2.5",
     "request": "2.67.0",
     "vizabi": "^0.12.5-3",
-    "vizabi-interpolators": "^1.0.0"
+    "vizabi-interpolators": "1.0.1"
   }
 }
