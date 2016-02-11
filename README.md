@@ -49,11 +49,11 @@ Second terminal:
 npm run dev
 ```
 
-View in browser at `http://localhost:8080/tools/`:
+View in browser at `http://localhost:8080/tools/`.
 
-```bash
-open http://localhost:8080/tools/
-```
+> Hint: On OSX, you can open the url directly from a terminal session:
+>
+>    open http://localhost:8080/tools/
 
 ### Server-specific
 
