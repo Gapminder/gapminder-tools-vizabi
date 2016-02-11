@@ -10,7 +10,12 @@ The frontend Angular app is built and served locally using [Webpack](https://web
 
 ### Server
 
-The server and it's dependencies are encapsulated using Docker. The only dependency thus is Docker Toolbox:
+The server and it's dependencies are encapsulated using Docker. The following are required:
+
+ * [docker](https://docs.docker.com/engine/installation/) v1.10+
+ * [docker-compose](https://docs.docker.com/compose/install/) 1.6.0+
+
+Mac and Windows-users can install them by installing Docker Toolbox:
 
  - [Docker Toolbox](https://www.docker.com/products/docker-toolbox) v1.10+
 
