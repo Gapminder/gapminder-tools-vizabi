@@ -34,7 +34,7 @@ module.exports = function (app) {
               Vizabi.utils.extend(model, urlModel);
             }
 
-            model.bind = options.bind || {};
+            model.bind = model.bind || {};
             model.bind.persistentChange = onPersistentChange;
             
             function onPersistentChange(evt, minModel) {
