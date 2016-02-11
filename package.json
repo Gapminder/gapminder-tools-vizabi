@@ -1,7 +1,7 @@
 {
-  "name": "GapminderToolsPage",
+  "name": "gapminder-tools-vizabi-client",
   "version": "0.8.3",
-  "description": "Gapminder Tools Page",
+  "description": "Gapminder Tools Page - Client",
   "repository": {
     "type": "git",
     "url": "http://gapminder.org/tools"
@@ -37,19 +37,11 @@
     "angular": "1.4.7",
     "angular-route": "1.4.7",
     "angular-touch": "1.4.7",
-    "body-parser": "1.14.1",
     "bourbon": "4.2.6",
     "compression": "1.6.0",
-    "connect-gzip-static": "1.0.0",
     "d3": "3.5.6",
-    "express": "4.13.3",
-    "express-redis-cache": "0.1.8",
     "lodash": "3.10.1",
-    "method-override": "2.3.5",
-    "mongoose": "4.1.12",
-    "morgan": "1.6.1",
     "node-bourbon": "4.2.3",
-    "redis": "2.2.5",
     "request": "2.67.0",
     "vizabi": "^0.12.6"
   }

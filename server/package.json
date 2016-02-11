@@ -1,0 +1,25 @@
+{
+  "name": "gapminder-tools-vizabi-server",
+  "version": "0.8.3",
+  "description": "Gapminder Tools Page - Server",
+  "repository": {
+    "type": "git",
+    "url": "http://gapminder.org/tools"
+  },
+  "author": "Gapminder Foundation",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+    "express": "4.13.3",
+    "express-redis-cache": "0.1.8",
+    "mongoose": "4.1.12",
+    "morgan": "1.6.1",
+    "body-parser": "1.14.1",
+    "connect-gzip-static": "1.0.0",
+    "method-override": "2.3.5",
+    "redis": "2.2.5"
+  }
+}
