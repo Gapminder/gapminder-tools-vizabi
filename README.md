@@ -4,7 +4,7 @@ The Gapminder Tools Page ([http://gapminder.org/tools](http://gapminder.org/tool
 
 As a backend, it uses a [Node.js Express](http://expressjs.com/)-based server to process and cache indicator information stored in a [MongoDB](https://www.mongodb.org/) database. This Express-backend is called "Server" in this repository. 
 
-The frontend Angular app is built and packaged locally using [Webpack](https://webpack.github.io/). The packaged client code in `client/dist/` is in turn served by the Express server above. 
+The frontend Angular app is built and served locally using [Webpack](https://webpack.github.io/). Calls to the webpack-server matching `*/api/*` are served by the Express server above. 
 
 ## Requirements
 
