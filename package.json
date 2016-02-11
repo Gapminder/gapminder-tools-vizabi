@@ -12,7 +12,7 @@
     "build": "NODE_ENV=development SERVER_HOST=$(docker-machine ip default) webpack",
     "deploy": "NODE_ENV=production SERVER_HOST=$(docker-machine ip default) webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "prestart": "SERVER_HOST=$(docker-machine ip default) npm run build",
-    "start": "node server/server.js"
+    "start": "cd server && docker-compose up"
   },
   "engine": "node >= 4.2.6",
   "engine-strict" : true,
