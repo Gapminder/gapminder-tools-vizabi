@@ -68,29 +68,23 @@ docker-compose -f docker-compose.yml -f docker-compose.local-mongodb.yml up
 - WS_HOST = `waffle-server env host` || localhost
 - WS_PORT = `waffle-server env port ` || 3000
 
-## List of waffle environments:
+#### Update vizabi
 
-### dev
-`http://waffle-server-dev.gapminderdev.org`
-
-### stage
-`http://waffle-server-stage.gapminderdev.org/`
-
-### prod
-`http://waffle-server.gapminderdev.org/`
-
-## Update vizabi
 ```bash
 npm i vizabi@latest -S
 ```
-## Enviropments
+
+## Environments
 
 **Develop**
 http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
+Waffle server: `http://waffle-server-dev.gapminderdev.org`
 
 **Stage**
 https://tools-stage.gapminderdev.org/ - released once every week, usually
+Waffle server: `http://waffle-server-stage.gapminderdev.org/`
 
 **Production (live)**
 https://tools-prod.gapminderdev.org/ 
 http://www.gapminder.org/tools/
+Waffle server: `http://waffle-server.gapminderdev.org/`
