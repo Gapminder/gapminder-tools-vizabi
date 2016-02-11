@@ -6,7 +6,7 @@
     "type": "git",
     "url": "http://gapminder.org/tools"
   },
-  "author": "Arthur Camara",
+  "author": "Gapminder Foundation",
   "scripts": {
     "dev": "NODE_ENV=development SERVER_HOST=$(docker-machine ip default) webpack-dev-server --inline --hot --progress --color",
     "build": "NODE_ENV=development SERVER_HOST=$(docker-machine ip default) webpack",

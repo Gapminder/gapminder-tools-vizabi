@@ -1,7 +1,10 @@
-# Gapminder Tools page
-> This is the gapminder tools page
+# Gapminder Tools Page
 
-Code for page: [http://gapminder.org/tools](http://gapminder.org/tools)
+The Gapminder Tools Page ([http://gapminder.org/tools](http://gapminder.org/tools)) is an Angular application that leverages the [Vizabi](http://vizabi.org) visualization framework in order to display and animate information about the world. 
+
+As a backend, it uses a [Node.js Express](http://expressjs.com/)-based server to process and cache indicator information stored in a [MongoDB](https://www.mongodb.org/) database. This Express-backend is called "Server" in this repository. 
+
+The frontend Angular app is built and packaged locally using [Webpack](https://webpack.github.io/). The packaged client code in `client/dist/` is in turn served by the Express server above. 
 
 ## Requirements
 
