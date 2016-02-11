@@ -14,6 +14,8 @@
     "prestart": "SERVER_HOST=$(docker-machine ip default) npm run build",
     "start": "node server/server.js"
   },
+  "engine": "node >= 4.2.6",
+  "engine-strict" : true,
   "devDependencies": {
     "clean-webpack-plugin": "0.1.3",
     "compression-webpack-plugin": "0.2.0",

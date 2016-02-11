@@ -10,6 +10,8 @@
   "scripts": {
     "start": "node server/server.js"
   },
+  "engine": "node >= 4.2.6",
+  "engine-strict" : true,
   "devDependencies": {
   },
   "dependencies": {
