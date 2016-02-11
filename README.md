@@ -54,6 +54,10 @@ open http://localhost:8080/tools/
 
 By default, a remote mongo database (hosted at mongolab.com) is used for development. To use the local mongo docker container:
 
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.local-mongodb.yml up
+```
+
 ### Client-specific
 
 1. `npm run dev` - start serving UI only on port 8080, uses in memory file system
