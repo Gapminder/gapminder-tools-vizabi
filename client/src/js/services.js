@@ -19,28 +19,30 @@ module.exports = function (app) {
            * @param {DOMElement} placeholder
            * @return {Object}
            */
-          render: function (tool, placeholder, options) {
+          render: function (tool, placeholder, model) {
             var loc = window.location.toString();
             var hash = null;
+            var initialModel = Vizabi.utils.deepClone(model);
+
             if (loc.indexOf('#') >= 0) {
               hash = loc.substring(loc.indexOf('#') + 1);
             }
 
             if (hash) {
               var str = encodeURI(decodeURIComponent(hash));
-              var urlOptions = urlon.parse(str);
-              Vizabi.utils.extend(options, urlOptions);
+              var urlModel = urlon.parse(str);
+              Vizabi.utils.extend(model, urlModel);
             }
 
-            options.bind = options.bind || {};
-            options.bind.persistentChange = onPersistentChange;
+            model.bind = model.bind || {};
+            model.bind.persistentChange = onPersistentChange;
             
             function onPersistentChange(evt, minModel) {
-              minModel = Vizabi.utils.diffObject(minModel, options);
+              minModel = Vizabi.utils.diffObject(minModel, initialModel);
               window.location.hash = urlon.stringify(minModel);
             }
 
-            return Vizabi(tool, placeholder, options);
+            return Vizabi(tool, placeholder, model);
           }
         };
       }]);
