@@ -29,6 +29,33 @@ module.exports = function (app) {
     baseHref = bases[0].href;
   }
 
+
+  var mappingChartTypeList = {
+    'BubbleChart': "bubbles",
+    'MountainChart': "mountain",
+    'BubbleMap': "map",
+    'BarChart': "bar",
+    'BarRankChart': "barrank",
+    'LineChart': "line",
+    'PopByAge': "pop"
+  };
+
+  var mappingChartTypeMeasures = {
+    "bubbles": {
+      x: "axis_x",
+      y: "axis_y"
+    },
+    "map": {
+      x: "lat",
+      y: "lng"
+    },
+    "mountain": {
+      x: "axis_x",
+      y: "axis_y"
+    }
+  };
+
+
   app
     .factory("vizabiFactory", ['$http',
       function ($http) {
@@ -60,13 +87,19 @@ module.exports = function (app) {
 
             function onPersistentChange(evt, minModel) {
 
+              //console.log("onPersistentChange::", minModel);
+
               minModel = Vizabi.utils.diffObject(minModel, initialModel);
               window.location.hash = urlon.stringify(minModel);
 
               if(!_.isEmpty(minModel) && !/snapshot/.test(window.location.search)) {
+
+                var chartType = mappingChartTypeList[tool] ? mappingChartTypeList[tool] : "bubbles";
+
                 rxSubject.next({
                   minModel: minModel,
-                  vizabi: this
+                  vizabi: this,
+                  chartType: chartType
                 });
               }
             };
@@ -77,7 +110,12 @@ module.exports = function (app) {
               .subscribe(function(data) {
 
                 console.log('rxSubject', data);
+
                 var dataVizabi = data.vizabi;
+                var chartType = data.chartType;
+
+
+
 
                 // Request Object Structure
 
@@ -94,7 +132,7 @@ module.exports = function (app) {
                 if(data.minModel.state && data.minModel.state.entities && data.minModel.state.entities.select) {
                   targetModel = data.minModel;
                 } else {
-                  targetModel = data.vizabi;
+                  targetModel = dataVizabi;
                 }
 
                 foundEntitiesRaw = targetModel['state']['entities']['select'];
@@ -115,7 +153,7 @@ module.exports = function (app) {
                 if(data.minModel.state && data.minModel.state.entities && data.minModel.state.entities.show) {
                   targetModel = data.minModel;
                 } else {
-                  targetModel = data.vizabi;
+                  targetModel = dataVizabi;
                 }
 
                 if(targetModel['state']['entities']['show'] && targetModel['state']['entities']['show']['geo.cat']) {
@@ -133,22 +171,28 @@ module.exports = function (app) {
                 var foundMeasures = [];
                 var foundMeasuresRaw;
 
-                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker.axis_x) {
+                var measureX = mappingChartTypeMeasures[chartType]['x'];
+                var measureY = mappingChartTypeMeasures[chartType]['y'];
+
+
+
+
+                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker[measureX] && data.minModel.state.marker[measureX]['which']) {
                   targetModel = data.minModel;
                 } else {
-                  targetModel = data.vizabi;
+                  targetModel = dataVizabi;
                 }
 
-                foundMeasuresRaw = targetModel['state']['marker']['axis_x']['which'];
+                foundMeasuresRaw = targetModel['state']['marker'][measureX]['which'];
                 foundMeasures.push(foundMeasuresRaw);
 
-                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker.axis_y) {
+                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker[measureY] && data.minModel.state.marker[measureY]['which']) {
                   targetModel = data.minModel;
                 } else {
-                  targetModel = data.vizabi;
+                  targetModel = dataVizabi;
                 }
 
-                foundMeasuresRaw = targetModel['state']['marker']['axis_y']['which'];
+                foundMeasuresRaw = targetModel['state']['marker'][measureY]['which'];
                 foundMeasures.push(foundMeasuresRaw);
 
                 requestState.measures = foundMeasures;
@@ -163,16 +207,61 @@ module.exports = function (app) {
                 if(data.minModel.state && data.minModel.state.time) {
                   foundTime = data.minModel.state.time.value;
                 } else {
-                  foundTimeRaw = data.vizabi.state.time.value;
+                  foundTimeRaw = dataVizabi.state.time.value;
                   foundTime = new Date(foundTimeRaw).getFullYear().toString();
                 }
 
                 requestState.time = foundTime || "2015";
 
+
+
+                // Calculate :: Markers
+
+                requestState.marker = {};
+
+                // Calculate :: Size
+
+                var foundSize;
+                var foundSizeUse;
+
+                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker.size) {
+                  targetModel = data.minModel;
+                } else {
+                  targetModel = dataVizabi;
+                }
+
+                if(targetModel['state']['marker']["size"]) {
+                  foundSize = targetModel['state']['marker']["size"]['which'];
+                  foundSizeUse = dataVizabi['state']['marker']["size"]['use'] || false;
+                  requestState.marker.size = {which: foundSize};
+                  if(foundSizeUse) {
+                    requestState.marker.size['use'] = foundSizeUse;
+                  }
+                }
+
+                // Calculate :: Stack
+
+                var foundStack;
+                var foundStackUse;
+
+                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker.stack) {
+                  targetModel = data.minModel;
+                } else {
+                  targetModel = dataVizabi;
+                }
+
+                if(targetModel['state']['marker']["stack"]) {
+                  foundStack = targetModel['state']['marker']["stack"]['which'];
+                  foundStackUse = dataVizabi['state']['marker']["stack"]['use'] || false;
+                  requestState.marker.stack = {which: foundStack, use: foundStackUse};
+                  if(foundStackUse) {
+                    requestState.marker.stack['use'] = foundStackUse;
+                  }
+                }
+
+                // Ready requestState
                 console.log("requestState::", requestState);
 
-                // data.vizabi.state.entities.dim;  :: geo
-                // options.entitiy.dim              :: country,global,un_state,world_4region
 
                 $http.post('http://192.168.1.98:3000/api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
@@ -183,12 +272,17 @@ module.exports = function (app) {
 
                     var responseData = response.data.data;
                     var dataSend = {};
+
                     var ruleIndex = 0;
+                    var ruleIndexTotal = 0;
+
+                    for(var keyRule in responseData) {
+                      ruleIndexTotal++;
+                    }
 
                     for(var keyRule in responseData) {
 
                       var staticState = responseData[keyRule];
-
                       var readyTime = staticState.time.toString();
 
                       if(staticState.activeEntities) {
@@ -206,7 +300,6 @@ module.exports = function (app) {
                             });
                           }
                         }
-
                       } else {
                         readyEntities = [];
                       }
@@ -220,50 +313,100 @@ module.exports = function (app) {
                           staticStateShowEntities[i] = 'unstate';
                         }
 
-                        readyEntitiesShow.push(staticStateShowEntities[i]);
+                        // skip empty
+                        if(!_.isEmpty(staticStateShowEntities[i])) {
+                          readyEntitiesShow.push(staticStateShowEntities[i]);
+                        }
+                      }
+
+                      var staticStateVisibleEntities = staticState.entities;
+                      var readyEntitiesVisible = [];
+
+                      for(var i = 0; i < staticStateVisibleEntities.length; i += 1) {
+                        // skip empty
+                        if(!_.isEmpty(staticStateVisibleEntities[i])) {
+                          readyEntitiesVisible.push(staticStateVisibleEntities[i]);
+                        }
                       }
 
 
-                      // child_mortality_rate_per1000
-                      //staticState.measures[0] = "population";
 
-                      // gdp_p_cap_const_ppp2011_dollar
-                      //staticState.measures[1] = "child_mortality_rate_percent";
-
-                      // SETUP MIN_MODEL
+                      // SETUP :: MIN_MODEL
 
                       var mockMinModel = {
                         state : {
                           entities: {
-                            select: readyEntities,
-                            show: {
-                              'geo.cat': readyEntitiesShow
-                            }
-                          },
-                          marker: {
-                            axis_x: {
-                              //which: staticState.measures[0]
-                              which: requestState.measures[0]
-                            },
-                            axis_y: {
-                              //which: staticState.measures[1]
-                              which: requestState.measures[1]
-                            }
+                            select: readyEntities
                           },
                           time : {
-                            value: readyTime,
-                            start: readyTime,
-                            end: readyTime
+                            value: readyTime
                           }
                         }
                       };
 
+                      // SETUP :: MIN_MODEL :: measures
+
+                      mockMinModel.state.marker = requestState.marker;
+
+                      mockMinModel.state.marker[measureX] = {which: requestState.measures[0]};
+                      mockMinModel.state.marker[measureY] = {which: requestState.measures[1]};
+
+                      // SETUP :: Additional :: Time (start/End)
+
+                      //mockMinModel.state.time['start'] = readyTime;
+                      //mockMinModel.state.time['end'] = readyTime;
+
+                      // SETUP :: Additional :: Entities (show)
+
+                      if(readyEntitiesShow.length) {
+                        if(!mockMinModel.state.entities.show) {
+                          mockMinModel.state.entities.show = {};
+                        }
+                        mockMinModel.state.entities.show['geo.cat'] = readyEntitiesShow;
+                      }
+
+                      // SETUP :: Additional :: Entities (visible)
+
+                      if(readyEntitiesVisible.length) {
+                        if(!mockMinModel.state.entities.show) {
+                          mockMinModel.state.entities.show = {};
+                        }
+                        mockMinModel.state.entities.show['geo'] = readyEntitiesVisible;
+                      }
+
+                      // SETUP Exception
+
+                      if("map" == chartType) {
+                        delete mockMinModel.state.marker[measureX];
+                        delete mockMinModel.state.marker[measureY];
+                      }
+
+                      /*
+
+                      if(requestState['size']) {
+                        if(!mockMinModel.state.marker) {
+                          mockMinModel.state.marker = {};
+                        }
+                        mockMinModel.state.marker["size"] = {which: requestState['size']};
+                      }
+
+                      if(requestState['stack']) {
+                        if(!mockMinModel.state.marker) {
+                          mockMinModel.state.marker = {};
+                        }
+                        mockMinModel.state.marker["stack"] = {which: requestState['stack']};
+                      }
+
+                      */
+
+                      // Ready mockMinModel
                       console.log("Responce::mockMinModel", mockMinModel);
 
                       var requestImage = {
                         hash: URLON.stringify(mockMinModel),
-                        chartType: 'bubbles',
+                        chartType: chartType,
                         minModel: mockMinModel,
+                        ruleIndexTotal: ruleIndexTotal,
                         ruleIndex: ruleIndex
                       };
 
@@ -273,8 +416,8 @@ module.exports = function (app) {
                       });
 
                       ruleIndex++;
-                      //break;
 
+                      //break;
                       // URLON.stringify(minModel)
                       // URLON.parse(encodeURI(decodeURIComponent(hash)));
                     }
@@ -287,8 +430,8 @@ module.exports = function (app) {
 
             var VizabiInstance = Vizabi(tool, placeholder, model);
 
-            console.log("V::Vizabi ", VizabiInstance, initialModel);
-            console.log("V::initialModel ", initialModel);
+            //console.log("V::Vizabi ", VizabiInstance, initialModel);
+            //console.log("V::initialModel ", initialModel);
 
             return VizabiInstance;
           }

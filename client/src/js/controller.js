@@ -83,9 +83,9 @@ module.exports = function (app) {
                 console.log("$scope.viz::", urlModel, $scope.viz);
                 $scope.viz.model.set('state', urlModel.state);
 
-                //window.location.hash = "#" + hash;
-                //$event.preventDefault();
-                //return false;
+                window.location.hash = "#" + hash;
+                $event.preventDefault();
+                return false;
 
                 //$scope.viz.model.state = urlModel.state;
                 //$scope.viz.triggerResize();
@@ -138,11 +138,23 @@ module.exports = function (app) {
               .subscribe(function(data){
 
               var suggestion = data.requestData.ruleIndex;
+              var suggestions = data.requestData.ruleIndexTotal;
 
               var bases = document.getElementsByTagName('base');
               var baseHref = null;
               if (bases.length > 0) {
                 baseHref = bases[0].href;
+              }
+
+              if($scope.relatedItems) {
+                for(var i = 0; i < $scope.relatedItems.length; i++) {
+                  if((i+1) > suggestions) {
+                    $scope.relatedItems.splice(i, 1);
+                  } else {
+                    $scope.relatedItems[i].title = "Loading ...";
+                    $scope.relatedItems[i].subtitle = "";
+                    $scope.relatedItems[i].link = "";                  }
+                }
               }
 
               // REQUEST :: Screenshot
