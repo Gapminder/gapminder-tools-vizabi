@@ -22,6 +22,15 @@ var request = require('request');
 var WSHostUrl = config.WS_HOST + ':' + config.WS_PORT;
 var staticUrl = config.HOST + ':' + config.PORT;
 
+var webshot = require('webshot');
+var URLON = require('URLON');
+var fs = require('fs');
+var base64Stream = require('base64-stream');
+
+// DEP :: "base-64": "^0.1.0",
+//var base64 = require('base-64');
+
+
 module.exports = function (app) {
   var router = express.Router();
   /* API Routes */
@@ -67,6 +76,92 @@ module.exports = function (app) {
   router.get('/item', compression(), function (req, res) {
     return getItems(res);
   });
+
+
+  // TEST MAGIC :: ROUTE 1 :: Mock state
+
+  router.post('/testmagicstep1', compression(), function (req, res) {
+
+    var expectedSuggestion = {
+      parent_when_one_selected: {
+        entities: ['europe', 'africa', 'americas', 'asia', 'ukr'],
+        activeEntities: ['europe', 'world'],
+        entityConcepts: ['global', 'world_4region'],
+        //entityConcepts: ["country", "unstate"],
+        measures: ['population', 'child_mortality_rate_percent'],
+        //measures: ["child_mortality_rate_per1000", "gdp_p_cap_const_ppp2011_dollar"],
+        time: 2008
+      }
+    };
+
+    return res.json({data:expectedSuggestion});
+  });
+
+  // TEST MAGIC :: ROUTE 2 :: Take Screenshot
+
+  router.post('/testmagicstep2', function (req, res) {
+
+    var data = req.body.hash;
+    var chartType = req.body.chartType;
+    chartType += '_' + String(Date.now());
+
+    var options = {
+      screenSize: {
+        width: 750,
+        height: 400
+      },
+      /*shotSize: {
+        width: 600,
+        height: 400
+      },*/
+      shotOffset: {
+        top: 70,
+        left: 20,
+        right: 110,
+        bottom: 115
+      },
+      //customCSS: '.vzb-placeholder .vzb-tool { background-color: #DDDDDD; }',
+      timeout: 7500,
+      renderDelay: 2000,
+      errorIfJSException: false,
+      takeShotOnCallback: true,
+      streamType:'png',
+      quality: 100
+    };
+
+    // errorIfStatusIsNot200: true,
+    // takeShotOnCallback: true
+
+    var webHostUrl = staticUrl + '/tools/' + req.body.chartType + '?snapshot#' + data;
+    var webHostPathImage = path.join(__dirname, '../screens/', chartType + '.png');
+
+    console.log("testmagicstep2::webHostUrl", webHostUrl);
+    console.log("testmagicstep2::webHostPathImage", webHostPathImage);
+
+    webshot(webHostUrl, options, function (err, renderStream) {
+    //webshot(webHostUrl, webHostPathImage, options, function (err, renderStream) {
+      //renderStream.pipe(res);
+      renderStream.pipe(base64Stream.encode()).pipe(res);
+    });
+  });
+
+  /*
+     console.log("webshot::", err);
+     if (err) {
+      return res.send({
+        error: JSON.stringify(err)
+      });
+     }
+     console.log("Server::ScreenshotReady!", webHostPathImage);
+     //return res.sendFile(webHostPathImage);
+     fs.readFile(webHostPathImage, function(err, original_data){
+      var base64Image = original_data.toString('base64');
+      return res.send({
+        images: [base64Image]
+      });
+     });
+   */
+
 
   router.get('/menu', compression(), function (req, res) {
     return Menu
