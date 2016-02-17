@@ -189,7 +189,6 @@ module.exports = function (app) {
     'mc_precomputed_shapes.json': '/api/vizabi/mc_precomputed_shapes.json',
     'world-50m.json': '/api/vizabi/world-50m.json',
     'dont-panic-poverty-geo-properties.csv': '/api/vizabi/geo_properties.csv'
-    'suggestions': '/api/suggestions'
   };
 
   function proxyMiddleware(url) {
@@ -201,6 +200,8 @@ module.exports = function (app) {
   _.forEach(valueKey, function (value, key) {
     router.get('/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
   });
+
+  router.get('/tools/api/suggestions', compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
 
   var base = path.join(BASEURL, 'api');
   app.use(base, router);
