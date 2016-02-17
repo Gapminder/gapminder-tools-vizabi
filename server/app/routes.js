@@ -189,6 +189,7 @@ module.exports = function (app) {
     'mc_precomputed_shapes.json': '/api/vizabi/mc_precomputed_shapes.json',
     'world-50m.json': '/api/vizabi/world-50m.json',
     'dont-panic-poverty-geo-properties.csv': '/api/vizabi/geo_properties.csv'
+    'suggestions': '/api/suggestions'
   };
 
   function proxyMiddleware(url) {

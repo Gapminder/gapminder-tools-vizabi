@@ -299,8 +299,12 @@ module.exports = function (app) {
                 // Ready requestState
                 console.log("requestState::", requestState);
                 requestState.temp = '22';
-
-                $http.post( WS_HOST + ':' + WS_PORT + '/api/suggestions', requestState).then(function(response){
+                var bases = document.getElementsByTagName('base');
+                var baseHref = null;
+                if (bases.length > 0) {
+                  baseHref = bases[0].href;
+                }
+                $http.post( baseHref + 'api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
 
                   console.log("Responce::Success", response);
