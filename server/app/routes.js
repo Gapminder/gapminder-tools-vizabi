@@ -122,7 +122,7 @@ module.exports = function (app) {
       },
       //customCSS: '.vzb-placeholder .vzb-tool { background-color: #DDDDDD; }',
       timeout: 7500,
-      renderDelay: 2000,
+      renderDelay: 750,
       errorIfJSException: false,
       takeShotOnCallback: true,
       streamType:'png',

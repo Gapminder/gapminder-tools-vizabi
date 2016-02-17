@@ -119,11 +119,31 @@ module.exports = function (app) {
                 var str = encodeURI(decodeURIComponent(hash));
                 var urlModel = urlon.parse(str);
 
+                // Can't affect Vizabi Model
+                var reload = false;
+                if(_.isEmpty(urlModel.state.entities.show)) {
+                  urlModel.state.entities.show['geo.cat'] = [
+                    "global", "world_4region", "country", "un_state"
+                  ];
+                  var reload = true;
+                  //urlModel.state.entities.show['geo'] = [];
+                  //$scope.viz.model.state.entities.set('show', urlModel.state.entities.show, true);
+                }
+
                 console.log("$scope.viz::", urlModel, $scope.viz);
                 $scope.viz.model.set('state', urlModel.state);
 
+                console.log("relatedClickHandler::Stop");
+
                 window.location.hash = "#" + hash;
                 $event.preventDefault();
+
+                if(reload) {
+                  setTimeout(function () {
+                    window.location.reload();
+                  },1);
+                }
+                //$scope.viz.triggerResize();
                 return false;
 
                 //$scope.viz.model.state = urlModel.state;
@@ -169,7 +189,12 @@ module.exports = function (app) {
               }
             }});
 
-
+            var rulesDescription = {
+              'parents_when_non_or_4_and_more_selected': 'Parents when non or 4 and more selected',
+              "parent_when_one_selected": 'Parent when one selected',
+              "parents_when_2_to_4_selected": 'Parents when 2 to 4 selected',
+              "children_of_selected": 'Children of selected'
+            }
 
 
 
@@ -178,6 +203,7 @@ module.exports = function (app) {
 
               var suggestion = data.requestData.ruleIndex;
               var suggestions = data.requestData.ruleIndexTotal;
+              var keyRule = data.requestData.keyRule;
 
               var bases = document.getElementsByTagName('base');
               var baseHref = null;
@@ -192,7 +218,9 @@ module.exports = function (app) {
                   } else {
                     $scope.relatedItems[i].title = "Loading ...";
                     $scope.relatedItems[i].subtitle = "";
-                    $scope.relatedItems[i].link = "";                  }
+                    $scope.relatedItems[i].link = "";
+                    $scope.relatedItems[i].image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AIRDjYaNhWXvQAAAAxJREFUCNdj+P//PwAF/gL+3MxZ5wAAAABJRU5ErkJggg==";
+                  }
                 }
               }
 
@@ -216,8 +244,8 @@ module.exports = function (app) {
                 console.log("relatedItems ::link::", link);
 
                 $scope.relatedItems[suggestion] = {};
-                $scope.relatedItems[suggestion].title = "Suggestion Ready!" + (suggestion + 1);
-                $scope.relatedItems[suggestion].subtitle = "Suggestion Subtitle ...";
+                $scope.relatedItems[suggestion].title = "Suggestion Ready!";
+                $scope.relatedItems[suggestion].subtitle = rulesDescription[keyRule];
                 $scope.relatedItems[suggestion].link = link;
                 $scope.relatedItems[suggestion].image = imageSource;
 

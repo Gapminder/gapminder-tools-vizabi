@@ -77,9 +77,12 @@ module.exports = function (app) {
             }
 
             if (hash) {
+
               var str = encodeURI(decodeURIComponent(hash));
               var urlModel = urlon.parse(str);
-              Vizabi.utils.extend(model, urlModel);
+
+              Vizabi.utils.deepExtend(model, urlModel);
+              //model = Vizabi.utils.diffObject(urlModel, model);
             }
 
             model.bind = model.bind || {};
@@ -150,7 +153,7 @@ module.exports = function (app) {
                 var foundEntityConcept = [];
                 var foundEntityConceptRaw = [];
 
-                if(data.minModel.state && data.minModel.state.entities && data.minModel.state.entities.show) {
+                if(data.minModel.state && data.minModel.state.entities && data.minModel.state.entities.show && data.minModel.state.entities.show['geo.cat']) {
                   targetModel = data.minModel;
                 } else {
                   targetModel = dataVizabi;
@@ -295,7 +298,7 @@ module.exports = function (app) {
 
                 // Ready requestState
                 console.log("requestState::", requestState);
-
+                requestState.temp = '22';
 
                 $http.post( WS_HOST + ':' + WS_PORT + '/api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
@@ -392,10 +395,10 @@ module.exports = function (app) {
 
                       // SETUP :: Additional :: Entities (show)
 
+                      if(!mockMinModel.state.entities.show) {
+                        mockMinModel.state.entities.show = {};
+                      }
                       if(readyEntitiesShow.length) {
-                        if(!mockMinModel.state.entities.show) {
-                          mockMinModel.state.entities.show = {};
-                        }
                         mockMinModel.state.entities.show['geo.cat'] = readyEntitiesShow;
                       }
 
@@ -441,7 +444,8 @@ module.exports = function (app) {
                         chartType: chartType,
                         minModel: mockMinModel,
                         ruleIndexTotal: ruleIndexTotal,
-                        ruleIndex: ruleIndex
+                        ruleIndex: ruleIndex,
+                        keyRule: keyRule
                       };
 
 
