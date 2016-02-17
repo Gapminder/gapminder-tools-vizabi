@@ -217,7 +217,7 @@ module.exports = function (app) {
 
                 // Calculate :: Markers
 
-                requestState.marker = {};
+                requestStateMarker = {};
 
                 // Calculate :: Size
 
@@ -233,9 +233,9 @@ module.exports = function (app) {
                 if(targetModel['state']['marker']["size"]) {
                   foundSize = targetModel['state']['marker']["size"]['which'];
                   foundSizeUse = dataVizabi['state']['marker']["size"]['use'] || false;
-                  requestState.marker.size = {which: foundSize};
+                  requestStateMarker.size = {which: foundSize};
                   if(foundSizeUse) {
-                    requestState.marker.size['use'] = foundSizeUse;
+                    requestStateMarker.size['use'] = foundSizeUse;
                   }
                 }
 
@@ -253,17 +253,52 @@ module.exports = function (app) {
                 if(targetModel['state']['marker']["stack"]) {
                   foundStack = targetModel['state']['marker']["stack"]['which'];
                   foundStackUse = dataVizabi['state']['marker']["stack"]['use'] || false;
-                  requestState.marker.stack = {which: foundStack, use: foundStackUse};
+                  requestStateMarker.stack = {which: foundStack};
                   if(foundStackUse) {
-                    requestState.marker.stack['use'] = foundStackUse;
+                    requestStateMarker.stack['use'] = foundStackUse;
                   }
                 }
+
+
+                // Calculate :: Color Pallet
+
+                var foundColor;
+                var foundColorUse;
+                var foundColorPallet;
+
+                if(data.minModel.state && data.minModel.state.marker && data.minModel.state.marker.color) {
+                  targetModel = data.minModel;
+                } else {
+                  targetModel = dataVizabi;
+                }
+
+                if(targetModel['state']['marker']["color"]) {
+                  foundColor = targetModel['state']['marker']["color"]['which'];
+                  foundColorUse = dataVizabi['state']['marker']["color"]['use'] || false;
+                  foundColorPallet = dataVizabi['state']['marker']["color"]['palette'] || false;
+
+                  requestStateMarker.color = {which: foundColor};
+                  if(foundColorUse) {
+                    requestStateMarker.color['use'] = foundColorUse;
+                  }
+                  if(foundColorPallet) {
+                    requestStateMarker.color['palette'] = {};
+                    var foundColorPalletAll = foundColorPallet.get();
+                    for(var index in foundColorPalletAll) {
+                      if(index != '_default') {
+                        requestStateMarker.color['palette'][index] = foundColorPalletAll[index].value;
+                      }
+                    }
+                  }
+                }
+
 
                 // Ready requestState
                 console.log("requestState::", requestState);
 
 
-                $http.post('http://192.168.1.98:3000/api/suggestions', requestState).then(function(response){
+                //$http.post('http://192.168.1.98:3000/api/suggestions', requestState).then(function(response){
+                $http.post('http://localhost:3000/api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
 
                   console.log("Responce::Success", response);
@@ -346,7 +381,7 @@ module.exports = function (app) {
 
                       // SETUP :: MIN_MODEL :: measures
 
-                      mockMinModel.state.marker = requestState.marker;
+                      mockMinModel.state.marker = requestStateMarker;
 
                       mockMinModel.state.marker[measureX] = {which: requestState.measures[0]};
                       mockMinModel.state.marker[measureY] = {which: requestState.measures[1]};

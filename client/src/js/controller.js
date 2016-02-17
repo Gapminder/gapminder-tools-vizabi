@@ -13,7 +13,9 @@ module.exports = function (app) {
     .controller('gapminderToolsCtrl', [
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', '$http',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, $http) {
+
         var placeholder = document.getElementById('vizabi-placeholder');
+        var prevSlug = null;
 
         $scope.loadingError = false;
         $scope.tools = {};
@@ -24,16 +26,14 @@ module.exports = function (app) {
         vizabiItems.getItems().then(function (items) {
           // "geo": ["asia", "africa", "europe", "americas"]
           // "geo.cat": ["global", "world_4region", "country", "un_state"]
-          var default_state = {
+
+          var default_state_map = {
             "entities": {
               "show": {
                 "geo.cat": ["global", "world_4region", "country", "un_state"]
               }
             },
             "marker": {
-              "axis_y": {
-                "which": "life_expectancy"
-              },
               "color": {
                 "which": "geo",
                 "palette": {
@@ -45,15 +45,28 @@ module.exports = function (app) {
               }
             }
           };
-          items.bubbles.opts.state = default_state;
-          items.map.opts.state = default_state;
-          //items.mountain.opts.state = default_state;
+
+          var default_state_bubble = angular.copy(default_state_map);
+          default_state_bubble.marker["axis_y"] = {
+              "which": "life_expectancy"
+          };
+
+          var default_state_mountain = angular.copy(default_state_map);
+          default_state_mountain.marker["axis_y"] = {
+            "which": "life_expectancy"
+          };
+
+
+          items.map.opts.state = default_state_map;
+          items.bubbles.opts.state = default_state_bubble;
+          items.mountain.opts.state = default_state_mountain;
+
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
           updateGraph();
         });
 
-        var prevSlug = null;
+
         $scope.$root.$on('$routeChangeStart', function(event, state){
           var newSlug = state.params.slug;
           if (!prevSlug) {
