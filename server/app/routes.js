@@ -201,7 +201,7 @@ module.exports = function (app) {
     router.get('/static/data/' + key, compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + value));
   });
 
-  router.post('/suggestions', compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + '/api/suggestions'));
+  //router.post('/suggestions', compression(), cache.route({expire: 86400}), proxyMiddleware(WSHostUrl + '/api/suggestions'));
 
   var base = path.join(BASEURL, 'api');
   app.use(base, router);

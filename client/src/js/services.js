@@ -304,7 +304,7 @@ module.exports = function (app) {
                 if (bases.length > 0) {
                   baseHref = bases[0].href;
                 }
-                $http.post( baseHref + 'api/suggestions', requestState).then(function(response){
+                $http.post('http://52.48.200.43:3000/api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
 
                   console.log("Responce::Success", response);
