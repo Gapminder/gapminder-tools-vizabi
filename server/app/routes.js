@@ -141,6 +141,10 @@ module.exports = function (app) {
     webshot(webHostUrl, options, function (err, renderStream) {
     //webshot(webHostUrl, webHostPathImage, options, function (err, renderStream) {
       //renderStream.pipe(res);
+      if (err) {
+        return res.status(500).json(err);
+      }
+
       renderStream.pipe(base64Stream.encode()).pipe(res);
     });
   });

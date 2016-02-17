@@ -22,6 +22,32 @@ module.exports = function (app) {
 
         //start off by getting all items
         vizabiItems.getItems().then(function (items) {
+          // "geo": ["asia", "africa", "europe", "americas"]
+          // "geo.cat": ["global", "world_4region", "country", "un_state"]
+          var default_state = {
+            "entities": {
+              "show": {
+                "geo.cat": ["global", "world_4region", "country", "un_state"]
+              }
+            },
+            "marker": {
+              "axis_y": {
+                "which": "life_expectancy"
+              },
+              "color": {
+                "which": "geo",
+                "palette": {
+                  "asia": "#ff5872",
+                  "africa": "#00d5e9",
+                  "europe": "#ffe700",
+                  "americas": "#7feb00"
+                }
+              }
+            }
+          };
+          items.bubbles.opts.state = default_state;
+          items.map.opts.state = default_state;
+          //items.mountain.opts.state = default_state;
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
           updateGraph();
