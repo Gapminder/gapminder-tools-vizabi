@@ -11,12 +11,12 @@ var Rx = require('rxjs/Rx');
 // ScreenShot :: Phantom :: Math.sign polyfill
 
 Math.sign = Math.sign || function(x) {
-    x = +x; // convert to a number
-    if (x === 0 || isNaN(x)) {
-      return x;
-    }
-    return x > 0 ? 1 : -1;
+  x = +x; // convert to a number
+  if (x === 0 || isNaN(x)) {
+    return x;
   }
+  return x > 0 ? 1 : -1;
+}
 
 
 
@@ -297,8 +297,7 @@ module.exports = function (app) {
                 console.log("requestState::", requestState);
 
 
-                //$http.post('http://192.168.1.98:3000/api/suggestions', requestState).then(function(response){
-                $http.post('http://localhost:3000/api/suggestions', requestState).then(function(response){
+                $http.post( WS_HOST + ':' + WS_PORT + '/api/suggestions', requestState).then(function(response){
                 //$http.post(baseHref + 'api/testmagicstep1', requestState).then(function(response){
 
                   console.log("Responce::Success", response);

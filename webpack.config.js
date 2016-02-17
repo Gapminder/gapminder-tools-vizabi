@@ -7,16 +7,18 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+var _ = require('lodash');
 
 var bourbon = require('node-bourbon').includePaths;
 
-var config = {
+var config = require('./server/config');
+config = _.extend(config, {
   template: 'index.html',
   index: 'index.html',
   src: './client/src',
   dest: './client/dist/tools',
   publicPath: '/tools/'
-};
+});
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -93,7 +95,11 @@ var wConfig = {
   plugins: [
     new Clean([config.dest]),
     new webpack.DefinePlugin({
-      _isDev: !isProduction
+      _isDev: !isProduction,
+      HOST: JSON.stringify(config.HOST),
+      PORT: JSON.stringify(config.PORT),
+      WS_HOST: JSON.stringify(config.WS_HOST),
+      WS_PORT: JSON.stringify(config.WS_PORT)
     }),
     new ExtractTextPlugin('[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
@@ -149,7 +155,7 @@ var wConfig = {
     },
     devtool: 'eval',
     proxy: {
-      '*/api/*': 'http://localhost:' + (process.env.PORT || '3001')
+      '*/api/*': config.HOST + ':' + config.PORT
     }
   }
 };
