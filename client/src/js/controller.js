@@ -1,12 +1,12 @@
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
 var Rx = require('rxjs/Rx');
-require('phantomjs-polyfill');
 
-// DEP :: "polyfill-math": "0.0.1",
-//require('polyfill-math');
-// DEP :: "es5-shim": "^4.5.4",
-//require('es5-shim');
+require('phantomjs-polyfill');
+require('./services/phanthom-polyfills');
+
+var ServiceSuggestion = require('./services/suggestion');
+var ServiceSnapshot = require('./services/snapshot');
 
 module.exports = function (app) {
   app
@@ -24,8 +24,6 @@ module.exports = function (app) {
 
         //start off by getting all items
         vizabiItems.getItems().then(function (items) {
-          // "geo": ["asia", "africa", "europe", "americas"]
-          // "geo.cat": ["global", "world_4region", "country", "un_state"]
 
           var default_state_map = {
             "entities": {
@@ -158,6 +156,7 @@ module.exports = function (app) {
         };
 
         function updateGraph() {
+
           var validTools = $scope.validTools;
           if (validTools.length === 0) return;
           if (validTools.indexOf($routeParams.slug) === -1) {
@@ -167,14 +166,46 @@ module.exports = function (app) {
           }
 
           scrollTo(document.querySelector('.wrapper'), 0, 200, function () {
+
             $scope.activeTool = $routeParams.slug;
             // do not put data in $scope
             var tool = angular.copy($scope.tools[$scope.activeTool]);
+            var chartType = tool.tool;
 
             Vizabi.clearInstances();
 
+
             var rxSubjectCallback = new Rx.Subject();
-            $scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts, rxSubjectCallback);
+
+
+
+            $scope.persistantChangeCallBack = new Rx.Subject();
+            $scope.serviceSuggestion = new ServiceSuggestion(chartType, {'$http': $http});
+
+            $scope.persistantChangeCallBack
+              .distinctUntilChanged()
+              .debounceTime(500)
+              .subscribe(function(data){
+                var suggestionResult = $scope.serviceSuggestion.send(data);
+                suggestionResult.then(function(response){
+
+                  console.log("suggestionResult::Ok", response);
+                  new ServiceSnapshot(response, $scope.serviceSuggestion, rxSubjectCallback);
+
+                }, function(response){
+                  console.log("suggestionResult::Error", response);
+                });
+              });
+
+            $scope.viz = vizabiFactory.render(chartType, placeholder, tool.opts, $scope.persistantChangeCallBack);
+
+
+
+
+
+
+
+            //$scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts, rxSubjectCallback);
             //$scope.relatedItems = tool.relateditems;
             $scope.$apply();
 
