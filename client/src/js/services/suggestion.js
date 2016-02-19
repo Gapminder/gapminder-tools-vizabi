@@ -9,20 +9,21 @@ module.exports = function (app) {
 };
 */
 
-var ToolVizabiExternal = require('./../tools/vizabi/external.js');
+var ToolVizabiExternal = require('./../tools/vizabi.external.js');
 
 var ServiceSuggestions = function (chartType, dependencies) {
 
   $http = dependencies['$http'];
 
   this.defaultChartType = "bubbles";
+  this.serviceUrl = 'http://52.48.200.43:3000/api/suggestions';
   this.chartTypeLabel = ToolVizabiExternal.getChartType(chartType, this.defaultChartType);
 
-  this.modelState = {};
+  this.modelMarkersState = {};
 
   /* Methods */
 
-  this._getRequstData = function (data) {
+  this._getRequestData = function (data) {
 
     var modelMin = data.minModel;
     var modelViz = data.vizModel;
@@ -40,70 +41,88 @@ var ServiceSuggestions = function (chartType, dependencies) {
     requestState.measures.push(ToolVizabiExternal.searchData(measurePathX, modelMin, modelViz));
     requestState.measures.push(ToolVizabiExternal.searchData(measurePathY, modelMin, modelViz));
 
-    requestState.entityConcepts = ToolVizabiExternal.searchData('state/entities/show/geo.cat', modelMin, modelViz) || [];
-    requestState.time = ToolVizabiExternal.searchDataTime('state/time/value', modelMin, modelViz);
+    var entityConceptsRaw = ToolVizabiExternal.searchData('state/entities/show/geo.cat', modelMin, modelViz) || [];
+    requestState.entityConcepts = ToolVizabiExternal.convertFormatMismatchTo(entityConceptsRaw);
 
+    requestState.time = ToolVizabiExternal.searchDataTime('state/time/value', modelMin, modelViz);
     requestState.entities = ToolVizabiExternal.searchDataEntities('state/entities/select', modelMin, modelViz, 'geo') || [];
 
     return requestState;
   };
 
-  this._getStateData = function (data) {
+  this._getMarkersData = function (data) {
 
     var modelMin = data.minModel;
     var modelViz = data.vizModel;
 
-    var modelStateAdditional = {};
+    var modelMarkersState = {};
 
     // Marker :: Size
 
     var markerSize = ToolVizabiExternal.searchData('state/marker/size', modelMin, modelViz);
     if(markerSize) {
-      modelStateAdditional['size'] = {};
-      modelStateAdditional['size']['which'] = ToolVizabiExternal.searchData('state/marker/size/which', modelMin, modelViz);
-      modelStateAdditional['size']['use'] = ToolVizabiExternal.searchData('state/marker/size/use', modelMin, modelViz);
+      modelMarkersState['size'] = {};
+      modelMarkersState['size']['which'] = ToolVizabiExternal.searchData('state/marker/size/which', modelMin, modelViz);
+      modelMarkersState['size']['use'] = ToolVizabiExternal.searchData('state/marker/size/use', modelMin, modelViz);
     }
 
     // Marker :: Stack
 
     var markerStack = ToolVizabiExternal.searchData('state/marker/stack', modelMin, modelViz);
     if(markerStack) {
-      modelStateAdditional['stack'] = {};
-      modelStateAdditional['stack']['which'] = ToolVizabiExternal.searchData('state/marker/stack/which', modelMin, modelViz);
-      modelStateAdditional['stack']['use'] = ToolVizabiExternal.searchData('state/marker/stack/use', modelMin, modelViz);
+      modelMarkersState['stack'] = {};
+      modelMarkersState['stack']['which'] = ToolVizabiExternal.searchData('state/marker/stack/which', modelMin, modelViz);
+      modelMarkersState['stack']['use'] = ToolVizabiExternal.searchData('state/marker/stack/use', modelMin, modelViz);
     }
 
-    // Marker :: Stack
+    // Marker :: Color
 
     var markerColor = ToolVizabiExternal.searchData('state/marker/color', modelMin, modelViz);
     if(markerColor) {
-      modelStateAdditional['color'] = {};
-      modelStateAdditional['color']['which'] = ToolVizabiExternal.searchData('state/marker/color/which', modelMin, modelViz);
-      modelStateAdditional['color']['use'] = ToolVizabiExternal.searchData('state/marker/color/use', modelMin, modelViz);
+      modelMarkersState['color'] = {};
+      modelMarkersState['color']['which'] = ToolVizabiExternal.searchData('state/marker/color/which', modelMin, modelViz);
+      modelMarkersState['color']['use'] = ToolVizabiExternal.searchData('state/marker/color/use', modelMin, modelViz);
 
       var colorPallet = ToolVizabiExternal.searchData('state/marker/color/palette', modelMin, modelViz) || false;
       if(colorPallet) {
-        modelStateAdditional['color']['palette'] = {};
+        modelMarkersState['color']['palette'] = {};
         var colorPalletAll = colorPallet.get();
         for(var indexColor in colorPalletAll) {
           if(indexColor != '_default') {
-            modelStateAdditional['color']['palette'][indexColor] = colorPalletAll[indexColor].value;
+            modelMarkersState['color']['palette'][indexColor] = colorPalletAll[indexColor].value;
           }
         }
       }
     }
 
-    return modelStateAdditional;
+    // Marker :: Measures
+
+    var measureList = ToolVizabiExternal.getChartMeasures(this.chartTypeLabel);
+
+    var measurePathX = 'state/marker/' + measureList['x'] + '/which';
+    var measurePathY = 'state/marker/' + measureList['y'] + '/which';
+
+    modelMarkersState[measureList['x']] = {};
+    modelMarkersState[measureList['x']]['which'] = ToolVizabiExternal.searchData(measurePathX, modelMin, modelViz);
+
+    modelMarkersState[measureList['y']] = {};
+    modelMarkersState[measureList['y']]['which'] = ToolVizabiExternal.searchData(measurePathY, modelMin, modelViz);
+
+
+    return modelMarkersState;
+  };
+
+  this.getModelMarkersState = function () {
+    return this.modelMarkersState;
   };
 
   this.send = function (data) {
 
-    var requestData = this._getRequstData(data);
-    var modelState = this._getStateData(data);
-    this.modelState = modelState;
+    var requestData = this._getRequestData(data);
+    this.modelMarkersState = this._getMarkersData(data);
 
-    console.log("ServiceSuggestions::send", requestData, modelState);
-    return $http.post('http://52.48.200.43:3000/api/suggestions', requestData);
+    console.log("ServiceSuggestions::send", requestData, this.modelMarkersState);
+    return $http.post(this.serviceUrl, requestData);
   };
 
   return this;

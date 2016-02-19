@@ -20,7 +20,7 @@ module.exports = function (app) {
            * @param {DOMElement} placeholder
            * @return {Object}
            */
-          render: function (tool, placeholder, model, persistantChangeCallBack) {
+          render: function (tool, placeholder, model, persistantChangeCallback) {
             var loc = window.location.toString();
             var hash = null;
             var initialModel = Vizabi.utils.deepClone(model);
@@ -45,10 +45,13 @@ module.exports = function (app) {
 
               minModel = Vizabi.utils.diffObject(minModel, initialModel);
               window.location.hash = urlon.stringify(minModel);
+              console.log("onPersistentChange");
+
+              // Suggestion Feature Integration (Magic)
 
               if(!_.isEmpty(minModel) && !/snapshot/.test(window.location.search)) {
 
-                persistantChangeCallBack.next({
+                persistantChangeCallback.next({
                   minModel: minModel,
                   vizModel: this
                 });

@@ -25,6 +25,30 @@ var ToolVizabiExternal = function () {
     }
   };
 
+  var defaultModelState = {
+    "entities": {
+      "show": {
+        "geo.cat": [
+          "global",
+          "world_4region",
+          "country",
+          "un_state"
+        ]
+      }
+    },
+    "marker": {
+      "color": {
+        "which": "geo",
+        "palette": {
+          "asia": "#ff5872",
+          "africa": "#00d5e9",
+          "europe": "#ffe700",
+          "americas": "#7feb00"
+        }
+      }
+    }
+  };
+
   this.getChartType = function (tool, def) {
     return mappingChartTypeList[tool] ? mappingChartTypeList[tool] : def;
   };
@@ -89,6 +113,57 @@ var ToolVizabiExternal = function () {
         return;
       }
     }
+  };
+
+  this.convertFormatMismatchFrom = function(array) {
+    return array.map(function(v) {
+      return v === 'unstate' ? 'un_state' : v;
+    });
+  };
+
+  this.convertFormatMismatchTo = function(array) {
+    return array.map(function(v) {
+      return v === 'un_state' ? 'unstate' : v;
+    });
+  };
+
+  this.getDefaultEntityShowData = function () {
+    return defaultModelState.entities.show['geo.cat'];
+  };
+
+  this.clearModelForLink = function (minModel) {
+
+    // restriction Time
+    delete minModel.state.time.end;
+    delete minModel.state.time.start;
+
+    // restriction Splash
+    // delete minModel.data.splash;
+  }
+
+  this.setupInitState = function(items) {
+
+    // setup Map Chart Model
+
+    var defaultModelStateMap = angular.copy(defaultModelState);
+    items.map.opts.state = defaultModelStateMap;
+
+    // setup Bubble Chart Model
+
+    var defaultModelStateBubble = angular.copy(defaultModelState);
+    defaultModelStateBubble.marker["axis_y"] = {
+      "which": "life_expectancy"
+    };
+    items.bubbles.opts.state = defaultModelStateBubble;
+
+    // setup Mountain Chart Model
+    // Asked For Correct State (*)
+
+    var defaultModelStateMountain = angular.copy(defaultModelState);
+    defaultModelStateMountain.marker["axis_y"] = {
+      "which": "life_expectancy"
+    };
+    items.mountain.opts.state = defaultModelStateMountain;
   };
 
   return this;

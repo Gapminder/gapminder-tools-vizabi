@@ -1,12 +1,15 @@
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
 var Rx = require('rxjs/Rx');
+var _ = require('lodash');
 
 require('phantomjs-polyfill');
 require('./services/phanthom-polyfills');
 
 var ServiceSuggestion = require('./services/suggestion');
 var ServiceSnapshot = require('./services/snapshot');
+var ToolVizabiExternal = require('./tools/vizabi.external.js');
+var ToolHelper = require('./tools/helper');
 
 module.exports = function (app) {
   app
@@ -22,42 +25,32 @@ module.exports = function (app) {
         $scope.validTools = [];
         $scope.relatedItems = [];
 
+
+        // Services Callbacks
+
+        $scope.persistantChangeCallback = new Rx.Subject();
+        $scope.suggestionClickHandlerRule = new Rx.Subject();
+
+        $scope.serviceSnapshot = new ServiceSnapshot($scope.relatedItems, {'$http': $http});
+        $scope.serviceSuggestion = null;
+
+        setupSuggestionService();
+
+
+        // Suggestions Click Handle :: UI
+
+        $scope.suggestionClickHandler = function ($event, link) {
+          $scope.suggestionClickHandlerRule.next({
+            $event: $event,
+            link: link
+          });
+        };
+
+
         //start off by getting all items
         vizabiItems.getItems().then(function (items) {
 
-          var default_state_map = {
-            "entities": {
-              "show": {
-                "geo.cat": ["global", "world_4region", "country", "un_state"]
-              }
-            },
-            "marker": {
-              "color": {
-                "which": "geo",
-                "palette": {
-                  "asia": "#ff5872",
-                  "africa": "#00d5e9",
-                  "europe": "#ffe700",
-                  "americas": "#7feb00"
-                }
-              }
-            }
-          };
-
-          var default_state_bubble = angular.copy(default_state_map);
-          default_state_bubble.marker["axis_y"] = {
-              "which": "life_expectancy"
-          };
-
-          var default_state_mountain = angular.copy(default_state_map);
-          default_state_mountain.marker["axis_y"] = {
-            "which": "life_expectancy"
-          };
-
-
-          items.map.opts.state = default_state_map;
-          items.bubbles.opts.state = default_state_bubble;
-          items.mountain.opts.state = default_state_mountain;
+          ToolVizabiExternal.setupInitState(items);
 
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
@@ -96,65 +89,6 @@ module.exports = function (app) {
           }
         });
 
-        var clickHandlerSuggestion = new Rx.Subject();
-
-        clickHandlerSuggestion
-          .distinctUntilChanged(function (x, y) {
-            return x.link === y.link;
-          })
-          .debounceTime(500)
-          .subscribe(function(value) {
-            var $event = value.$event;
-            var link = value.link;
-
-            if(/#/.test(link)) {
-              console.log("relatedClickHandler::", arguments);
-              $location.path(link);
-
-              if($scope.viz) {
-
-                var hash = link.substring(link.indexOf("#") + 1);
-                var str = encodeURI(decodeURIComponent(hash));
-                var urlModel = urlon.parse(str);
-
-                // Can't affect Vizabi Model
-                var reload = false;
-                if(_.isEmpty(urlModel.state.entities.show)) {
-                  urlModel.state.entities.show['geo.cat'] = [
-                    "global", "world_4region", "country", "un_state"
-                  ];
-                  var reload = true;
-                  //urlModel.state.entities.show['geo'] = [];
-                  //$scope.viz.model.state.entities.set('show', urlModel.state.entities.show, true);
-                }
-
-                console.log("$scope.viz::", urlModel, $scope.viz);
-                $scope.viz.model.set('state', urlModel.state);
-
-                console.log("relatedClickHandler::Stop");
-
-                window.location.hash = "#" + hash;
-                $event.preventDefault();
-
-                if(reload) {
-                  setTimeout(function () {
-                    window.location.reload();
-                  },1);
-                }
-                //$scope.viz.triggerResize();
-                return false;
-
-                //$scope.viz.model.state = urlModel.state;
-                //$scope.viz.triggerResize();
-              }
-            }
-          });
-
-        // Click Handler Related :: Suggestions
-        $scope.relatedClickHandler = function ($event, link) {
-          clickHandlerSuggestion.next({$event: $event, link: link});
-        };
-
         function updateGraph() {
 
           var validTools = $scope.validTools;
@@ -175,116 +109,27 @@ module.exports = function (app) {
             Vizabi.clearInstances();
 
 
-            var rxSubjectCallback = new Rx.Subject();
-
-
-
-            $scope.persistantChangeCallBack = new Rx.Subject();
+            // Integrate Suggestion Service
             $scope.serviceSuggestion = new ServiceSuggestion(chartType, {'$http': $http});
 
-            $scope.persistantChangeCallBack
-              .distinctUntilChanged()
-              .debounceTime(500)
-              .subscribe(function(data){
-                var suggestionResult = $scope.serviceSuggestion.send(data);
-                suggestionResult.then(function(response){
-
-                  console.log("suggestionResult::Ok", response);
-                  new ServiceSnapshot(response, $scope.serviceSuggestion, rxSubjectCallback);
-
-                }, function(response){
-                  console.log("suggestionResult::Error", response);
-                });
-              });
-
-            $scope.viz = vizabiFactory.render(chartType, placeholder, tool.opts, $scope.persistantChangeCallBack);
-
-
-
-
-
-
-
-            //$scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts, rxSubjectCallback);
-            //$scope.relatedItems = tool.relateditems;
+            $scope.viz = vizabiFactory.render(chartType, placeholder, tool.opts, $scope.persistantChangeCallback);
             $scope.$apply();
 
-
-
-            // ScreenShot :: Phantom Callback
+            // Vizabi Ready
 
             $scope.viz.on({'readyOnce': function () {
-              console.log("Vizabi::readyOnce");
+
+              $scope.persistantChangeCallback.next({
+                minModel: {},
+                vizModel: $scope.viz.model
+              });
+
+              // ScreenShot :: Phantom Callback
+
               if (window.callPhantom) {
                 window.callPhantom('takeShot');
               }
             }});
-
-            var rulesDescription = {
-              'parents_when_non_or_4_and_more_selected': 'Parents when non or 4 and more selected',
-              "parent_when_one_selected": 'Parent when one selected',
-              "parents_when_2_to_4_selected": 'Parents when 2 to 4 selected',
-              "children_of_selected": 'Children of selected'
-            }
-
-
-
-            rxSubjectCallback
-              .subscribe(function(data){
-
-              var suggestion = data.requestData.ruleIndex;
-              var suggestions = data.requestData.ruleIndexTotal;
-              var keyRule = data.requestData.keyRule;
-
-              var bases = document.getElementsByTagName('base');
-              var baseHref = null;
-              if (bases.length > 0) {
-                baseHref = bases[0].href;
-              }
-
-              if($scope.relatedItems) {
-                for(var i = 0; i < $scope.relatedItems.length; i++) {
-                  if((i+1) > suggestions) {
-                    $scope.relatedItems.splice(i, 1);
-                  } else {
-                    $scope.relatedItems[i].title = "Loading ...";
-                    $scope.relatedItems[i].subtitle = "";
-                    $scope.relatedItems[i].link = "";
-                    $scope.relatedItems[i].image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AIRDjYaNhWXvQAAAAxJREFUCNdj+P//PwAF/gL+3MxZ5wAAAABJRU5ErkJggg==";
-                  }
-                }
-              }
-
-              // REQUEST :: Screenshot
-              $http.post(baseHref + 'api/testmagicstep2', data.requestData).then(function(response){
-
-                console.log("Responce Image::Success");
-
-                if(response.data.error) {
-                  console.log("Responce Image::Success::Error");
-                  return false;
-                }
-
-                console.log("Responce Image::Success::Success");
-
-                //var responseImages = response.data.images;
-                var responseImages = response.data;
-                var imageSource = "data:image/png;base64," + responseImages;
-                var link = baseHref + data.requestData.chartType + "#" + data.requestData.hash;
-
-                console.log("relatedItems ::link::", link);
-
-                $scope.relatedItems[suggestion] = {};
-                $scope.relatedItems[suggestion].title = "Suggestion Ready!";
-                $scope.relatedItems[suggestion].subtitle = rulesDescription[keyRule];
-                $scope.relatedItems[suggestion].link = link;
-                $scope.relatedItems[suggestion].image = imageSource;
-
-              }, function(response){
-                console.log("Responce Image::Error", response);
-              });
-
-            });
 
             //send to google analytics
             $window.ga('send', 'pageview', {page: $location.url()});
@@ -304,7 +149,94 @@ module.exports = function (app) {
             }
             scrollTo(element, to, duration - 10, cb);
           }, 10);
-        }
+        };
+
+        function setupSuggestionService () {
+
+          // Setup Vizabi persistant Change Callback
+
+          $scope.persistantChangeCallback
+            .distinctUntilChanged()
+            .debounceTime(500)
+            .subscribe(function(data){
+              if($scope.serviceSuggestion) {
+
+                // Setup Suggestion Service Callback
+
+                $scope.serviceSuggestion.send(data)
+                  .then(function(response){
+                    console.log("suggestionResult::Ok", response);
+                    var chartType = $scope.serviceSuggestion.chartTypeLabel;
+                    var modelMarkersState = $scope.serviceSuggestion.getModelMarkersState();
+                    $scope.serviceSnapshot.takeSnapshots(response, chartType, modelMarkersState);
+                  }, function(response){
+                    console.log("suggestionResult::Error", response);
+                  });
+              }
+            });
+
+          // Setup Suggestions Click Handle Rules
+
+          $scope.suggestionClickHandlerRule
+            .distinctUntilChanged(function (x, y) {
+              return x.link === y.link;
+            })
+            .debounceTime(500)
+            .subscribe(function(value) {
+              suggestionClickHandlerCallback(value);
+            });
+
+
+        };
+
+        function suggestionClickHandlerCallback(value) {
+
+          var $event = value.$event;
+          var link = value.link;
+
+          // Check that link contain Hash
+
+          if(/#/.test(link)) {
+
+            $location.path(link);
+
+            if($scope.viz) {
+
+              // Can't affect Vizabi Model
+              //var canNotApplyChangesToModel = false;
+
+              var hash = link.substring(link.indexOf("#") + 1);
+              var str = encodeURI(decodeURIComponent(hash));
+              var urlModel = urlon.parse(str);
+
+              /*
+              if(_.isEmpty(urlModel.state.entities.show['geo.cat'])) {
+                urlModel.state.entities.show['geo.cat'] = [
+                  "global", "world_4region", "country", "un_state"
+                ];
+                //canNotApplyChangesToModel = true;
+              }
+              */
+
+              // Update Vizabi Model
+              $scope.viz.model.set('state', urlModel.state);
+
+              window.location.hash = "#" + hash;
+              $event.preventDefault();
+
+              // Check Case When Changes are not Applied
+              /*
+              if(canNotApplyChangesToModel) {
+                setTimeout(function () {
+                  window.location.reload();
+                },1);
+              }
+              */
+
+              return false;
+            }
+          }
+        };
 
       }]);
 };
