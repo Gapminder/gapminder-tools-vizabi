@@ -23,12 +23,14 @@ var ServiceSnapshot = function (suggestionItems, dependencies) {
   // Display Loading Morkup
 
   this._prepareContainer = function (rulesCount) {
+    var maxLength = Math.max(this.suggestionItems.length, rulesCount);
     if(this.suggestionItems) {
-      for(var i = 0; i < this.suggestionItems.length; i++) {
+      for(var i = 0; i < maxLength; i++) {
         if((i+1) > rulesCount) {
           this.suggestionItems.splice(i, 1);
+        } else {
+          this.suggestionItems[i] = ToolHelper.getLoadingSuggestionItemData();
         }
-        this.suggestionItems[i] = ToolHelper.getLoadingSuggestionItemData();
       }
     }
   };
@@ -154,8 +156,8 @@ var ServiceSnapshot = function (suggestionItems, dependencies) {
     if (!_.isEmpty(suggestions.data)) {
 
       var ruleIndex = 0;
-      var rulesCount = _.keys(suggestionRules).length;
       var suggestionRules = suggestions.data.data;
+      var rulesCount = _.keys(suggestionRules).length;
 
       var requests = this._getRequestData(suggestionRules, modelMarkerState);
       console.log("takeSnapshots::requests", requests);
