@@ -4,11 +4,8 @@ var urlon = require('URLON');
 
 var _ = require('lodash');
 var Rx = require('rxjs/Rx');
-var ToolHelper = require('./tools/helper');
 
 module.exports = function (app) {
-
-  var baseHref = ToolHelper.getBaseHref();
 
   app
     .factory("vizabiFactory", ['$http',
@@ -65,31 +62,31 @@ module.exports = function (app) {
 
 
   app
-    .factory("vizabiItems", ['$http', function ($http) {
-
-      return {
-        /**
-         * Get All Items
-         */
-        getItems: function () {
-          //return the promise directly.
-          return $http.get(baseHref + 'api/item')
-            .then(function (result) {
-              var items = {}, i, s;
-              for (i = 0, s = result.data.length; i < s; i++) {
-                items[result.data[i].slug] = result.data[i];
-              }
-              return items;
-            });
-        }
-      };
+    .factory("vizabiItems", ['$http', 'ToolHelper',
+      function ($http, ToolHelper) {
+        return {
+          /**
+           * Get All Items
+           */
+          getItems: function () {
+            //return the promise directly.
+            return $http.get(ToolHelper.getBaseHref() + 'api/item')
+              .then(function (result) {
+                var items = {}, i, s;
+                for (i = 0, s = result.data.length; i < s; i++) {
+                  items[result.data[i].slug] = result.data[i];
+                }
+                return items;
+              });
+          }
+        };
 
     }]);
 
   app
     .factory('menuFactory', [
-      '$location', '$q', '$http',
-      function ($location, $q, $http) {
+      '$location', '$q', '$http', 'ToolHelper',
+      function ($location, $q, $http, ToolHelper) {
 
         return {
           cached: [],
@@ -100,7 +97,7 @@ module.exports = function (app) {
           getMenu: function () {
             //return the promise directly.
             var _this = this;
-            return $http.get(baseHref + 'api/menu')
+            return $http.get(ToolHelper.getBaseHref() + 'api/menu')
               .then(function (result) {
                 if (result.status === 200) {
                   _this.cached = result.data.children;

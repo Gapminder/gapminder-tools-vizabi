@@ -58,6 +58,18 @@
       color: $color-blue-dark;
     }
   }
+
+  .related-item-loading {
+    .related-item-info {
+      display: none;
+    }
+    .related-item-thumbnail {
+      img {
+        width: 50%;
+        margin: 70px 0 0 140px;
+      }
+    }
+  }
 }
 
 .related-item-thumbnail {

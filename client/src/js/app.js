@@ -11,4 +11,13 @@ var app = angular.module('gapminderTools', [ngRoute, ngTouch]);
 require('./app.config')(app);
 require('./controller')(app);
 require('./directives')(app);
+
+// Suggestions :: Services
+require('./tools/helper')(app);
+require('./tools/vizabi.external.js')(app);
+// Suggestions :: Factory
+require('./services/snapshot')(app);
+require('./services/suggestion')(app);
+
+// GapMinder Services
 require('./services')(app);

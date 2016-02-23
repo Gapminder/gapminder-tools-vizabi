@@ -1,183 +1,212 @@
+module.exports = function (app, ToolHelper, ToolVizabiExternal) {
+  app
+    .factory("ServiceSnapshot", ['$http', 'ToolHelper', 'ToolVizabiExternal',
+      function ($http, ToolHelper, ToolVizabiExternal) {
 
-var _ = require('lodash');
+        /* ServiceSnapshot :: Setup */
 
-var ToolHelper = require('./../tools/helper');
-var ToolVizabiExternal = require('./../tools/vizabi.external.js');
+        var logEnabled = true;
+        var baseHref = ToolHelper.getBaseHref();
 
-
-var ServiceSnapshot = function (suggestionItems, dependencies) {
-
-  $http = dependencies['$http'];
-  this.suggestionItems = suggestionItems;
-
-  this.baseHref = ToolHelper.getBaseHref();
-  this.serviceUrl = this.baseHref + 'api/testmagicstep2';
-
-  this.availableRules = {
-    "parents_when_non_or_4_and_more_selected": 'Parents when non or 4 and more selected',
-    "parent_when_one_selected": 'Parent when one selected',
-    "parents_when_2_to_4_selected": 'Parents when 2 to 4 selected',
-    "children_of_selected": 'Children of selected'
-  };
-
-  // Display Loading Morkup
-
-  this._prepareContainer = function (rulesCount) {
-    var maxLength = Math.max(this.suggestionItems.length, rulesCount);
-    if(this.suggestionItems) {
-      for(var i = 0; i < maxLength; i++) {
-        if((i+1) > rulesCount) {
-          this.suggestionItems.splice(i, 1);
-        } else {
-          this.suggestionItems[i] = ToolHelper.getLoadingSuggestionItemData();
-        }
-      }
-    }
-  };
-
-  this._getRequestData = function (suggestionRules, modelMarkerState) {
-
-    var requests = {};
-
-    for(var keyRule in suggestionRules) {
-
-      var readyTime,
-          entityConcepts,
-          suggestion = suggestionRules[keyRule],
-          requestRule = {};
-
-      // Check :: Time
-
-      readyTime = suggestion.time.toString();
-
-      requestRule['time'] = {};
-      requestRule['time']['value'] = readyTime;
-      requestRule['time']['start'] = readyTime;
-      requestRule['time']['end'] = readyTime;
+        var SERVICE_URL = baseHref + 'api/testmagicstep2';
 
 
-      // Check :: activeEntities :: Model => entities/select
+        /* ServiceSnapshot :: Vars */
 
-      requestRule['entities'] = {};
-      requestRule['entities']['select'] = [];
+        var suggestionItems = [];
 
-      if(suggestion['activeEntities']) {
-        for(var i = 0; i < suggestion['activeEntities'].length; i += 1) {
-          requestRule['entities']['select'].push({
-            geo: suggestion['activeEntities'],
-            trailStartTime: readyTime,
-            labelOffset: [0,0]
-          });
-        }
-      }
+        var availableRules = {
+          "parents_when_non_or_4_and_more_selected": 'Parents when non or 4 and more selected',
+          "parent_when_one_selected": 'Parent when one selected',
+          "parents_when_2_to_4_selected": 'Parents when 2 to 4 selected',
+          "children_of_selected": 'Children of selected'
+        };
 
 
-      // Check :: entities :: Model => entities/show/geo
+        /* ServiceSnapshot :: API */
 
-      requestRule['entities']['show'] = {};
+        return {
+          'takeSnapshots': takeSnapshots
+        };
 
-      if(suggestion['entities'].length) {
-        requestRule['entities']['show']['geo']= suggestion['entities'];
-      } else {
-        requestRule['entities']['show']['geo'] = [];
-      }
 
-      // Check :: entityConcepts :: Model => entities/show/geo.cat
+        /* ServiceSnapshot :: Private */
 
-      entityConcepts = ToolVizabiExternal.convertFormatMismatchFrom(suggestion['entityConcepts']);
+        function _prepareContainer (rulesCount) {
+          var i,
+              maxLength;
 
-      if(entityConcepts.length) {
-        requestRule['entities']['show']['geo.cat'] = entityConcepts;
-      } else {
-        requestRule['entities']['show']['geo.cat'] = ToolVizabiExternal.getDefaultEntityShowData();
-      }
+          maxLength = Math.max(suggestionItems.length, rulesCount);
+          if(suggestionItems) {
+            for(i = 0; i < maxLength; i++) {
+              if((i+1) > rulesCount) {
+                suggestionItems.splice(i, 1);
+              } else {
+                suggestionItems[i] = ToolHelper.getLoadingSuggestionItemData();
+              }
+            }
+          }
+        };
 
-      // Merge Markers
+        function _getRequestData (suggestionRules, modelMarkerState) {
 
-      requestRule['marker'] = modelMarkerState;
+          var i,
+              keyRule,
+              readyTime,
+              entityConcepts,
+              suggestion,
+              requestRule,
+              requests = {};
 
-      // Completed
+          for(keyRule in suggestionRules) {
 
-      requests[keyRule] = {
-        'state': requestRule
-      };
-    }
+            requestRule = {};
+            suggestion = suggestionRules[keyRule];
 
-    return requests;
-  };
+            // Check :: Time
 
-  this._render = function(response, minModel, metaData) {
+            readyTime = suggestion['time'].toString();
 
-    if(response.data.error) {
-      console.log("Responce Image::Success::Error");
-      return false;
-    }
+            requestRule['time'] = {
+              'value' : readyTime,
+              'start' : readyTime,
+              'end' : readyTime
+            };
 
-    console.log("Responce Image::Success::Success");
+            // Check :: activeEntities :: Model => entities/select
 
-    // Unset Restrictions
+            requestRule['entities'] = {};
+            requestRule['entities']['select'] = [];
 
-    ToolVizabiExternal.clearModelForLink(minModel);
-    console.log("_render::",minModel);
+            if(suggestion['activeEntities']) {
+              for(i = 0; i < suggestion['activeEntities'].length; i += 1) {
+                requestRule['entities']['select'].push({
+                  geo: suggestion['activeEntities'],
+                  trailStartTime: readyTime,
+                  labelOffset: [0,0]
+                });
+              }
+            }
 
-    // Create New Layout Item
 
-    var suggestionItem = {
-      title: "Suggestion Ready!",
-      subtitle: this.availableRules[metaData.ruleLabel],
-      link: this.baseHref + metaData.chartType + "#" + URLON.stringify(minModel),
-      image: "data:image/png;base64," + response.data
-    };
+            // Check :: entities :: Model => entities/show/geo
 
-    // Update Layout
+            requestRule['entities']['show'] = {};
+            requestRule['entities']['show']['geo'] = suggestion['entities'].length ?
+              suggestion['entities'] :
+              [];
 
-    this.suggestionItems[metaData.ruleIndex] = suggestionItem;
-  };
 
-  this._processRequest = function (minModel, metaData) {
+            // Check :: entityConcepts :: Model => entities/show/geo.cat
 
-    var requestData = {
-      hash: URLON.stringify(minModel),
-      chartType: metaData.chartType
-    };
+            entityConcepts = ToolVizabiExternal.convertFormatMismatchFrom(suggestion['entityConcepts']);
+            requestRule['entities']['show']['geo.cat'] = entityConcepts.length ?
+              entityConcepts :
+              ToolVizabiExternal.getDefaultEntityShowData();
 
-    // Take Snapshot
+            // Merge Markers
 
-    $http.post(this.serviceUrl, requestData).then(function (response) {
-      console.log("Responce Image::Success");
-      this._render(response, minModel, metaData);
-    }.bind(this), function (response) {
-      console.log("Responce Image::Error", response);
-    }.bind(this));
-  };
+            requestRule['marker'] = modelMarkerState;
 
-  this.takeSnapshots = function (suggestions, chartType, modelMarkerState) {
+            // Completed
 
-    if (!_.isEmpty(suggestions.data)) {
+            requests[keyRule] = {
+              'state': requestRule
+            };
+          }
 
-      var ruleIndex = 0;
-      var suggestionRules = suggestions.data.data;
-      var rulesCount = _.keys(suggestionRules).length;
+          return requests;
+        };
 
-      var requests = this._getRequestData(suggestionRules, modelMarkerState);
-      console.log("takeSnapshots::requests", requests);
+        function _render (response, minModel, metaData) {
 
-      this._prepareContainer(rulesCount);
+          var suggestionItem = {};
 
-      for (var rule in requests) {
+          if(response.data.error) {
+            log("ServiceSnapshot::Image::Success::Error", response.data.error);
+            return false;
+          }
+          log("ServiceSnapshot::Image::Success::Success");
 
-        this._processRequest(requests[rule], {
-          ruleLabel: rule,
-          ruleIndex: ruleIndex,
-          chartType: chartType
-        });
+          // Unset Restrictions
+          ToolVizabiExternal.clearModelForLink(minModel);
+          log("ServiceSnapshot::render::minModel", minModel);
 
-        ruleIndex++;
-      }
-    }
-  };
+          // Create New Layout Item
 
-  return this;
+          suggestionItem = {
+            'title': "Suggestion Ready!",
+            'subtitle': availableRules[metaData.ruleLabel],
+            'link': baseHref + metaData.chartType + "#" + URLON.stringify(minModel),
+            'image': "data:image/png;base64," + response.data,
+            'classLoading': ""
+          };
+
+          // Update Layout
+
+          suggestionItems[metaData.ruleIndex] = suggestionItem;
+        };
+
+        function _processRequest (minModel, metaData) {
+
+          var requestData = {
+            'hash': URLON.stringify(minModel),
+            'chartType': metaData.chartType
+          };
+
+          // Take Snapshot
+
+          $http.post(SERVICE_URL, requestData).then(function (response) {
+            _render(response, minModel, metaData);
+          }.bind(this), function (response) {
+            log("ServiceSnapshot::Image::Error", response);
+          }.bind(this));
+        };
+
+        function log () {
+          if(logEnabled) {
+            console.log.apply(console, arguments);
+          }
+        };
+
+
+        /* ServiceSnapshot :: Public */
+
+        function takeSnapshots (suggestions, suggestionItemsScope, chartType, modelMarkerState) {
+
+          suggestionItems = suggestionItemsScope || [];
+          log("ServiceSnapshot::takeSnapshots::suggestions", suggestions);
+
+          var rule,
+              requests,
+              ruleIndex,
+              rulesCount,
+              suggestionRules;
+
+          if (!_.isEmpty(suggestions.data)) {
+
+            ruleIndex = 0;
+
+            suggestionRules = suggestions.data.data;
+            rulesCount = _.keys(suggestionRules).length;
+
+            requests = _getRequestData(suggestionRules, modelMarkerState);
+            log("ServiceSnapshot::takeSnapshots::requests", requests);
+
+            _prepareContainer(rulesCount);
+
+            for (rule in requests) {
+
+              _processRequest(requests[rule], {
+                'ruleLabel': rule,
+                'ruleIndex': ruleIndex,
+                'chartType': chartType
+              });
+
+              ruleIndex++;
+            }
+          }
+        };
+
+      }]);
 };
-
-module.exports = ServiceSnapshot;

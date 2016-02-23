@@ -6,19 +6,17 @@ var _ = require('lodash');
 require('phantomjs-polyfill');
 require('./services/phanthom-polyfills');
 
-var ServiceSuggestion = require('./services/suggestion');
-var ServiceSnapshot = require('./services/snapshot');
 var ToolVizabiExternal = require('./tools/vizabi.external.js');
-var ToolHelper = require('./tools/helper');
 
 module.exports = function (app) {
   app
     .controller('gapminderToolsCtrl', [
-      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', '$http',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, $http) {
+      '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window', '$http', 'ServiceSnapshot', 'ServiceSuggestion', 'ToolVizabiExternal',
+      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window, $http, ServiceSnapshot, ServiceSuggestion, ToolVizabiExternal) {
 
         var placeholder = document.getElementById('vizabi-placeholder');
         var prevSlug = null;
+        var chartTypeLabel;
 
         $scope.loadingError = false;
         $scope.tools = {};
@@ -26,13 +24,11 @@ module.exports = function (app) {
         $scope.relatedItems = [];
 
 
+
         // Services Callbacks
 
         $scope.persistantChangeCallback = new Rx.Subject();
         $scope.suggestionClickHandlerRule = new Rx.Subject();
-
-        $scope.serviceSnapshot = new ServiceSnapshot($scope.relatedItems, {'$http': $http});
-        $scope.serviceSuggestion = null;
 
         setupSuggestionService();
 
@@ -106,11 +102,10 @@ module.exports = function (app) {
             var tool = angular.copy($scope.tools[$scope.activeTool]);
             var chartType = tool.tool;
 
+            // Setup Chart Type
+            chartTypeLabel = ToolVizabiExternal.getChartType(chartType);
+
             Vizabi.clearInstances();
-
-
-            // Integrate Suggestion Service
-            $scope.serviceSuggestion = new ServiceSuggestion(chartType, {'$http': $http});
 
             $scope.viz = vizabiFactory.render(chartType, placeholder, tool.opts, $scope.persistantChangeCallback);
             $scope.$apply();
@@ -159,20 +154,15 @@ module.exports = function (app) {
             .distinctUntilChanged()
             .debounceTime(500)
             .subscribe(function(data){
-              if($scope.serviceSuggestion) {
 
-                // Setup Suggestion Service Callback
-
-                $scope.serviceSuggestion.send(data)
-                  .then(function(response){
-                    console.log("suggestionResult::Ok", response);
-                    var chartType = $scope.serviceSuggestion.chartTypeLabel;
-                    var modelMarkersState = $scope.serviceSuggestion.getModelMarkersState();
-                    $scope.serviceSnapshot.takeSnapshots(response, chartType, modelMarkersState);
-                  }, function(response){
-                    console.log("suggestionResult::Error", response);
-                  });
-              }
+              ServiceSuggestion.send(data, chartTypeLabel)
+                .then(function(response){
+                  var modelMarkersState = ServiceSuggestion.getModelMarkersState();
+                  var suggestionItems = $scope.relatedItems;
+                  ServiceSnapshot.takeSnapshots(response, suggestionItems, chartTypeLabel, modelMarkersState);
+                }, function(response){
+                  console.log("ServiceSuggestion::Error", response);
+                });
             });
 
           // Setup Suggestions Click Handle Rules
@@ -185,11 +175,13 @@ module.exports = function (app) {
             .subscribe(function(value) {
               suggestionClickHandlerCallback(value);
             });
-
-
         };
 
         function suggestionClickHandlerCallback(value) {
+
+          var hash,
+              str,
+              urlModel;
 
           var $event = value.$event;
           var link = value.link;
@@ -197,46 +189,20 @@ module.exports = function (app) {
           // Check that link contain Hash
 
           if(/#/.test(link)) {
-
-            $location.path(link);
-
+            //$location.path(link);
             if($scope.viz) {
-
-              // Can't affect Vizabi Model
-              //var canNotApplyChangesToModel = false;
-
-              var hash = link.substring(link.indexOf("#") + 1);
-              var str = encodeURI(decodeURIComponent(hash));
-              var urlModel = urlon.parse(str);
-
-              /*
-              if(_.isEmpty(urlModel.state.entities.show['geo.cat'])) {
-                urlModel.state.entities.show['geo.cat'] = [
-                  "global", "world_4region", "country", "un_state"
-                ];
-                //canNotApplyChangesToModel = true;
-              }
-              */
+              hash = link.substring(link.indexOf("#") + 1);
+              str = encodeURI(decodeURIComponent(hash));
+              urlModel = urlon.parse(str);
 
               // Update Vizabi Model
               $scope.viz.model.set('state', urlModel.state);
 
               window.location.hash = "#" + hash;
               $event.preventDefault();
-
-              // Check Case When Changes are not Applied
-              /*
-              if(canNotApplyChangesToModel) {
-                setTimeout(function () {
-                  window.location.reload();
-                },1);
-              }
-              */
-
               return false;
             }
           }
         };
-
       }]);
 };

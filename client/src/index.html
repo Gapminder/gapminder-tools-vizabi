@@ -34,7 +34,7 @@
       <h2 class="heading-2">Related</h2>
       <ul class="related-items">
         <li class="related-item" ng-repeat="(key, related) in relatedItems track by $index">
-          <a ng-href="{{related.link}}" ng-click="suggestionClickHandler($event, related.link)">
+          <a ng-href="{{related.link}}" ng-click="suggestionClickHandler($event, related.link)" ng-class="related.classLoading">
             <div class="related-item-thumbnail">
               <img ng-src="{{related.image}}">
             </div>
