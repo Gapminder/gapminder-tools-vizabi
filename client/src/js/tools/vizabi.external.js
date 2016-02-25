@@ -138,9 +138,16 @@ module.exports = function (app) {
         // Asked For Correct State (*)
 
         defaultModelStateMountain = angular.copy(DEFAULT_MODEL_STATE);
+        /*
+        defaultModelStateMountain.marker.group = {
+          "merge" :true
+        };
+        */
+        /*
         defaultModelStateMountain.marker["axis_y"] = {
           "which": "life_expectancy"
         };
+        */
         items.mountain.opts.state = defaultModelStateMountain;
       };
 

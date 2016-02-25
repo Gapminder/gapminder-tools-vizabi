@@ -70,7 +70,8 @@ module.exports = function (app, ToolHelper, ToolVizabiExternal) {
               markerIndex,
               measureList,
               measurePathX,
-              measurePathY;
+              measurePathY,
+              groupMerge;
 
           var markerSearch = ['size', 'stack', 'color'];
 
@@ -103,6 +104,16 @@ module.exports = function (app, ToolHelper, ToolVizabiExternal) {
               }
             }
           }
+
+          // Marker :: Group Merge :: Custom (Mountain Chart)
+          /*
+          groupMerge = ToolVizabiExternal.searchData('state/marker/group/merge', modelMin, modelViz) || false;
+          if(groupMerge) {
+            modelMarkersState['group'] = {
+              "merge": groupMerge
+            };
+          }
+          */
 
           // Marker :: Measures
 
