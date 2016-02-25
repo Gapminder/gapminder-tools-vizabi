@@ -10,9 +10,10 @@
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server --inline --hot --progress --color",
     "build": "NODE_ENV=development webpack",
+    "local": "NODE_ENV=local webpack && node server.js",
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "prestart": "npm run build",
-    "start": "node server/server.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.3",
@@ -44,6 +45,7 @@
     "d3": "3.5.6",
     "express": "4.13.3",
     "express-redis-cache": "0.1.8",
+    "live-server": "0.9.2",
     "lodash": "3.10.1",
     "method-override": "2.3.5",
     "mongoose": "4.1.12",

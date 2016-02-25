@@ -43,6 +43,7 @@ sudo apt-get install redis-server
 2. `npm run build` - creates static dev build of UI
 3. `npm run deploy` - creates static, production ready UI files
 4. `npm start` - starts API and `npm run build`
+
 5.  Specify port and host:
 - WS_HOST = `waffle-server env host` || localhost
 - WS_PORT = `waffle-server env port ` || 3000
@@ -50,11 +51,24 @@ sudo apt-get install redis-server
 6. On daily basis you will likely use
 ```bash
 # one terminal or from webstorm
-WS_HOST=http://waffle-server-no-proxy.gapminderdev.org WS_PORT=80 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
+WS_HOST=http://waffle-server-no-proxy.gapminderdev.org WS_PORT=80 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server.js
 # second terminal
 npm run dev
 # open http://localhost:8080/tools/bubbles
 ```
+
+7. `npm run local` - starts UI on `localhost:3001` with WS `localhost:3000` (webpack && node server.js)
+As usual, WS_HOST and WS_PORT could be setup:
+```bash
+WS_HOST=http://localhost WS_PORT=3000 npm run local
+```
+
+Default WaffleServer URL is `http://waffle-server-dev.gapminderdev.org` is taken from Vizabi: vizabi-gapminder.js file
+
+## Docker
+
+`docker build .`
+`docker run  --net=host -p 3001:3001 IMAGE_ID`
 
 ## List of waffle environments:
 
@@ -78,11 +92,11 @@ npm i vizabi@latest -S
 ## Enviropments
 
 **Develop**
-http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
+http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour.
 
 **Stage**
 https://tools-stage.gapminderdev.org/ - released once every week, usually
 
 **Production (live)**
-https://tools-prod.gapminderdev.org/ 
+https://tools-prod.gapminderdev.org/
 http://www.gapminder.org/tools/

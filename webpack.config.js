@@ -7,6 +7,9 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+var WSurl = require('./ws-detect');
+var HomeUrl = '/tools/bubbles';
+
 
 var bourbon = require('node-bourbon').includePaths;
 
@@ -93,7 +96,9 @@ var wConfig = {
   plugins: [
     new Clean([config.dest]),
     new webpack.DefinePlugin({
-      _isDev: !isProduction
+      _isDev: !isProduction,
+      WS_SERVER: JSON.stringify(WSurl),
+      HOME_URL: JSON.stringify(HomeUrl)
     }),
     new ExtractTextPlugin('[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
@@ -147,10 +152,7 @@ var wConfig = {
         }
       ]
     },
-    devtool: 'eval',
-    proxy: {
-      '*/api/*': 'http://localhost:' + (process.env.PORT || '3001')
-    }
+    devtool: 'eval'
   }
 };
 
