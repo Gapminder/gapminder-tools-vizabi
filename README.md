@@ -1,43 +1,69 @@
-# Gapminder Tools page
-> This is the gapminder tools page
+# Gapminder Tools Page
 
-Code for page: [http://gapminder.org/tools](http://gapminder.org/tools)
+The Gapminder Tools Page ([http://gapminder.org/tools](http://gapminder.org/tools)) is an Angular application that leverages the [Vizabi](http://vizabi.org) visualization framework in order to display and animate information about the world. 
+
+As a backend, it uses a [Node.js Express](http://expressjs.com/)-based server to process and cache indicator information stored in a [MongoDB](https://www.mongodb.org/) database. This Express-backend is called "Server" in this repository. 
+
+The frontend Angular app is built and served locally using [Webpack](https://webpack.github.io/). Calls to the webpack-server matching `*/api/*` are served by the Express server above. 
 
 ## Requirements
 
-- [Node and npm](http://nodejs.org) *If node was already installed remove node_modules and reinstall after upgrade*
+### Server
+
+The server and it's dependencies are encapsulated using Docker. The following are required:
+
+ * [docker](https://docs.docker.com/engine/installation/) v1.10+
+ * [docker-compose](https://docs.docker.com/compose/install/) 1.6.0+
+
+Mac and Windows-users can install them by installing Docker Toolbox:
+
+ - [Docker Toolbox](https://www.docker.com/products/docker-toolbox) v1.10+
+
+### Client
+
+The client code runs and is packaged locally. The following packages needs to be installed on your workstation:
+
+- [Node and npm](http://nodejs.org) v4.2.6+ *If node was already installed remove node_modules and reinstall after upgrade*
 - [Ruby](http://ruby-lang.com/)
 - [Sass](http://sass-lang.com/) : `gem install sass`
-- [MongoDB](https://www.mongodb.org/)
-```bash
-# osx
-brew install mongodb
-# ubuntu
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
-sudo apt-get update
-sudo apt-get install -y mongodb-org
-```
-- Redis
-```bash
-# osx
-brew install redis
-# ubuntu
-sudo apt-get install redis-server
-```
-- Webpack and webpack dev server
- ```bash
- npm i -g webpack webpack-dev-server
- ```
+- [Webpack](https://webpack.github.io/) : `npm i -g webpack webpack-dev-server`
 
-## Installation
+## Installation (First time set-up)
 
 1. Clone the repository: `git clone git@github.com:Gapminder/gapminder-tools-vizabi.git`
-2. Make sure mongoDB is running: `mongo`
-3. Start the server: `npm start`
-4. View in browser at `http://localhost:8080/tools/`
+2. Step into the checked out folder: `cd gapminder-tools-vizabi`
+3. Install client dependencies: `npm install`
 
 ## Development
+
+On daily basis you will likely use:
+
+One terminal or from webstorm:
+```bash
+cd server
+docker-compose up
+```
+
+Second terminal:
+```bash
+npm run dev
+```
+
+View in browser at `http://localhost:8080/tools/`.
+
+> Hint: On OSX, you can open the url directly from a terminal session:
+>
+>    open http://localhost:8080/tools/
+
+### Server-specific
+
+By default, a remote mongo database (hosted at mongolab.com) is used for development. To use the local mongo docker container:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.local-mongodb.yml up
+```
+
+### Client-specific
 
 1. `npm run dev` - start serving UI only on port 8080, uses in memory file system
 2. `npm run build` - creates static dev build of UI
@@ -47,42 +73,23 @@ sudo apt-get install redis-server
 - WS_HOST = `waffle-server env host` || localhost
 - WS_PORT = `waffle-server env port ` || 3000
 
-6. On daily basis you will likely use
-```bash
-# one terminal or from webstorm
-WS_HOST=http://waffle-server-no-proxy.gapminderdev.org WS_PORT=80 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server/server.js
-# second terminal
-npm run dev
-# open http://localhost:8080/tools/bubbles
-```
+#### Update vizabi
 
-## List of waffle environments:
-
-### dev
-`http://waffle-server-dev.gapminderdev.org`
-
-### stage
-`http://waffle-server-stage.gapminderdev.org/`
-
-### prod
-`http://waffle-server.gapminderdev.org/`
-
-### Troubleshooting:
-
-If an error for redis is displayed, make sure it's running: `redis-cli`
-
-## Update vizabi
 ```bash
 npm i vizabi@latest -S
 ```
-## Enviropments
+
+## Environments
 
 **Develop**
 http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour. 
+Waffle server: `http://waffle-server-dev.gapminderdev.org`
 
 **Stage**
 https://tools-stage.gapminderdev.org/ - released once every week, usually
+Waffle server: `http://waffle-server-stage.gapminderdev.org/`
 
 **Production (live)**
 https://tools-prod.gapminderdev.org/ 
 http://www.gapminder.org/tools/
+Waffle server: `http://waffle-server.gapminderdev.org/`

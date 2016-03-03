@@ -6,6 +6,7 @@ RUN apt-get update
 # tools
 RUN apt-get install -y linux-libc-dev libkrb5-dev
 RUN apt-get install -y curl python-virtualenv
+RUN apt-get install -y git
 
 # ruby and sass
 RUN apt-get install -y ruby ruby-dev ruby-bundler
@@ -18,15 +19,9 @@ RUN apt-get install -y nodejs
 # global node dependecies
 RUN npm i -g webpack webpack-dev-server nodemon forever
 
-# set up access to repo
-# link: https://developer.github.com/guides/managing-deploy-keys/#deploy-keys
-
-# clone project
-#RUN git clone https://github.com/Gapminder/gapminder-tools-vizabi.git /home
-COPY . /home/app
-#VOLUME /home/app
-
+# set working directory
+VOLUME /home/app
 WORKDIR /home/app
-# install project dependecies
-# run app server
-CMD npm install && nodemon -w . server/server.js
+
+# run server
+CMD server/docker-start-server.sh

@@ -1,5 +1,5 @@
 var redis = require('redis');
-var host = 'localhost';
+var host = process.env.REDIS_HOST || 'localhost';
 var port = 6379;
 
 var dockerConn = getDockerRedisConnection();

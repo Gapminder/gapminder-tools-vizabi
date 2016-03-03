@@ -149,7 +149,7 @@ var wConfig = {
     },
     devtool: 'eval',
     proxy: {
-      '*/api/*': 'http://localhost:' + (process.env.PORT || '3001')
+      '*/api/*': 'http://' + (process.env.SERVER_HOST || 'localhost') + ':' + (process.env.PORT || '3001')
     }
   }
 };
