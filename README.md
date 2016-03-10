@@ -8,95 +8,91 @@ Code for page: [http://gapminder.org/tools](http://gapminder.org/tools)
 - [Node and npm](http://nodejs.org) *If node was already installed remove node_modules and reinstall after upgrade*
 - [Ruby](http://ruby-lang.com/)
 - [Sass](http://sass-lang.com/) : `gem install sass`
-- [MongoDB](https://www.mongodb.org/)
+- [Webpack](https://webpack.github.io/) and [webpack dev server](https://webpack.github.io/docs/webpack-dev-server.html)
 ```bash
-# osx
-brew install mongodb
-# ubuntu
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
-sudo apt-get update
-sudo apt-get install -y mongodb-org
+npm i -g webpack webpack-dev-server
 ```
-- Redis
-```bash
-# osx
-brew install redis
-# ubuntu
-sudo apt-get install redis-server
-```
-- Webpack and webpack dev server
- ```bash
- npm i -g webpack webpack-dev-server
- ```
 
 ## Installation
 
 1. Clone the repository: `git clone git@github.com:Gapminder/gapminder-tools-vizabi.git`
-2. Make sure mongoDB is running: `mongo`
-3. Start the server: `npm start`
-4. View in browser at `http://localhost:8080/tools/`
+3. Start the server (with default data source): `npm start`
+4. View in browser at `http://localhost:3001`
 
-## Development
+## Alignment
 
-1. `npm run dev` - start serving UI only on port 8080, uses in memory file system
-2. `npm run build` - creates static dev build of UI
-3. `npm run deploy` - creates static, production ready UI files
-4. `npm start` - starts API and `npm run build`
+1. `npm run local`
+  - starts UI on `localhost:3001`
+  - default WS_HOST: `localhost`
+  - default WS_PORT: `3000`
+2. `npm run dev`
+  - serving on port 8080 `http://localhost:8080`, uses in memory file system
+  - default WS_HOST: `https://waffle-server-dev.gapminderdev.org`
+3. `npm run stage`
+  - serving on port 8080 `http://localhost:8080`, uses in memory file system
+  - default WS_HOST: `https://waffle-server-stage.gapminderdev.org`
+4. `npm run prod`
+  - creates static, production ready UI files
+  - starts simple server for serving static files `http://localhost:3001`
+  - default WS_HOST: `https://waffle-server.gapminderdev.org`
+5. `npm run build`
+  - creates static development build into the directory `client/dist`
+  - default WS_HOST: `https://waffle-server-stage.gapminderdev.org`
+6. `npm run deploy`
+  - creates static, production ready UI files
+  - default WS_HOST: `https://waffle-server.gapminderdev.org`
+7. `npm start`
+  - creates static stage build into the directory `client/dist`
+  - starts simple server for serving static files `http://localhost:3001`
 
-5.  Specify port and host:
-- WS_HOST = `waffle-server env host` || localhost
-- WS_PORT = `waffle-server env port ` || 3000
+## Specify port and host:
 
-6. On daily basis you will likely use
-```bash
-# one terminal or from webstorm
-WS_HOST=http://waffle-server-no-proxy.gapminderdev.org WS_PORT=80 MONGO_URL=mongodb://readme:123123@ds033744.mongolab.com:33744/gampinder-tools-dev node server.js
-# second terminal
-npm run dev
-# open http://localhost:8080/tools/bubbles
-```
+- WS_HOST = `waffle-server env host` || `http://localhost`
+- WS_PORT = `waffle-server env port ` || `3000`
 
-7. `npm run local` - starts UI on `localhost:3001` with WS `localhost:3000` (webpack && node server.js)
-As usual, WS_HOST and WS_PORT could be setup:
+Example as WS_HOST and WS_PORT could be setup:
 ```bash
 WS_HOST=http://localhost WS_PORT=3000 npm run local
 ```
 
-Default WaffleServer URL is `http://waffle-server-dev.gapminderdev.org` is taken from Vizabi: vizabi-gapminder.js file
+Default WaffleServer URL is `https://waffle-server-stage.gapminderdev.org` is used in the Vizabi library: vizabi-gapminder.js file
 
 ## Docker
 
 `docker build .`
 `docker run  --net=host -p 3001:3001 IMAGE_ID`
 
-## List of waffle environments:
+## List of Waffle Server environments:
 
-### dev
-`http://waffle-server-dev.gapminderdev.org`
+```
+# development *BEWARE!!! This environment you use only on your's own responsibility*
+  - HOST_URL: `https://waffle-server-dev.gapminderdev.org`
+  - PORT: null
 
-### stage
-`http://waffle-server-stage.gapminderdev.org/`
+# stage
+  - HOST_URL: `https://waffle-server-stage.gapminderdev.org`
+  - PORT: null
 
-### prod
-`http://waffle-server.gapminderdev.org/`
+# production (live)
+  - HOST_URL: `https://waffle-server.gapminderdev.org`
+  - PORT: null
+```
 
-### Troubleshooting:
+## Update vizabi library
 
-If an error for redis is displayed, make sure it's running: `redis-cli`
-
-## Update vizabi
 ```bash
 npm i vizabi@latest -S
 ```
-## Enviropments
 
-**Develop**
-http://tools-dev.gapminderdev.org:3001/ - Here you have the latest version. Sometimes it is updated many times an hour.
+## List of Vizabi Tools environments
 
-**Stage**
-https://tools-stage.gapminderdev.org/ - released once every week, usually
+```
+# development - here you have the latest version. Sometimes it is updated many times an hour.
+  - `http://tools-dev.gapminderdev.org/`
 
-**Production (live)**
-https://tools-prod.gapminderdev.org/
-http://www.gapminder.org/tools/
+# stage - released once every week, usually
+  - `https://tools-stage.gapminderdev.org/`
+
+# production (live)
+  - `http://www.gapminder.org/tools/`
+```

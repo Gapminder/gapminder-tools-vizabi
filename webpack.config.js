@@ -47,7 +47,6 @@ var wConfig = {
     extensions: ['', '.js', '.png', '.gif', '.jpg']
   },
   module: {
-    //noParse: new RegExp(require.resolve("vizabi"), 'ig'),
     loaders: [
       {
         test: /vizabi\.js/,
@@ -97,6 +96,7 @@ var wConfig = {
     new Clean([config.dest]),
     new webpack.DefinePlugin({
       _isDev: !isProduction,
+      // WS_SERVER is used also in Vizabi library, change this variable carefully
       WS_SERVER: JSON.stringify(WSurl),
       HOME_URL: JSON.stringify(HomeUrl)
     }),
@@ -146,7 +146,7 @@ var wConfig = {
       rewrites: [
         {
           from: /^\/$|^\/tools.*$/,
-          to: function(context) {
+          to: function() {
             return '/tools/';
           }
         }

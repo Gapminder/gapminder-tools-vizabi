@@ -1,5 +1,5 @@
 
-var DEFAULT_NODE_ENV = 'development';
+var DEFAULT_NODE_ENV = 'stage';
 var NODE_ENV = process.env.NODE_ENV || DEFAULT_NODE_ENV;
 
 var DEFAULT_WS_HOST_URLS = {
