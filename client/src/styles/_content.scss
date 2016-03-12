@@ -70,3 +70,49 @@
     display: block;
   }
 }
+
+
+/* wrap-social */
+.wrap-social {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+  .social-list {
+    list-style: none;
+    margin: 9px 200px 0 0;
+    padding: 0;
+    float: right;
+    @include breakpoint(medium) {
+      margin-right: 175px;
+    }
+    &.mobile {
+      display: none;
+      margin: 5px;
+    }
+
+    @include breakpoint(small) {
+      &.desktop {display: none;}
+      &.mobile {
+        float: none;
+        display: inline-block;
+      }
+    }
+      li {
+      float: left;
+      margin-left: 8px;
+      a {
+        color: $color-primary;
+        font-size: 25px;
+      }
+    }
+    .ico-plane {
+      background: $color-primary;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      padding: 3px 6px 4px 4px;
+      margin: 5px 0;
+      border-radius: 4px;
+    }
+  }
