@@ -3,17 +3,24 @@
   @include box-sizing(border-box);
   @include display(block);
 
+  @include breakpoint(small) {
+    padding: 20px 0;
+  }
   @include breakpoint(not-small) {
     padding-top: 0px;
   }
 }
 .related {
+  @include breakpoint(small) {
+    padding: 20px;
+  }
   @include breakpoint(not-small) {
     float: left;
     width: 63%;
   }
 }
 .about {
+  float: right;
   @include box-sizing(border-box);
   @include breakpoint(not-small) {
     padding-left: 20px;
@@ -21,6 +28,15 @@
     width: 37%;
     &:after {
       clear: both;
+    }
+  }
+  @include breakpoint(small) {
+    background: #f2fafc;
+    float: none;
+    padding: 20px 20px 0;
+    width: 100%;
+    .heading-2 {
+      display: none;
     }
   }
 }
@@ -114,60 +130,77 @@
 }
 
 .menu-primary {
-    list-style: none;
+  list-style: none;
+  position: relative;
+  z-index: 100;
+  background: white;
+  padding: 0;
+  margin: 0;
+
+  & > .menu-item {
+    display: block;
+    color: #808285;
     position: relative;
-    z-index: 100;
-    background: white;
-    padding: 0;
-    margin: 0;
-    & > .menu-item {
-        display: block;
-        color: #808285;
-        position: relative;
+
+    @include breakpoint(large) {
+      float: left;
+      width: 50%;
+    }
+    & > a {
+      @include transition(all 0.1s);
+      @include border-radius(3px);
+      display: block;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.15);
+      position: relative;
+      cursor: pointer;
+      margin: 1px 0 0 0;
+      text-decoration: none;
+      max-width: 400px;
+      margin-bottom: 40px;
+      width: 90%;
 
       @include breakpoint(large) {
-        float: left;
-        width: 50%;
+        width: 90%;
       }
-        & > a {
-            @include transition(all 0.1s);
-            @include border-radius(3px);
-            display: block;
-            box-shadow: 0 1px 3px rgba(0,0,0, 0.05), 0 1px 2px rgba(0,0,0, 0.15);  
-            position: relative;
-            cursor: pointer;
-            margin: 1px 0 0 0;
-            text-decoration: none;
-            max-width: 400px;
-            margin-bottom: 40px;
-          width: 90%;
 
-          @include breakpoint(large) {
-              width: 90%;
-            }
+      .title {
+        font-family: 'Bariol Bold';
+        color: #808285;
+        font-size: 18px;
+        font-weight: 300;
+        display: block;
+        padding: 15px;
+      }
 
-            .title {
-              font-family: 'Bariol Bold';
-              color: #808285;
-              font-size: 18px;
-              font-weight: 300;
-              display: block;
-              padding: 15px;
-            }
+      .image {
+        width: 100%;
+        height: auto;
+      }
 
-            .image {
-              width: 100%;
-              height: auto;
-            }
+      &:hover {
+        box-shadow: 0 1px 11px rgba(0, 0, 0, 0.05), 0 1px 6px rgba(0, 0, 0, 0.18);
 
-            &:hover {
-              box-shadow: 0 1px 11px rgba(0, 0, 0, 0.05), 0 1px 6px rgba(0, 0, 0, 0.18);
-
-              &> .title {
-                color: $color-blue-dark;
-              }
-            }
-
+        & > .title {
+          color: $color-blue-dark;
         }
+      }
+
     }
+  }
+  @include breakpoint(small) {
+    background: none;
+    text-align: center;
+    & > .menu-item {
+      width: 48%;
+      display: inline-block;
+      > a {
+        background: #fff;
+        margin: 0;
+        display: inline-block;
+        .title {
+          display: none;
+        }
+      }
+    }
+  }
 }

@@ -30,6 +30,21 @@
 
   <!--More-->
   <div class="more">
+
+    <div class="about">
+      <h2 class="heading-2">See also</h2>
+
+      <div class="menu"></div>
+      <ul class="menu-primary">
+        <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
+          <a href ng-hide="activeTool == key" ng-href="{{::key}}">
+            <span class="title">{{::tool.title}}</span>
+            <img class="image" ng-src="{{::tool.image}}">
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <div class="related">
       <h2 class="heading-2">Related</h2>
       <ul class="related-items">
@@ -42,19 +57,6 @@
               <span class="title">{{::related.title}}</span>
               <span class="subtitle">{{::related.subtitle}}</span>
             </div>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="about">
-      <h2 class="heading-2">See also</h2>
-
-      <div class="menu"></div>
-      <ul class="menu-primary">
-        <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
-          <a href ng-hide="activeTool == key" ng-href="{{::key}}">
-            <span class="title">{{::tool.title}}</span>
-            <img class="image" ng-src="{{::tool.image}}">
           </a>
         </li>
       </ul>
