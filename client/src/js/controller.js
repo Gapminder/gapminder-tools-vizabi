@@ -7,6 +7,48 @@ module.exports = function (app) {
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         var placeholder = document.getElementById('vizabi-placeholder');
 
+        document.getElementById("vzbp-btn-share").onclick = shareLink;
+
+        function shareLink() {
+
+          function getJSON(url, param, callback, err) {
+            var request = new XMLHttpRequest();
+            var pars = [];
+            for (var i in param) {
+              pars.push(i + "=" + param[i]);
+            }
+            request.open('GET', url + '?' + pars.join("&"), true);
+            request.onload = function () {
+              if (request.status >= 200 && request.status < 400) {
+                var data = JSON.parse(request.responseText);
+                if (callback) callback(data);
+              } else {
+                if (err) err();
+              }
+            };
+            request.onerror = function () {
+              if (err) err();
+            };
+            request.send();
+          }
+
+          //BITLY
+          var address = "https://api-ssl.bitly.com/v3/shorten",
+            params = {
+              access_token: "8765eb3be5b975830e72af4e0949022cb53d9596",
+              longUrl: encodeURIComponent(document.URL)
+            };
+          getJSON(address, params, function (response) {
+            if (response.status_code == "200") {
+              prompt("Copy the following link: ", response.data.url);
+            } else {
+              prompt("Copy the following link: ", window.location);
+            }
+          });
+
+        }
+
+
         $scope.loadingError = false;
         $scope.tools = {};
         $scope.validTools = [];
@@ -20,7 +62,7 @@ module.exports = function (app) {
         });
 
         var prevSlug = null;
-        $scope.$root.$on('$routeChangeStart', function(event, state){
+        $scope.$root.$on('$routeChangeStart', function (event, state) {
           var newSlug = state.params.slug;
           if (!prevSlug) {
             prevSlug = newSlug;
@@ -31,11 +73,12 @@ module.exports = function (app) {
             // and here we go, one more hack
             setTimeout(function () {
               window.location.href = window.location.href;
+              document.getElementById("vzbp-btn-share").onclick = shareLink;
             }, 1);
             return;
           }
         });
-        $scope.$root.$on('$routeUpdate', function(event, state){
+        $scope.$root.$on('$routeUpdate', function (event, state) {
           var newSlug = state.params.slug;
           if (!prevSlug) {
             prevSlug = newSlug;
@@ -46,6 +89,7 @@ module.exports = function (app) {
             // and here we go, one more hack
             setTimeout(function () {
               window.location.href = window.location.href;
+              document.getElementById("vzbp-btn-share").onclick = shareLink;
             }, 1);
             return;
           }

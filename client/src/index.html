@@ -23,13 +23,59 @@
     </div>
     <ul class="nav navbar-nav navbar-nav-left desktop" nav-expandable="" items="expandedItems"></ul>
     <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
+    <!--social-->
+    <ul class="social-list desktop">
+      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank"><i class="fa fa-envelope-square"></i></a></li>
+      <li>
+        <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank">
+          <i class="fa fa-twitter-square"></i>
+        </a>
+      </li>
+      <li><a href="http://www.addtoany.com/add_to/facebook?linkurl=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F&amp;type=page&amp;linkname=&amp;linknote=" target="_blank"><i class="fa fa-facebook-square"></i></a></li>
+      <li><button id="vzbp-btn-share" class="ico-plane"><i class="fa fa-paper-plane"></i></button></li>
+    </ul>
   </div>
 
   <!--Content-->
   <div class="column main" id="vizabi-placeholder"></div>
 
+  <!--social-->
+
+  <div class="wrap-social">
+    <ul class="social-list mobile">
+      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank"><i class="fa fa-envelope-square"></i></a></li>
+      <li>
+        <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank">
+          <i class="fa fa-twitter-square"></i>
+        </a>
+      </li>
+      <li><a href="http://www.addtoany.com/add_to/facebook?linkurl=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F&amp;type=page&amp;linkname=&amp;linknote=" target="_blank"><i class="fa fa-facebook-square"></i></a></li>
+      <li><button id="vzbp-btn-share" class="ico-plane"><i class="fa fa-paper-plane"></i></button></li>
+    </ul>
+  </div>
+    
+  <!--link report problem -->
+   <div class="wrap-report-problem">
+     <a class="report-problem" href="https://getsatisfaction.com/gapminder/#problem" target="_blank">Report problem</a>
+   </div>    
+
   <!--More-->
   <div class="more">
+
+    <div class="about">
+      <h2 class="heading-2">See also</h2>
+
+      <div class="menu"></div>
+      <ul class="menu-primary">
+        <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
+          <a href ng-hide="activeTool == key" ng-href="{{::key}}">
+            <span class="title">{{::tool.title}}</span>
+            <img class="image" ng-src="{{::tool.image}}">
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <div class="related">
       <h2 class="heading-2">Related</h2>
       <ul class="related-items">
@@ -42,19 +88,6 @@
               <span class="title">{{::related.title}}</span>
               <span class="subtitle">{{::related.subtitle}}</span>
             </div>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="about">
-      <h2 class="heading-2">See also</h2>
-
-      <div class="menu"></div>
-      <ul class="menu-primary">
-        <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
-          <a href ng-hide="activeTool == key" ng-href="{{::key}}">
-            <span class="title">{{::tool.title}}</span>
-            <img class="image" ng-src="{{::tool.image}}">
           </a>
         </li>
       </ul>
