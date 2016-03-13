@@ -71,6 +71,17 @@
   }
 }
 
+/* wrap-report-problem */
+.wrap-report-problem {
+  display: inline-block;
+  width: 100%;
+  .report-problem {
+    padding: 0 20px;
+    float: right;
+    margin-right: 30px;
+    text-transform: uppercase;
+    color: #777;
+  }
 
 /* wrap-social */
 .wrap-social {
