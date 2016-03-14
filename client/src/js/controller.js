@@ -98,8 +98,9 @@ module.exports = function (app) {
           var validTools = $scope.validTools;
           if (validTools.length === 0) return;
           if (validTools.indexOf($routeParams.slug) === -1) {
+            // $scope.loadingError = false;
             //redirect
-            $location.path('/' + validTools[0]);
+            window.location.href = HOME_URL;
             return;
           }
 

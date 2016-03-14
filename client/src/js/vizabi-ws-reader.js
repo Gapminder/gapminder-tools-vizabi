@@ -1,5 +1,6 @@
 require('d3');
+
 var Vizabi = require('vizabi');
-var prefix = location.pathname.indexOf('/tools') === 0 ? '/tools' : '';
-Vizabi._globals.gapminder_paths.baseUrl = prefix + '/api/static/';
+// Setup WS location from webpack variable "WS_SERVER"
+Vizabi._globals.gapminder_paths.wsUrl = WS_SERVER;
 require('vizabi/build/dist/vizabi.css');
