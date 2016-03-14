@@ -126,6 +126,9 @@
       padding: 4px 5px 3px;
       margin: 5px 0;
       border-radius: 4px;
+      cursor: pointer;
+      path {
+        fill: white;
+      }
     }
-    .ico-plane path{fill: white}
   }
