@@ -1,37 +1,24 @@
 FROM ubuntu:14.04
 
-# apt-get update
+### Environment
+
 RUN apt-get update
 
-# tools
-RUN apt-get install -y git
-RUN apt-get install -y linux-libc-dev libkrb5-dev
-RUN apt-get install -y curl python-virtualenv
+RUN apt-get install -y linux-libc-dev=3.13.0-79.123 libkrb5-dev=1.12+dfsg-2ubuntu5.2 curl=7.35.0-1ubuntu2.6 python-virtualenv=1.11.4-1ubuntu1 ruby=1:1.9.3.4 ruby-dev=1:1.9.3.4 ruby-bundler=1.3.5-2ubuntu1 git=1:1.9.1-1
+RUN gem install sass -v 3.4.21
 
-# ruby and sass
-RUN apt-get install -y ruby ruby-dev ruby-bundler
-RUN gem install sass
-
-# node.js 4
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 RUN apt-get install -y nodejs
 
-# global node dependecies
-RUN npm i -g webpack webpack-dev-server forever
+RUN npm i -g webpack@1.12.2 webpack-dev-server@1.12.1 forever@0.15.1 npm@3.8.0
 
-# set up access to repo
-# link: https://developer.github.com/guides/managing-deploy-keys/#deploy-keys
+### Install
 
-# clone project
-#RUN git clone https://github.com/Gapminder/gapminder-tools-vizabi.git /home
-#RUN cd home && git checkout feature_tp_server_routes && cd ../
-COPY . /home/app
-#VOLUME /home/app
+COPY . /home/gtv
+WORKDIR /home/gtv
 
-WORKDIR /home/app
+RUN npm install
 
-EXPOSE 3001
+### Link vizabi (--volume-from) and start server
 
-# install project dependecies
-# run app server
-CMD npm install && forever server.js
+CMD cd ../vizabi && npm link && cd ../gtv && npm link vizabi && npm start

@@ -8,14 +8,16 @@
   },
   "author": "Arthur Camara",
   "scripts": {
-    "local": "NODE_ENV=local webpack && lite-server -с bs-config.js",
+    "start-docker": "sh ./docker_run.sh",
+    "local": "NODE_ENV=local webpack && npm run lite-server",
     "dev": "echo \"\\033[0;31mBEWARE!!! This environment you use only on your's own responsibility\\033[0m\n\" && NODE_ENV=development webpack-dev-server --inline --hot --progress --color",
     "stage": "NODE_ENV=stage webpack-dev-server --inline --hot --progress --color",
     "prod": "NODE_ENV=production npm start",
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "build": "NODE_ENV=development webpack",
     "prestart": "npm run build",
-    "start": "lite-server -с bs-config.js"
+    "start": "npm run lite-server",
+    "lite-server": "lite-server -с bs-config.js"
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.3",
@@ -40,21 +42,11 @@
     "angular": "1.4.7",
     "angular-route": "1.4.7",
     "angular-touch": "1.4.7",
-    "body-parser": "1.14.1",
     "bourbon": "4.2.6",
-    "compression": "1.6.0",
-    "connect-gzip-static": "1.0.0",
     "d3": "3.5.6",
-    "express": "4.13.3",
-    "express-redis-cache": "0.1.8",
     "lite-server": "2.1.0",
     "lodash": "3.10.1",
-    "method-override": "2.3.5",
-    "mongoose": "4.1.12",
-    "morgan": "1.6.1",
     "node-bourbon": "4.2.3",
-    "redis": "2.2.5",
-    "request": "2.67.0",
     "vizabi": "0.13.1"
   }
 }
