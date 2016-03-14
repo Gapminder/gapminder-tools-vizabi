@@ -123,8 +123,12 @@
       border: none;
       color: #fff;
       font-size: 12px;
-      padding: 3px 6px 4px 4px;
+      padding: 4px 5px 3px;
       margin: 5px 0;
       border-radius: 4px;
+      cursor: pointer;
+      path {
+        fill: white;
+      }
     }
   }

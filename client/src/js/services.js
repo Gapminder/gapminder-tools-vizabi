@@ -31,12 +31,12 @@ module.exports = function (app) {
             if (hash) {
               var str = encodeURI(decodeURIComponent(hash));
               var urlModel = urlon.parse(str);
-              Vizabi.utils.extend(model, urlModel);
+              Vizabi.utils.deepExtend(model, urlModel);
             }
 
             model.bind = model.bind || {};
             model.bind.persistentChange = onPersistentChange;
-            
+
             function onPersistentChange(evt, minModel) {
               minModel = Vizabi.utils.diffObject(minModel, initialModel);
               window.location.hash = urlon.stringify(minModel);
@@ -57,7 +57,7 @@ module.exports = function (app) {
          */
         getItems: function () {
           //return the promise directly.
-          return $http.get(baseHref + 'api/item')
+          return $http.get(WS_SERVER + '/api/vizabi/gapminder_tools/related_items/')
             .then(function (result) {
               var items = {}, i, s;
               for (i = 0, s = result.data.length; i < s; i++) {
@@ -77,14 +77,14 @@ module.exports = function (app) {
 
         return {
           cached: [],
-
           /**
            * Get All Items
            */
           getMenu: function () {
             //return the promise directly.
             var _this = this;
-            return $http.get(baseHref + 'api/menu')
+            return $http.get(WS_SERVER + '/api/vizabi/gapminder_tools/menu_items/')
+
               .then(function (result) {
                 if (result.status === 200) {
                   _this.cached = result.data.children;

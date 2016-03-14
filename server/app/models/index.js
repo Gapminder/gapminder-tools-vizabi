@@ -1,2 +1,0 @@
-require('./item');
-require('./menu');

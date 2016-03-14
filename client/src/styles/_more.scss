@@ -33,7 +33,7 @@
   @include breakpoint(small) {
     background: #f2fafc;
     float: none;
-    padding: 20px 20px 0;
+    padding: 20px;
     width: 100%;
     .heading-2 {
       display: none;
@@ -190,9 +190,10 @@
   @include breakpoint(small) {
     background: none;
     text-align: center;
+    display: inline-block;
     & > .menu-item {
       width: 48%;
-      display: inline-block;
+      float: left;
       > a {
         background: #fff;
         margin: 0;
