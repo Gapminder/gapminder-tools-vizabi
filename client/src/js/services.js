@@ -31,7 +31,7 @@ module.exports = function (app) {
             if (hash) {
               var str = encodeURI(decodeURIComponent(hash));
               var urlModel = urlon.parse(str);
-              Vizabi.utils.extend(model, urlModel);
+              Vizabi.utils.deepExtend(model, urlModel);
             }
 
             model.bind = model.bind || {};
