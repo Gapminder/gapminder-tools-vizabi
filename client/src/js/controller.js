@@ -7,10 +7,7 @@ module.exports = function (app) {
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         var placeholder = document.getElementById('vizabi-placeholder');
 
-        document.getElementById("vzbp-btn-share").onclick = shareLink;
-
-        function shareLink() {
-
+        $scope.shareLink = function () {
           function getJSON(url, param, callback, err) {
             var request = new XMLHttpRequest();
             var pars = [];
@@ -73,7 +70,6 @@ module.exports = function (app) {
             // and here we go, one more hack
             setTimeout(function () {
               window.location.href = window.location.href;
-              document.getElementById("vzbp-btn-share").onclick = shareLink;
             }, 1);
             return;
           }
@@ -89,7 +85,6 @@ module.exports = function (app) {
             // and here we go, one more hack
             setTimeout(function () {
               window.location.href = window.location.href;
-              document.getElementById("vzbp-btn-share").onclick = shareLink;
             }, 1);
             return;
           }
