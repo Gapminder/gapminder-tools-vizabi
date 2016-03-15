@@ -8,17 +8,36 @@
   },
   "author": "Arthur Camara",
   "scripts": {
-    "start-docker": "sh ./docker_run.sh",
-    "local": "NODE_ENV=local webpack && npm run serve",
-    "dev": "echo \"\\033[0;31mBEWARE!!! This environment you use only on your's own responsibility\\033[0m\n\" && NODE_ENV=development webpack-dev-server --inline --hot --progress --color",
-    "stage": "NODE_ENV=stage webpack-dev-server --inline --hot --progress --color",
-    "prod": "NODE_ENV=production npm start",
-    "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
-    "build": "NODE_ENV=development webpack",
-    "prestart": "npm run build",
-    "start": "npm run serve",
+
+    "local:build": "NODE_ENV=local webpack --progress --color",
+    "local": "npm run local:build && npm run serve",
+
+    "local:hot": "NODE_ENV=local webpack-dev-server --inline --hot --progress --color",
+
+
+    "dev:warning": "echo \"\\033[0;31mBEWARE!!! This environment you use only on your's own responsibility\\033[0m\n\"",
+    "dev:build": "NODE_ENV=development webpack --progress --color",
+    "dev": "npm run dev:build && npm run dev:warning && npm run serve",
+
+    "dev:forever": "npm run dev:build && npm run serve-forever",
+    "dev:docker": "npm run dev:warning && sh ./docker_run.sh",
+
+
+    "stage:build": "NODE_ENV=stage webpack --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
+    "stage": "npm run stage:build && npm run serve",
+
+    "stage:forever": "npm run stage:build && npm run serve-forever",
+
+
+    "prod:build": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
+    "prod": "npm run prod:build && npm run serve",
+
+    "prod:forever": "npm run prod:build && npm run serve-forever",
+
+
     "serve": "ws --directory ./client/dist --spa ./tools/index.html --port 3001 --rewrite '/ -> /tools'",
-    "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port 3001 --rewrite '/ -> /tools'"
+    "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port 3001 --rewrite '/ -> /tools'",
+    "start": "npm run dev"
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.3",
