@@ -21,31 +21,82 @@ npm i -g webpack webpack-dev-server
 
 ## Alignment
 
-1. `npm run local`
-  - starts UI on `localhost:3001`
-  - default WS_HOST: `localhost`
-  - default WS_PORT: `3000`
-2. `npm run dev`
-  - serving on port 8080 `http://localhost:8080`, uses in memory file system
-  - default WS_HOST: `https://waffle-server-dev.gapminderdev.org`
-3. `npm run stage`
-  - serving on port 8080 `http://localhost:8080`, uses in memory file system
-  - default WS_HOST: `https://waffle-server-stage.gapminderdev.org`
-4. `npm run prod`
-  - creates static, production ready UI files
-  - starts simple server for serving static files `http://localhost:3001`
-  - default WS_HOST: `https://waffle-server.gapminderdev.org`
-5. `npm run build`
-  - creates static development build into the directory `client/dist`
-  - default WS_HOST: `https://waffle-server-stage.gapminderdev.org`
-6. `npm run deploy`
-  - creates static, production ready UI files
-  - default WS_HOST: `https://waffle-server.gapminderdev.org`
-7. `npm start`
-  - creates static stage build into the directory `client/dist`
-  - starts simple server for serving static files `http://localhost:3001`
+1. Local Environment
 
-## Specify port and host:
+  - default Waffle Server Host: `WS_HOST=localhost`
+  - default Waffle Server Port: `WS_PORT=3000`
+
+  1.1 `npm run local:build`
+    - build project with webpack to `client/dist` directory
+
+  1.2 `npm run local`
+    - build project and start server on `localhost:3001`
+
+  1.3 `npm run local:hot`
+    - start server on `localhost:8080`
+    - serve changes from webpack bundle (webpack-dev-server)
+
+2. Development Environment
+
+  - default Waffle Server Host: `WS_HOST=https://waffle-server-dev.gapminderdev.org`
+
+  2.1 `npm run dev:build`
+    - build project with webpack to `client/dist` directory
+
+  2.2 `npm run dev`
+    - build project and start server on `localhost:3001`
+
+  2.3 `npm run dev:forever`
+    - build project and start server on `localhost:3001` via forever
+
+  2.4 `npm run dev:docker`
+    - !vizabi should be built before in docker (shared volume will be created)
+    - build project in docker container and start serve on `localhost:3001`
+
+3. Stage Environment
+
+  - default Waffle Server Host: `WS_HOST=https://waffle-server-stage.gapminderdev.org`
+
+  3.1 `npm run stage:build`
+    - build project with webpack to `client/dist` directory
+
+  3.2 `npm run stage`
+    - build project and start server on `localhost:3001`
+
+  3.3 `npm run stage:forever`
+    - build project and start server on `localhost:3001` via forever
+
+4. Production Environment
+
+  - default Waffle Server Host: `WS_HOST=https://waffle-server.gapminderdev.org`
+
+  4.1 `npm run prod:build`
+    - build project production ready with webpack to `client/dist` directory
+
+  4.2 `npm run prod`
+    - build project and start server on `localhost:3001`
+
+  4.3 `npm run prod:forever`
+    - build project and start server on `localhost:3001` via forever
+
+5. Server Start
+
+  - use created static files from `client/dist` directory
+
+  5.1 `npm run serve`
+    - start server on `localhost:3001`
+
+  5.2 `npm run serve-forever`
+    - start server on `localhost:3001` via forever
+
+6. Simple Start
+
+`npm start`
+
+- build project with webpack to `client/dist` directory using Development Environment
+- start server on `localhost:3001`
+
+## Specify Waffle Server port and host:
 
 - WS_HOST = `waffle-server env host` || `http://localhost`
 - WS_PORT = `waffle-server env port ` || `3000`
@@ -59,8 +110,7 @@ Default WaffleServer URL is `https://waffle-server-stage.gapminderdev.org` is us
 
 ## Docker
 
-`docker build .`
-`docker run  --net=host -p 3001:3001 IMAGE_ID`
+`npm run dev:docker`
 
 ## List of Waffle Server environments:
 
