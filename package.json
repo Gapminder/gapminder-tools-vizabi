@@ -35,8 +35,8 @@
     "prod:forever": "npm run prod:build && npm run serve-forever",
 
 
-    "serve": "ws --directory ./client/dist --spa ./tools/index.html --port 3001 --rewrite '/ -> /tools'",
-    "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port 3001 --rewrite '/ -> /tools'",
+    "serve": "ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
+    "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
     "start": "npm run dev"
   },
   "devDependencies": {
