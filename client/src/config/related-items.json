@@ -1,0 +1,403 @@
+[
+  {
+    "_id": "55f70fd5dbbfabe3d6a2753f",
+    "description": "This graph shows the amount of people in the world across each income level.",
+    "opts": {
+      "state": {
+        "marker": {
+          "axis_x": {
+            "which": "income_per_person_gdppercapita_ppp_inflation_adjusted"
+          },
+          "axis_y": {
+            "which": "population_total"
+          },
+          "axis_s": {
+            "which": "inequality_index_gini"
+          }
+        }
+      },
+      "data": {
+        "reader": "waffle",
+        "path": "/api/graphs/stats/vizabi-tools",
+        "splash": true
+      },
+      "ui": {
+        "buttons": [
+          "colors",
+          "find",
+          "stack",
+          "show",
+          "moreoptions",
+          "fullscreen",
+          "presentation"
+        ],
+        "dialogs": {
+          "popup": [
+            "colors",
+            "find",
+            "stack",
+            "show",
+            "moreoptions"
+          ],
+          "sidebar": [
+            "colors",
+            "find",
+            "stack"
+          ],
+          "moreoptions": [
+            "opacity",
+            "speed",
+            "stack",
+            "axesmc",
+            "colors",
+            "presentation",
+            "about"
+          ]
+        }
+      }
+    },
+    "tool": "MountainChart",
+    "slug": "mountain",
+    "category": "Tools",
+    "image": "/tools/public/images/tools/mountainchart.png",
+    "title": "Mountain Chart",
+    "relateditems": [
+      {
+        "_id": "5600af4a188967b26265a73f",
+        "_relatedTo": [
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-many-are-rich-and-how-many-are-poor/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=399&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — Most are in between",
+        "title": "How many are rich and how many are poor?",
+        "__v": 0
+      },
+      {
+        "_id": "560061d4fc0d7c00002110a4",
+        "title": "How Reliable is the World Population Forecast?",
+        "subtitle": "Short answer — Very reliable",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=136&preset=160x96&title=media&extension=.jpg",
+        "link": "http://www.gapminder.org/answers/how-reliable-is-the-world-population-forecast/",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ]
+      },
+      {
+        "_id": "5600ad4c188967b26265a73b",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/will-saving-poor-children-lead-to-overpopulation/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=409&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — No. The opposite.",
+        "title": "Will saving poor children lead to overpopulation?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae2b188967b26265a73c",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-does-income-relate-to-life-expectancy/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=318&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — Rich people live longer",
+        "title": " How Does Income Relate to Life Expectancy?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae64188967b26265a73d",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-did-babies-per-woman-change-in-the-world/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=125&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — It dropped",
+        "title": "How Did Babies per Woman Change in the World?",
+        "__v": 0
+      },
+      {
+        "_id": "5600aedc188967b26265a73e",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/posters/gapminder-world-2013/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=209&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "This chart compares Life Expectancy & GDP per capita of 182 nations in 2013.",
+        "title": "Gapminder World Poster 2013",
+        "__v": 0
+      }
+    ],
+    "__v": 5
+  },
+  {
+    "_id": "55f71e8ccdedc1ff074e9f6d",
+    "description": "This graph shows how long people live and how much money they earn. Click the play button to see how countries have developed since 1800.",
+    "opts": {
+      "state": {
+        "marker": {
+          "axis_x": {
+            "which": "income_per_person_gdppercapita_ppp_inflation_adjusted"
+          },
+          "axis_y": {
+            "which": "life_expectancy_years"
+          },
+          "size": {
+            "which": "population_total"
+          }
+        }
+      },
+      "data": {
+        "reader": "waffle",
+        "path": "/api/graphs/stats/vizabi-tools",
+        "splash": true
+      },
+      "ui": {
+        "buttons": [
+          "colors",
+          "find",
+          "size",
+          "trails",
+          "lock",
+          "moreoptions",
+          "fullscreen"
+        ],
+        "dialogs": {
+          "popup": [
+            "colors",
+            "find",
+            "size",
+            "zoom",
+            "moreoptions"
+          ],
+          "sidebar": [
+            "colors",
+            "find",
+            "size",
+            "zoom"
+          ],
+          "moreoptions": [
+            "opacity",
+            "speed",
+            "axes",
+            "size",
+            "colors",
+            "label",
+            "zoom",
+            "presentation",
+            "about"
+          ]
+        }
+      }
+    },
+    "tool": "BubbleChart",
+    "relateditems": [
+      {
+        "_id": "5600aedc188967b26265a73e",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/posters/gapminder-world-2013/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=209&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "This chart compares Life Expectancy & GDP per capita of 182 nations in 2013.",
+        "title": "Gapminder World Poster 2013",
+        "__v": 0
+      },
+      {
+        "_id": "5600ad4c188967b26265a73b",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/will-saving-poor-children-lead-to-overpopulation/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=409&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — No. The opposite.",
+        "title": "Will saving poor children lead to overpopulation?",
+        "__v": 0
+      },
+      {
+        "_id": "560061d4fc0d7c00002110a4",
+        "title": "How Reliable is the World Population Forecast?",
+        "subtitle": "Short answer — Very reliable",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=136&preset=160x96&title=media&extension=.jpg",
+        "link": "http://www.gapminder.org/answers/how-reliable-is-the-world-population-forecast/",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ]
+      },
+      {
+        "_id": "5600782dabde580e33c79e24",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d"
+        ],
+        "link": "http://www.gapminder.org/answers/how-did-the-world-population-change/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=247&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "First slowly. Then fast.",
+        "title": "How Did The World Population Change?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae2b188967b26265a73c",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-does-income-relate-to-life-expectancy/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=318&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — Rich people live longer",
+        "title": " How Does Income Relate to Life Expectancy?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae64188967b26265a73d",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-did-babies-per-woman-change-in-the-world/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=125&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — It dropped",
+        "title": "How Did Babies per Woman Change in the World?",
+        "__v": 0
+      }
+    ],
+    "slug": "bubbles",
+    "image": "/tools/public/images/tools/bubblechart.png",
+    "category": "Tools",
+    "title": "Bubble Chart",
+    "__v": 4
+  },
+  {
+    "_id": "56559714e4b03cd696fc6d62",
+    "description": "This graph shows the population on a map",
+    "opts": {
+      "state": {
+        "marker": {
+          "size": {
+            "which": "population_total"
+          }
+        }
+      },
+      "data": {
+        "reader": "waffle",
+        "path": "/api/graphs/stats/vizabi-tools",
+        "splash": false
+      },
+      "ui": {
+        "buttons": [
+          "colors",
+          "find",
+          "size",
+          "moreoptions",
+          "fullscreen",
+          "presentation"
+        ],
+        "dialogs": {
+          "popup": [
+            "colors",
+            "find",
+            "size",
+            "moreoptions"
+          ],
+          "sidebar": [
+            "colors",
+            "find",
+            "size"
+          ],
+          "moreoptions": [
+            "opacity",
+            "speed",
+            "size",
+            "colors",
+            "presentation",
+            "about"
+          ]
+        }
+      }
+    },
+    "tool": "BubbleMap",
+    "slug": "map",
+    "category": "Tools",
+    "image": "/tools/public/images/tools/bubblemap.png",
+    "title": "Bubble Map",
+    "relateditems": [
+      {
+        "_id": "5600af4a188967b26265a73f",
+        "_relatedTo": [
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-many-are-rich-and-how-many-are-poor/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=399&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — Most are in between",
+        "title": "How many are rich and how many are poor?",
+        "__v": 0
+      },
+      {
+        "_id": "560061d4fc0d7c00002110a4",
+        "title": "How Reliable is the World Population Forecast?",
+        "subtitle": "Short answer — Very reliable",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=136&preset=160x96&title=media&extension=.jpg",
+        "link": "http://www.gapminder.org/answers/how-reliable-is-the-world-population-forecast/",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ]
+      },
+      {
+        "_id": "5600ad4c188967b26265a73b",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/will-saving-poor-children-lead-to-overpopulation/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=409&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — No. The opposite.",
+        "title": "Will saving poor children lead to overpopulation?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae2b188967b26265a73c",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-does-income-relate-to-life-expectancy/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=318&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — Rich people live longer",
+        "title": " How Does Income Relate to Life Expectancy?",
+        "__v": 0
+      },
+      {
+        "_id": "5600ae64188967b26265a73d",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/answers/how-did-babies-per-woman-change-in-the-world/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=125&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "Short answer — It dropped",
+        "title": "How Did Babies per Woman Change in the World?",
+        "__v": 0
+      },
+      {
+        "_id": "5600aedc188967b26265a73e",
+        "_relatedTo": [
+          "55f71e8ccdedc1ff074e9f6d",
+          "55f70fd5dbbfabe3d6a2753f"
+        ],
+        "link": "http://www.gapminder.org/posters/gapminder-world-2013/",
+        "image": "//cms.gapminder.org/files-api/p3media/file/image?id=209&preset=160x96&title=media&extension=.jpg",
+        "subtitle": "This chart compares Life Expectancy & GDP per capita of 182 nations in 2013.",
+        "title": "Gapminder World Poster 2013",
+        "__v": 0
+      }
+    ]
+  }
+]

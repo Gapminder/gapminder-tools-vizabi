@@ -1,6 +1,7 @@
 var d3 = require('d3');
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
+var Promise = require("bluebird");
 
 module.exports = function (app) {
   var bases = document.getElementsByTagName('base');
@@ -49,7 +50,7 @@ module.exports = function (app) {
 
 
   app
-    .factory("vizabiItems", ['$http', function ($http) {
+    .factory("vizabiItems", [function () {
 
       return {
         /**
@@ -57,11 +58,12 @@ module.exports = function (app) {
          */
         getItems: function () {
           //return the promise directly.
-          return $http.get(WS_SERVER + '/api/vizabi/gapminder_tools/related_items/')
+          return Promise.resolve(require('../config/related-items.json'))
             .then(function (result) {
               var items = {}, i, s;
-              for (i = 0, s = result.data.length; i < s; i++) {
-                items[result.data[i].slug] = result.data[i];
+              for (i = 0, s = result.length; i < s; i++) {
+                result[i].opts.data.path = WS_SERVER + result[i].opts.data.path; 
+                items[result[i].slug] = result[i];
               }
               return items;
             });
@@ -76,29 +78,11 @@ module.exports = function (app) {
       function ($location, $q, $http) {
 
         return {
-          cached: [],
           /**
            * Get All Items
            */
           getMenu: function () {
-            //return the promise directly.
-            var _this = this;
-            return $http.get(WS_SERVER + '/api/vizabi/gapminder_tools/menu_items/')
-
-              .then(function (result) {
-                if (result.status === 200) {
-                  _this.cached = result.data.children;
-                }
-                return _this.getCachedMenu();
-              });
-          },
-
-          /**
-           * Returns the home tree data.
-           * @returns {}
-           */
-          getCachedMenu: function () {
-            return this.cached;
+            return require('../config/menu-items.json').children;
           },
 
           /**

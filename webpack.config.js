@@ -44,13 +44,17 @@ var wConfig = {
   resolve: {
     root: [absSrc],
     modulesDirectories: ['./components', 'node_modules'],
-    extensions: ['', '.js', '.png', '.gif', '.jpg']
+    extensions: ['', '.js', 'json', '.png', '.gif', '.jpg']
   },
   module: {
     loaders: [
       {
         test: /vizabi\.js/,
         loader: 'imports?this=>window,d3'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       },
       {
         test: /\.scss/,
