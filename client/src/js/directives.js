@@ -17,11 +17,7 @@ module.exports = function (app) {
 
         controller: ['$scope', function ($scope) {
 
-          $scope.items = {};
-
-          menuFactory.getMenu().then(function (items) {
-            $scope.items = items;
-          });
+          $scope.items = menuFactory.getMenu();
 
           /**
            * Checks if a menu item has an icon.
