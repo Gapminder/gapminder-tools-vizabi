@@ -8,33 +8,20 @@
   },
   "author": "Arthur Camara",
   "scripts": {
-
     "local:build": "NODE_ENV=local webpack --progress --color",
     "local": "npm run local:build && npm run serve",
-
     "local:hot": "NODE_ENV=local webpack-dev-server --inline --hot --progress --color",
-
-
     "dev:warning": "echo \"\\033[0;31mBEWARE!!! This environment you use only on your's own responsibility\\033[0m\n\"",
     "dev:build": "NODE_ENV=development webpack --progress --color",
     "dev": "npm run dev:build && npm run dev:warning && npm run serve",
-
     "dev:forever": "npm run dev:build && npm run serve-forever",
     "dev:docker": "npm run dev:warning && sh ./docker_run.sh",
-
-
     "stage:build": "NODE_ENV=stage webpack --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "stage": "npm run stage:build && npm run serve",
-
     "stage:forever": "npm run stage:build && npm run serve-forever",
-
-
     "prod:build": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
     "prod": "npm run prod:build && npm run serve",
-
     "prod:forever": "npm run prod:build && npm run serve-forever",
-
-
     "serve": "ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
     "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
     "start": "npm run dev"
@@ -67,7 +54,7 @@
     "d3": "3.5.6",
     "local-web-server": "1.2.1",
     "lodash": "3.10.1",
-    "node-bourbon": "4.2.3",
+    "node-bourbon": "4.2.8",
     "vizabi": "0.13.3-3"
   }
 }
