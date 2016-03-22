@@ -6,6 +6,7 @@
     "type": "git",
     "url": "http://gapminder.org/tools"
   },
+  "license": "GPL-3.0",
   "author": "Arthur Camara",
   "scripts": {
 
