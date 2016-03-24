@@ -139,19 +139,6 @@
     "_id": "55f71e8ccdedc1ff074e9f6d",
     "description": "This graph shows how long people live and how much money they earn. Click the play button to see how countries have developed since 1800.",
     "opts": {
-      "state": {
-        "marker": {
-          "axis_x": {
-            "which": "income_per_person_gdppercapita_ppp_inflation_adjusted"
-          },
-          "axis_y": {
-            "which": "life_expectancy_years"
-          },
-          "size": {
-            "which": "population_total"
-          }
-        }
-      },
       "data": {
         "reader": "waffle",
         "path": "/api/graphs/stats/vizabi-tools",
