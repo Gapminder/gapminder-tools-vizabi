@@ -56,6 +56,6 @@
     "local-web-server": "1.2.1",
     "lodash": "3.10.1",
     "node-bourbon": "4.2.3",
-    "vizabi": "0.13.4-2"
+    "vizabi": "0.13.4-3"
   }
 }
