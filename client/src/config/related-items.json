@@ -3,19 +3,6 @@
     "_id": "55f70fd5dbbfabe3d6a2753f",
     "description": "This graph shows the amount of people in the world across each income level.",
     "opts": {
-      "state": {
-        "marker": {
-          "axis_x": {
-            "which": "income_per_person_gdppercapita_ppp_inflation_adjusted"
-          },
-          "axis_y": {
-            "which": "population_total"
-          },
-          "axis_s": {
-            "which": "inequality_index_gini"
-          }
-        }
-      },
       "data": {
         "reader": "waffle",
         "path": "/api/graphs/stats/vizabi-tools",
