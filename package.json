@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "URLON": "1.0.1",
-    "angular": "1.4.7",
+    "angular": "1.5.3",
     "angular-route": "1.4.7",
     "angular-touch": "1.4.7",
     "bourbon": "4.2.6",
