@@ -5,24 +5,24 @@
 }
 
 .column.main {
-    @include box-sizing(border-box);
-    width: 100%;
-    height: 90%;
-    background: white;
+  @include box-sizing(border-box);
+  width: 100%;
+  height: 90%;
+  background: white;
 
-    @include breakpoint(small) {
-      height: 450px;
-    }
+  @include breakpoint(small) {
+    height: 450px;
+  }
 
-    @include breakpoint(small-landscape) {
-      height: 250px;
-    }
+  @include breakpoint(small-landscape) {
+    height: 250px;
+  }
 }
 
 .card {
   background: white;
   border-radius: 2px;
-  box-shadow: rgba(0,0,0,0.02) 0px 2px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 2px 1px 2px;
   padding: 20px;
   margin: 0px auto 10px auto;
   max-width: 250px;
@@ -32,10 +32,10 @@
   }
 
   //animate down
-  @for $i from 0 through 9{
-    &:nth-child(#{$i}) { 
+  @for $i from 0 through 9 {
+    &:nth-child(#{$i}) {
       opacity: 0;
-      @include fadeInDown(0.5s, ($i/4)*1s );
+      @include fadeInDown(0.5s, ($i/4)*1s);
     }
   }
 }
@@ -45,7 +45,7 @@
   background: $color-grey;
   border: 0px;
   border-radius: 2px;
-  box-shadow: rgba(0,0,0,0.02) 0px 2px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 2px 1px 2px;
   padding: 8px 10px;
   margin: 0px 3px 7px 3px;
   color: white;
@@ -55,13 +55,13 @@
 
   &:hover {
     cursor: pointer;
-    background: darken( $color-grey, 10% );
+    background: darken($color-grey, 10%);
   }
 
   &.primary {
     background: $color-primary;
     &:hover {
-      background: darken( $color-primary, 10% );
+      background: darken($color-primary, 10%);
     }
   }
 
@@ -75,12 +75,18 @@
 .wrap-report-problem {
   display: inline-block;
   width: 100%;
+  text-align: center;
   .report-problem {
     padding: 0 20px;
     float: right;
-    margin-right: 30px;
-    text-transform: uppercase;
     color: #777;
+  &.indent {
+      margin-right: 30px;
+  }
+    @include breakpoint(small) {
+      float: none;
+      display: inline-block;
+    }
   }
 }
 
@@ -90,46 +96,49 @@
   width: 100%;
   text-align: center;
 }
-  .social-list {
-    list-style: none;
-    margin: 9px 200px 0 0;
-    padding: 0;
-    float: right;
-    @include breakpoint(medium) {
-      margin-right: 175px;
+
+.social-list {
+  list-style: none;
+  margin: 9px 200px 0 0;
+  padding: 0;
+  float: right;
+  @include breakpoint(medium) {
+    margin-right: 175px;
+  }
+  &.mobile {
+    display: none;
+    margin: 5px;
+  }
+
+  @include breakpoint(small) {
+    &.desktop {
+      display: none;
     }
     &.mobile {
-      display: none;
-      margin: 5px;
-    }
-
-    @include breakpoint(small) {
-      &.desktop {display: none;}
-      &.mobile {
-        float: none;
-        display: inline-block;
-      }
-    }
-      li {
-      float: left;
-      margin-left: 8px;
-      a {
-        color: $color-primary;
-        font-size: 25px;
-      }
-    }
-    .ico-plane {
-      background: $color-primary;
-      border: none;
-      color: #fff;
-      font-size: 12px;
-      padding: 4px 5px 3px;
-      margin: 5px 0;
-      border-radius: 4px;
-      cursor: pointer;
-      outline: none;
-      path {
-        fill: white;
-      }
+      float: none;
+      display: inline-block;
     }
   }
+  li {
+    float: left;
+    margin-left: 8px;
+    a {
+      color: $color-primary;
+      font-size: 25px;
+    }
+  }
+  .ico-plane {
+    background: $color-primary;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 5px 3px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    path {
+      fill: white;
+    }
+  }
+}
