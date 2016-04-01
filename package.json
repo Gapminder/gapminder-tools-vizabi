@@ -52,7 +52,7 @@
     "angular-route": "1.4.7",
     "angular-touch": "1.4.7",
     "bourbon": "4.2.6",
-    "d3": "3.5.6",
+    "d3": "3.5.16",
     "local-web-server": "1.2.1",
     "lodash": "3.10.1",
     "node-bourbon": "4.2.3",
