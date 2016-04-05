@@ -11,8 +11,6 @@ var WSurl = require('./ws-detect');
 var HomeUrl = '/tools/bubbles';
 
 
-var bourbon = require('node-bourbon').includePaths;
-
 var config = {
   template: 'index.html',
   index: 'index.html',
@@ -56,11 +54,7 @@ var wConfig = {
         test: /\.json$/,
         loader: 'json'
       },
-      {
-        test: /\.scss/,
-        //loader: 'style!css!sass?includePaths[]=' + bourbon
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc + '!sass-loader?includePaths[]=' + bourbon)
-      },
+      {test: /\.styl$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')},
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc)
@@ -150,7 +144,7 @@ var wConfig = {
       rewrites: [
         {
           from: /^\/$|^\/tools.*$/,
-          to: function() {
+          to: function () {
             return '/tools/';
           }
         }
