@@ -9,6 +9,8 @@
   "license": "GPL-3.0",
   "author": "Arthur Camara",
   "scripts": {
+    "postinstall": ".config/tools/choose_vizabi_version.js",
+
     "local:build": "NODE_ENV=local webpack --progress --color",
     "local": "npm run local:build && npm run serve",
     "local:hot": "NODE_ENV=local webpack-dev-server --inline --hot --progress --color",
@@ -25,7 +27,20 @@
     "prod:forever": "npm run prod:build && npm run serve-forever",
     "serve": "ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
     "serve-forever": "forever start -l forever.log -o logs/out.log -e logs/error.log -a -p logs --minUptime 1000 --spinSleepTime 1000 ./node_modules/.bin/ws --directory ./client/dist --spa ./tools/index.html --port ${PORT:=3001} --rewrite '/ -> /tools'",
-    "start": "npm run dev"
+    "start": "npm run dev",
+
+    "lint:eslint": "./node_modules/.bin/eslint --ext js --fix . .config",
+
+    "pretest": "npm run lint:eslint",
+
+    "bstack-tunnel": ".config/tools/bstack-local.js",
+    "update-webdriver": "./node_modules/protractor/bin/webdriver-manager update",
+    "selenium-server-standalone": "./node_modules/protractor/bin/webdriver-manager start",
+
+    "pre:e2e-local": "npm run update-webdriver && npm run selenium-server-standalone",
+    "e2e-bstack": ".config/tools/wait4tunnel.js && ./node_modules/.bin/protractor ./.config/protractor-browserstack.conf.js",
+    "e2e-local": "./node_modules/.bin/protractor ./.config/protractor-local.conf.js"
+
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.3",
@@ -44,7 +59,14 @@
     "stylus-loader": "2.0.0",
     "url-loader": "0.5.6",
     "webpack": "1.12.2",
-    "webpack-dev-server": "1.12.1"
+    "webpack-dev-server": "1.12.1",
+    "browserstack-wrapper": "1.0.0",
+    "protractor": "3.1.1",
+    "jasmine": "2.4.1",
+    "jasmine-spec-reporter": "2.4.0",
+    "eslint": "1.10.3",
+    "browserstacktunnel-wrapper": "1.4.2",
+    "shelljs": "0.6.0"
   },
   "dependencies": {
     "URLON": "1.0.1",

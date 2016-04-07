@@ -1,24 +1,35 @@
 FROM ubuntu:14.04
 
-### Environment
-
 RUN apt-get update
 
-RUN apt-get install -y linux-libc-dev=3.13.0-79.123 libkrb5-dev=1.12+dfsg-2ubuntu5.2 curl=7.35.0-1ubuntu2.6 python-virtualenv=1.11.4-1ubuntu1 ruby=1:1.9.3.4 ruby-dev=1:1.9.3.4 ruby-bundler=1.3.5-2ubuntu1 git=1:1.9.1-1
-RUN gem install sass -v 3.4.21
+RUN apt-get install -y linux-libc-dev libkrb5-dev curl python-virtualenv ruby ruby-dev ruby-bundler git nginx
 
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 RUN apt-get install -y nodejs
 
-RUN npm i -g webpack@1.12.2 webpack-dev-server@1.12.1 forever@0.15.1 npm@3.8.0
+RUN gem install sass
+RUN gem install scss_lint
 
-### Install
+RUN npm i -g webpack@1.12.2 npm@3.8.0
 
-COPY . /home/gtv
-WORKDIR /home/gtv
+COPY . /home/gapminder-tools-vizabi
+
+WORKDIR /home/gapminder-tools-vizabi
 
 RUN npm install
+RUN npm run prod:build
 
-### Link vizabi (--volume-from) and start server
+RUN rm /usr/share/nginx/html/*
+RUN cp -R ./client/dist/tools /usr/share/nginx/html/
 
-CMD cd ../vizabi && npm link && cd ../gtv && npm link vizabi && npm start
+COPY .config/nginx.conf /etc/nginx/
+
+RUN apt-get remove -y linux-libc-dev libkrb5-dev curl python-virtualenv ruby ruby-dev ruby-bundler git nodejs
+
+WORKDIR /home
+RUN rm -rf /home/gapminder-tools-vizabi
+
+VOLUME ["/var/log"]
+EXPOSE 80
+
+CMD ["/usr/sbin/nginx"]
