@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function (app) {
   var bases = document.getElementsByTagName('base');
   var baseHref = null;
@@ -16,7 +18,6 @@ module.exports = function (app) {
         },
 
         controller: ['$scope', function ($scope) {
-
           $scope.items = menuFactory.getMenu();
 
           /**

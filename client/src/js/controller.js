@@ -1,3 +1,5 @@
+'use strict';
+
 var Vizabi = require('vizabi');
 
 module.exports = function (app) {
@@ -35,12 +37,12 @@ module.exports = function (app) {
             request.send();
           }
 
-          //BITLY
-          var address = 'https://api-ssl.bitly.com/v3/shorten',
-            params = {
-              access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
-              longUrl: encodeURIComponent(document.URL)
-            };
+          // BITLY
+          var address = 'https://api-ssl.bitly.com/v3/shorten';
+          var params = {
+            access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
+            longUrl: encodeURIComponent(document.URL)
+          };
           getJSON(address, params, function (response) {
             if (response.status_code === '200') {
               prompt('Copy the following link: ', response.data.url);
@@ -48,16 +50,14 @@ module.exports = function (app) {
               prompt('Copy the following link: ', window.location);
             }
           });
-
         };
-
 
         $scope.loadingError = false;
         $scope.tools = {};
         $scope.validTools = [];
         $scope.relatedItems = [];
 
-        //start off by getting all items
+        // start off by getting all items
         vizabiItems.getItems().then(function (items) {
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
@@ -102,7 +102,7 @@ module.exports = function (app) {
           }
           if (validTools.indexOf($routeParams.slug) === -1) {
             // $scope.loadingError = false;
-            //redirect
+            // redirect
             window.location.href = HOME_URL;
             return;
           }
@@ -118,7 +118,7 @@ module.exports = function (app) {
             $scope.relatedItems = tool.relateditems;
             $scope.$apply();
 
-            //send to google analytics
+            // send to google analytics
             $window.ga('send', 'pageview', {page: $location.url()});
           });
         }
@@ -131,7 +131,7 @@ module.exports = function (app) {
           var perTick = difference / duration * 10;
 
           setTimeout(function () {
-            element.scrollTop = element.scrollTop + perTick;
+            element.scrollTop += perTick;
             if (element.scrollTop === to) {
               cb();
               return;

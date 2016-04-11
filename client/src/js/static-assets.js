@@ -1,8 +1,10 @@
+'use strict';
+
 require('file?name=[name].[ext]!../favicon.ico');
 require('!!file?name=[name].[ext]!../redirect.html');
 
 // icons
-//require('../public/images/icons/menu/answers.png');
+// require('../public/images/icons/menu/answers.png');
 require('../public/images/icons/menu/answers.png');
 require('../public/images/icons/menu/bubchart.png');
 require('../public/images/icons/menu/data.png');

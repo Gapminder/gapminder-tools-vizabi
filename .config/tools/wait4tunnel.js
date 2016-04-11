@@ -3,8 +3,6 @@
 'use strict';
 
 var path = require('path');
-var fs = require('fs');
-
 var shell = require('shelljs');
 
 var iterNum = process.env.TRAVIS_BUILD_NUMBER;
