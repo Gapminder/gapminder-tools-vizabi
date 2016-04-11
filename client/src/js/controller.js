@@ -12,38 +12,44 @@ module.exports = function (app) {
             var request = new XMLHttpRequest();
             var pars = [];
             for (var i in param) {
-              pars.push(i + "=" + param[i]);
+              if (param.hasOwnProperty(i)) {
+                pars.push(i + '=' + param[i]);
+              }
             }
-            request.open('GET', url + '?' + pars.join("&"), true);
+            request.open('GET', url + '?' + pars.join('&'), true);
             request.onload = function () {
               if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText);
-                if (callback) callback(data);
-              } else {
-                if (err) err();
+                if (callback) {
+                  callback(data);
+                }
+              } else if (err) {
+                err();
               }
             };
             request.onerror = function () {
-              if (err) err();
+              if (err) {
+                err();
+              }
             };
             request.send();
           }
 
           //BITLY
-          var address = "https://api-ssl.bitly.com/v3/shorten",
+          var address = 'https://api-ssl.bitly.com/v3/shorten',
             params = {
-              access_token: "8765eb3be5b975830e72af4e0949022cb53d9596",
+              access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
               longUrl: encodeURIComponent(document.URL)
             };
           getJSON(address, params, function (response) {
-            if (response.status_code == "200") {
-              prompt("Copy the following link: ", response.data.url);
+            if (response.status_code === '200') {
+              prompt('Copy the following link: ', response.data.url);
             } else {
-              prompt("Copy the following link: ", window.location);
+              prompt('Copy the following link: ', window.location);
             }
           });
 
-        }
+        };
 
 
         $scope.loadingError = false;
@@ -91,7 +97,9 @@ module.exports = function (app) {
         });
         function updateGraph() {
           var validTools = $scope.validTools;
-          if (validTools.length === 0) return;
+          if (validTools.length === 0) {
+            return;
+          }
           if (validTools.indexOf($routeParams.slug) === -1) {
             // $scope.loadingError = false;
             //redirect
@@ -116,13 +124,15 @@ module.exports = function (app) {
         }
 
         function scrollTo(element, to, duration, cb) {
-          if (duration < 0) return;
+          if (duration < 0) {
+            return;
+          }
           var difference = to - element.scrollTop;
           var perTick = difference / duration * 10;
 
           setTimeout(function () {
             element.scrollTop = element.scrollTop + perTick;
-            if (element.scrollTop == to) {
+            if (element.scrollTop === to) {
               cb();
               return;
             }

@@ -13,13 +13,13 @@ var file = path.join(' ', 'tmp', 'bstack-' + iterNum + '.ready').trim();
 
 var counter = max_tries;
 
-while (counter){
-    if (shell.test("-e", file)){
-        console.log('wait4tunnel: ok');
-        process.exit(0);
-    };
-    shell.exec("sleep 1");
-    counter--;
-};
+while (counter) {
+  if (shell.test('-e', file)) {
+    console.log('wait4tunnel: ok');
+    process.exit(0);
+  }
+  shell.exec('sleep 1');
+  counter--;
+}
 console.log('Seems like bstack tunnel is not established. Timed out. Exiting.');
 process.exit(1);

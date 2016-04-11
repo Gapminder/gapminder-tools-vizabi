@@ -1,7 +1,7 @@
 var d3 = require('d3');
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 
 module.exports = function (app) {
   var bases = document.getElementsByTagName('base');
@@ -11,14 +11,15 @@ module.exports = function (app) {
   }
 
   app
-    .factory("vizabiFactory", [
+    .factory('vizabiFactory', [
       function () {
         return {
           /**
            * Render Vizabi
            * @param {String} tool name of the tool
-           * @param {DOMElement} placeholder
-           * @return {Object}
+           * @param {DOMElement} placeholder placeholder
+           * @param {Object} model model
+           * @return {Object} Vizabi
            */
           render: function (tool, placeholder, model) {
             var loc = window.location.toString();
@@ -50,11 +51,12 @@ module.exports = function (app) {
 
 
   app
-    .factory("vizabiItems", [function () {
+    .factory('vizabiItems', [function () {
 
       return {
         /**
          * Get All Items
+         * @returns {Object} related items
          */
         getItems: function () {
           //return the promise directly.
@@ -62,7 +64,7 @@ module.exports = function (app) {
             .then(function (result) {
               var items = {}, i, s;
               for (i = 0, s = result.length; i < s; i++) {
-                result[i].opts.data.path = WS_SERVER + result[i].opts.data.path; 
+                result[i].opts.data.path = WS_SERVER + result[i].opts.data.path;
                 items[result[i].slug] = result[i];
               }
               return items;
@@ -80,6 +82,7 @@ module.exports = function (app) {
         return {
           /**
            * Get All Items
+           * @returns {Object} menu items
            */
           getMenu: function () {
             return require('../config/menu-items.json').children;
@@ -87,7 +90,7 @@ module.exports = function (app) {
 
           /**
            * Returns the current URL.
-           * @returns {string}
+           * @returns {string} current URL
            */
           getCurrentUrl: function () {
             return $location.$$path;
