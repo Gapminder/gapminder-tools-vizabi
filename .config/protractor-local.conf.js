@@ -1,7 +1,7 @@
 'use strict';
 
 // An example configuration file.
-let config = {
+var config = {
   baseUrl: 'http://localhost:3001/',
 
   // Spec patterns are relative to the current working directly when
