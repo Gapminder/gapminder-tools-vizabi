@@ -1,3 +1,5 @@
+'use strict';
+
 require('./static-assets');
 require('../styles/main.styl');
 

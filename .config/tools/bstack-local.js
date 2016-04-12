@@ -6,9 +6,6 @@ var shell = require('shelljs');
 var path = require('path');
 var fs = require('fs');
 var BrowserStackTunnel = require('browserstacktunnel-wrapper');
-var cwd = path.dirname(require.main.filename);
-
-var confDir = path.dirname(cwd);
 
 var TUNNEL_IDENTIFIER = process.env.TRAVIS_BUILD_NUMBER;
 var READY_FILE = path.join(' ', 'tmp', 'bstack-' + TUNNEL_IDENTIFIER + '.ready').trim();
