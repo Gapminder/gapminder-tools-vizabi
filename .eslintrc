@@ -10,7 +10,8 @@
     "angular": 2,
     "jQuery": 2,
     "WS_SERVER": 2,
-    "HOME_URL": 2
+    "HOME_URL": 2,
+    "ActiveXObject": 2
   },
   "rules": {
     // Possible Errors
