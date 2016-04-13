@@ -1,5 +1,5 @@
 'use strict';
-/*eslint no-process-env:0*/
+/* eslint no-process-env:0 */
 
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
@@ -7,11 +7,8 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
-var WSurl = require('./ws-detect');
+var WSurl = require('./ws-detect')(process.env);
 var HomeUrl = '/tools/bubbles';
-
-
-var bourbon = require('node-bourbon').includePaths;
 
 var config = {
   template: 'index.html',
@@ -56,21 +53,17 @@ var wConfig = {
         test: /\.json$/,
         loader: 'json'
       },
-      {
-        test: /\.scss/,
-        //loader: 'style!css!sass?includePaths[]=' + bourbon
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc + '!sass-loader?includePaths[]=' + bourbon)
-      },
+      {test: /\.styl$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')},
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc)
-        //loader: 'style!css'//?root=' + absSrc
+        // loader: 'style!css'//?root=' + absSrc
       },
       {
         test: /.*\.(gif|png|jpe?g)$/i,
         loaders: [
           'file?hash=sha512&digest=hex&name=[path][name].[ext]',
-          'image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}'
+          'image-webpack?{progressive:true,optimizationLevel:7,interlaced:false,pngquant:{quality:"65-90",speed:4}}'
         ]
       },
       {
@@ -122,8 +115,6 @@ var wConfig = {
     if (!isProduction) {
       return;
     }
-
-    console.log('Adding production plugins');
     this.plugins.push.apply(this.plugins, [
       // production only
       new webpack.optimize.UglifyJsPlugin(),
@@ -145,12 +136,12 @@ var wConfig = {
     inline: true,
     historyApiFallback: {
       index: config.index,
-      logger: console.log.bind(console),
-      verbose: true,
+      // logger: console.log.bind(console),
+      // verbose: true,
       rewrites: [
         {
           from: /^\/$|^\/tools.*$/,
-          to: function() {
+          to: function () {
             return '/tools/';
           }
         }

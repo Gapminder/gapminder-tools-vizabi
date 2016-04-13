@@ -8,12 +8,14 @@
     "_": 2,
     "$": 2,
     "angular": 2,
-    "jQuery": 2
+    "jQuery": 2,
+    "WS_SERVER": 2,
+    "HOME_URL": 2,
+    "ActiveXObject": 2
   },
   "rules": {
     // Possible Errors
     "comma-dangle": 2,
-    // no-comma-dangle - (deprecated)
     "no-cond-assign": [2, "always"],
     "no-console": 2,
     "no-constant-condition": 2,
@@ -23,7 +25,6 @@
     "no-dupe-args": 2,
     "no-duplicate-case": 2,
     "no-empty-character-class": 2,
-    // no-empty-class - (deprecated)
     "no-empty": 2,
     "no-ex-assign": 2,
     "no-extra-boolean-cast": 2,
@@ -56,7 +57,7 @@
     "dot-location": [2, "property"],
     "eqeqeq": 2,
     "guard-for-in": 2,
-    "no-alert": 2,
+    "no-alert": 1,
     "no-caller": 2,
     "no-div-regex": 2,
     "no-else-return": 2,
@@ -124,11 +125,12 @@
     // Stylistic Issues
     "array-bracket-spacing": [2, "never"],
     "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    "camelcase": 2,
+    "camelcase": [2, {"properties": "never"}],
     "comma-spacing": [2, {"before": false, "after": true}],
     "comma-style": [2, "last"],
     "computed-property-spacing": [2, "never"],
     "consistent-this": [2, "self"],
+
     // not sure
     "eol-last": 0,
     "func-names": 0,
@@ -136,18 +138,7 @@
     "indent": [2, 2],
     "key-spacing": [2, { "beforeColon": false, "afterColon": true}],
     "max-nested-callbacks": [2, 3],
-    "new-cap": [2, {"newIsCap": true, "capIsNew": true, "capIsNewExceptions":[
-      "ObjectId",
-      "Object",
-      "Function",
-      "Number",
-      "String",
-      "Boolean",
-      "Date",
-      "Array",
-      "Symbol",
-      "RegExp"
-    ]}],
+    "new-cap": [2, {"newIsCap": true, "capIsNew": true, "capIsNewExceptions":["ObjectId","Object","Function","Number","String","Boolean","Date","Array","Symbol","RegExp","Vizabi"]}],
     "new-parens": 2,
     "newline-after-var": 0,
     "no-array-constructor": 2,
@@ -160,7 +151,7 @@
     "no-spaced-func": 2,
     "no-ternary": 0,
     "no-trailing-spaces": 2,
-    "no-underscore-dangle": 2,
+    "no-underscore-dangle": [2, {"allow": ["_globals"]}],
     "no-unneeded-ternary": 2,
     "object-curly-spacing": [2, "never"],
     "one-var": [2, {
@@ -175,7 +166,7 @@
     "quotes": [2, "single", "avoid-escape"],
     "semi": [2, "always"],
     "semi-spacing": 2,
-    // "sort-vars":  [1, { "ignoreCase": true }],
+    "sort-vars":  [1, { "ignoreCase": true }],
     "space-after-keywords": [2, "always" ],
     "space-before-blocks": [2, "always"],
     "space-in-parens": [2, "never"],

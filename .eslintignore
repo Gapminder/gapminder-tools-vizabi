@@ -1,0 +1,2 @@
+client/dist/**
+tests/e2e/*.js

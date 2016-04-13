@@ -6,8 +6,6 @@ Code for page: [http://gapminder.org/tools](http://gapminder.org/tools)
 ## Requirements
 
 - [Node and npm](http://nodejs.org) *If node was already installed remove node_modules and reinstall after upgrade*
-- [Ruby](http://ruby-lang.com/)
-- [Sass](http://sass-lang.com/) : `gem install sass`
 - [Webpack](https://webpack.github.io/) and [webpack dev server](https://webpack.github.io/docs/webpack-dev-server.html)
 ```bash
 npm i -g webpack webpack-dev-server

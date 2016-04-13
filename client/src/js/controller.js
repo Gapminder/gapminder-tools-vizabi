@@ -1,3 +1,5 @@
+'use strict';
+
 var Vizabi = require('vizabi');
 
 module.exports = function (app) {
@@ -12,46 +14,67 @@ module.exports = function (app) {
             var request = new XMLHttpRequest();
             var pars = [];
             for (var i in param) {
-              pars.push(i + "=" + param[i]);
+              if (param.hasOwnProperty(i)) {
+                pars.push(i + '=' + param[i]);
+              }
             }
-            request.open('GET', url + '?' + pars.join("&"), true);
+            request.open('GET', url + '?' + pars.join('&'), true);
             request.onload = function () {
               if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText);
-                if (callback) callback(data);
-              } else {
-                if (err) err();
+                if (callback) {
+                  callback(data);
+                }
+              } else if (err) {
+                err();
               }
             };
             request.onerror = function () {
-              if (err) err();
+              if (err) {
+                err();
+              }
             };
             request.send();
           }
 
-          //BITLY
-          var address = "https://api-ssl.bitly.com/v3/shorten",
-            params = {
-              access_token: "8765eb3be5b975830e72af4e0949022cb53d9596",
-              longUrl: encodeURIComponent(document.URL)
-            };
+          // BITLY
+          var address = 'https://api-ssl.bitly.com/v3/shorten';
+          var params = {
+            access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
+            longUrl: encodeURIComponent(document.URL)
+          };
           getJSON(address, params, function (response) {
-            if (response.status_code == "200") {
-              prompt("Copy the following link: ", response.data.url);
+            if (response.status_code === '200') {
+              prompt('Copy the following link: ', response.data.url);
             } else {
-              prompt("Copy the following link: ", window.location);
+              prompt('Copy the following link: ', window.location);
             }
           });
+        };
 
-        }
-
+        $scope.isFlashAvailable = function () {
+          var hasFlash = false;
+          try {
+            var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+            if (fo) {
+              hasFlash = true;
+            }
+          } catch (e) {
+            if (navigator.mimeTypes &&
+              navigator.mimeTypes['application/x-shockwave-flash'] !== 'undefined' &&
+              navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
+              hasFlash = true;
+            }
+          }
+          return hasFlash;
+        };
 
         $scope.loadingError = false;
         $scope.tools = {};
         $scope.validTools = [];
         $scope.relatedItems = [];
 
-        //start off by getting all items
+        // start off by getting all items
         vizabiItems.getItems().then(function (items) {
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
@@ -91,10 +114,12 @@ module.exports = function (app) {
         });
         function updateGraph() {
           var validTools = $scope.validTools;
-          if (validTools.length === 0) return;
+          if (validTools.length === 0) {
+            return;
+          }
           if (validTools.indexOf($routeParams.slug) === -1) {
             // $scope.loadingError = false;
-            //redirect
+            // redirect
             window.location.href = HOME_URL;
             return;
           }
@@ -110,19 +135,21 @@ module.exports = function (app) {
             $scope.relatedItems = tool.relateditems;
             $scope.$apply();
 
-            //send to google analytics
+            // send to google analytics
             $window.ga('send', 'pageview', {page: $location.url()});
           });
         }
 
         function scrollTo(element, to, duration, cb) {
-          if (duration < 0) return;
+          if (duration < 0) {
+            return;
+          }
           var difference = to - element.scrollTop;
           var perTick = difference / duration * 10;
 
           setTimeout(function () {
-            element.scrollTop = element.scrollTop + perTick;
-            if (element.scrollTop == to) {
+            element.scrollTop += perTick;
+            if (element.scrollTop === to) {
               cb();
               return;
             }

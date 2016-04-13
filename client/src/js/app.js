@@ -1,5 +1,7 @@
+'use strict';
+
 require('./static-assets');
-require('../styles/main.scss');
+require('../styles/main.styl');
 
 var angular = require('angular');
 var ngRoute = require('angular-route');

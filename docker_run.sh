@@ -12,4 +12,4 @@ if [ "$imgId" != "" ]
 fi
 
 docker build --tag gtv:latest .
-docker run --name gtv --volumes-from vizabi --net=host -p 3001:3001 $(docker images -a -q gtv)
+docker run --name gtv --net=host -p 80:80 $(docker images -a -q gtv)
