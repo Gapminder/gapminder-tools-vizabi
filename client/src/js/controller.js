@@ -1,6 +1,7 @@
 'use strict';
 
 var Vizabi = require('vizabi');
+var swfobject = require('swfobject');
 
 module.exports = function (app) {
   app
@@ -53,20 +54,12 @@ module.exports = function (app) {
         };
 
         $scope.isFlashAvailable = function () {
-          var hasFlash = false;
-          try {
-            var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-            if (fo) {
-              hasFlash = true;
-            }
-          } catch (e) {
-            if (navigator.mimeTypes &&
-              navigator.mimeTypes['application/x-shockwave-flash'] !== 'undefined' &&
-              navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
-              hasFlash = true;
-            }
+          var swfVersion = swfobject.getFlashPlayerVersion();
+
+          if (swfVersion && (swfVersion.major || swfVersion.minor || swfVersion.release)) {
+            return true;
           }
-          return hasFlash;
+          return false;
         };
 
         $scope.loadingError = false;
