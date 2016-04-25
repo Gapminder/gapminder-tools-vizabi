@@ -1,16 +1,17 @@
 'use strict';
+
 /* eslint no-process-env:0 */
 
-var path = require('path');
-var Clean = require('clean-webpack-plugin');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
-var WSurl = require('./ws-detect')(process.env);
-var HomeUrl = '/tools/bubbles';
+const path = require('path');
+const Clean = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const WSurl = require('./ws-detect')(process.env);
+const HomeUrl = '/tools/bubbles';
 
-var config = {
+const config = {
   template: 'index.html',
   index: 'index.html',
   src: './client/src',
@@ -18,11 +19,15 @@ var config = {
   publicPath: '/tools/'
 };
 
-var isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
-var absSrc = path.join(__dirname, config.src);
-var absDest = path.join(__dirname, config.dest);
-var wConfig = {
+const absSrc = path.join(__dirname, config.src);
+const absDest = path.join(__dirname, config.dest);
+
+const cssLoaderPath = 'css-loader?sourceMap&root=';
+const loaderNamePathExt = 'html?name=[path][name].[ext]&root=';
+
+const wConfig = {
   debug: true,
   profile: true,
   cache: true,
@@ -56,7 +61,7 @@ var wConfig = {
       {test: /\.styl$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')},
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&root=' + absSrc)
+        loader: ExtractTextPlugin.extract('style-loader', cssLoaderPath + absSrc)
         // loader: 'style!css'//?root=' + absSrc
       },
       {
@@ -68,7 +73,7 @@ var wConfig = {
       },
       {
         test: /\.html$/,
-        loader: 'html?name=[path][name].[ext]&root=' + absSrc
+        loader: loaderNamePathExt + absSrc
       },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -86,6 +91,14 @@ var wConfig = {
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url?name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015']
+        }
       }
     ]
   },
@@ -111,11 +124,11 @@ var wConfig = {
       minify: true
     })
   ],
-  pushPlugins: function () {
+  pushPlugins: function pushPlugins() {
     if (!isProduction) {
       return;
     }
-    this.plugins.push.apply(this.plugins, [
+    this.plugins.push(
       // production only
       new webpack.optimize.UglifyJsPlugin(),
       new CompressionPlugin({
@@ -125,7 +138,7 @@ var wConfig = {
         threshold: 10240,
         minRatio: 0.8
       })
-    ]);
+    );
   },
   stats: {colors: true, progress: true, children: false},
   devServer: {
@@ -141,9 +154,7 @@ var wConfig = {
       rewrites: [
         {
           from: /^\/$|^\/tools.*$/,
-          to: function () {
-            return '/tools/';
-          }
+          to: () => '/tools/'
         }
       ]
     },

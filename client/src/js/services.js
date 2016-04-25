@@ -1,14 +1,18 @@
 'use strict';
 
-var Vizabi = require('vizabi');
-var urlon = require('URLON');
-var Promise = require('bluebird');
+const Vizabi = require('vizabi');
+const urlon = require('URLON');
+const Promise = require('bluebird');
 
-module.exports = function (app) {
+const relatedJson = require('../config/related-items.json');
+const menuItems = require('../config/menu-items.json');
+
+module.exports = function services(app) {
   app
     .factory('vizabiFactory', [
-      function () {
+      function vizabiFactory() {
         return {
+
           /**
            * Render Vizabi
            * @param {String} tool name of the tool
@@ -16,18 +20,20 @@ module.exports = function (app) {
            * @param {Object} model model
            * @return {Object} Vizabi
            */
-          render: function (tool, placeholder, model) {
-            var loc = window.location.toString();
-            var hash = null;
-            var initialModel = Vizabi.utils.deepClone(model);
+          render: function render(tool, placeholder, model) {
+            const loc = window.location.toString();
+            const initialModel = Vizabi.utils.deepClone(model);
+            let hash = null;
+            let str = null;
+            let urlModel = null;
 
             if (loc.indexOf('#') >= 0) {
               hash = loc.substring(loc.indexOf('#') + 1);
             }
 
             if (hash) {
-              var str = encodeURI(decodeURIComponent(hash));
-              var urlModel = urlon.parse(str);
+              str = encodeURI(decodeURIComponent(hash));
+              urlModel = urlon.parse(str);
               Vizabi.utils.deepExtend(model, urlModel);
             }
 
@@ -35,7 +41,8 @@ module.exports = function (app) {
             model.bind.persistentChange = onPersistentChange;
 
             function onPersistentChange(evt, minModel) {
-              var minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+              const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+
               window.location.hash = urlon.stringify(minModelDiff);
             }
 
@@ -45,21 +52,24 @@ module.exports = function (app) {
       }]);
 
   app
-    .factory('vizabiItems', [function () {
+    .factory('vizabiItems', [function vizabiItems() {
       return {
+
         /**
          * Get All Items
          * @returns {Object} related items
          */
-        getItems: function () {
+        getItems: function getItems() {
           // return the promise directly.
-          return Promise.resolve(require('../config/related-items.json'))
-            .then(function (result) {
-              var s = result.length;
-              var items = {};
-              for (var i = 0; i < s; i++) {
-                result[i].opts.data.path = WS_SERVER + result[i].opts.data.path;
-                items[result[i].slug] = result[i];
+          return Promise.resolve(relatedJson)
+            .then(result => {
+              let index = 0;
+              const resLength = result.length;
+              const items = {};
+
+              for (; index < resLength; index++) {
+                result[index].opts.data.path = WS_SERVER + result[index].opts.data.path;
+                items[result[index].slug] = result[index];
               }
               return items;
             });
@@ -70,21 +80,22 @@ module.exports = function (app) {
   app
     .factory('menuFactory', [
       '$location',
-      function ($location) {
+      function menuFactory($location) {
         return {
+
           /**
            * Get All Items
            * @returns {Object} menu items
            */
-          getMenu: function () {
-            return require('../config/menu-items.json').children;
+          getMenu: function getMenu() {
+            return menuItems.children;
           },
 
           /**
            * Returns the current URL.
            * @returns {string} current URL
            */
-          getCurrentUrl: function () {
+          getCurrentUrl: function getCurrentUrl() {
             return $location.$$path;
           }
         };
