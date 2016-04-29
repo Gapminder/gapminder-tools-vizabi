@@ -2,7 +2,7 @@
 
 var config = {
   baseUrl: 'http://localhost:3001/',
-
+//  baseUrl: 'http://gapminder.org',
   // Spec patterns are relative to the current working directly when
   // protractor is called.
   specs: ['../tests/e2e/*.js'],
@@ -29,6 +29,9 @@ var config = {
     var SpecReporter = require('jasmine-spec-reporter');
     // add jasmine spec reporter
     jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+    var width = 1400;
+    var height = 700;
+    browser.driver.manage().window().setSize(width, height);
   },
 
   reporter: ['spec'],
@@ -47,7 +50,10 @@ if (process.env.TRAVIS) {
   config.multiCapabilities = [
     {
       'browserName': 'chrome',
-      'version': '46',
+      'version': '49',
+      'os': 'OS X',
+      'os_version' : 'El Capitan',
+      'resolution' : '1920x1080',
       'browserstack.user': process.env.BROWSER_STACK_USERNAME,
       'browserstack.key': process.env.BROWSER_STACK_ACCESS_KEY,
       'build': process.env.TRAVIS_BUILD_NUMBER,

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (app) {
-  app.run(function() {
+  app.run(function () {
     var locationPath = window.location.pathname || '';
 
     if (locationPath === '/' || locationPath.indexOf('/tools/') !== 0) {
