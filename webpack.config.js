@@ -41,7 +41,7 @@ var wConfig = {
   resolve: {
     root: [absSrc],
     modulesDirectories: ['./components', 'node_modules'],
-    extensions: ['', '.js', 'json', '.png', '.gif', '.jpg']
+    extensions: ['', '.js', 'json', '.png', '.gif', '.jpg', '.cur']
   },
   module: {
     loaders: [
@@ -60,7 +60,7 @@ var wConfig = {
         // loader: 'style!css'//?root=' + absSrc
       },
       {
-        test: /.*\.(gif|png|jpe?g)$/i,
+        test: /.*\.(gif|png|jpe?g|cur)$/i,
         loaders: [
           'file?hash=sha512&digest=hex&name=[path][name].[ext]',
           'image-webpack?{progressive:true,optimizationLevel:7,interlaced:false,pngquant:{quality:"65-90",speed:4}}'
