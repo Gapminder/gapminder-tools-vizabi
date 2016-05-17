@@ -1,36 +1,50 @@
 'use strict';
 
-var Vizabi = require('vizabi');
-var swfobject = require('swfobject');
+const Vizabi = require('vizabi');
+const swfobject = require('swfobject');
 
-module.exports = function (app) {
+module.exports = function controller(app) {
   app
     .controller('gapminderToolsCtrl', [
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
-      function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
-        var placeholder = document.getElementById('vizabi-placeholder');
+      function gapminderToolsCtrl($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
+        const placeholder = document.getElementById('vizabi-placeholder');
+        let prevSlug = null;
 
-        $scope.shareLink = function () {
+        $scope.shareLink = function shareLink() {
+          const address = 'https://api-ssl.bitly.com/v3/shorten';
+          const params = {
+            access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
+            longUrl: encodeURIComponent(document.URL)
+          };
+
           function getJSON(url, param, callback, err) {
-            var request = new XMLHttpRequest();
-            var pars = [];
-            for (var i in param) {
-              if (param.hasOwnProperty(i)) {
-                pars.push(i + '=' + param[i]);
+            const request = new XMLHttpRequest();
+            const pars = [];
+            let index = null;
+
+            for (index in param) {
+              if (param.hasOwnProperty(index)) {
+                pars.push(`${index}=${param[index]}`);
               }
             }
-            request.open('GET', url + '?' + pars.join('&'), true);
-            request.onload = function () {
-              if (request.status >= 200 && request.status < 400) {
-                var data = JSON.parse(request.responseText);
+            request.open('GET', `${url}?${pars.join('&')}`, true);
+            request.onload = function onload() {
+              let data = null;
+              const minRange = 200;
+              const maxRange = 400;
+
+              if (request.status >= minRange && request.status < maxRange) {
+                data = JSON.parse(request.responseText);
                 if (callback) {
                   callback(data);
+                  return;
                 }
               } else if (err) {
                 err();
               }
             };
-            request.onerror = function () {
+            request.onerror = function onerror() {
               if (err) {
                 err();
               }
@@ -38,13 +52,7 @@ module.exports = function (app) {
             request.send();
           }
 
-          // BITLY
-          var address = 'https://api-ssl.bitly.com/v3/shorten';
-          var params = {
-            access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
-            longUrl: encodeURIComponent(document.URL)
-          };
-          getJSON(address, params, function (response) {
+          getJSON(address, params, response => {
             if (response.status_code === '200') {
               prompt('Copy the following link: ', response.data.url);
             } else {
@@ -53,8 +61,8 @@ module.exports = function (app) {
           });
         };
 
-        $scope.isFlashAvailable = function () {
-          var swfVersion = swfobject.getFlashPlayerVersion();
+        $scope.isFlashAvailable = function isFlashAvailable() {
+          const swfVersion = swfobject.getFlashPlayerVersion();
 
           if (swfVersion && (swfVersion.major || swfVersion.minor || swfVersion.release)) {
             return true;
@@ -68,15 +76,15 @@ module.exports = function (app) {
         $scope.relatedItems = [];
 
         // start off by getting all items
-        vizabiItems.getItems().then(function (items) {
+        vizabiItems.getItems().then(items => {
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
           updateGraph();
         });
 
-        var prevSlug = null;
-        $scope.$root.$on('$routeChangeStart', function (event, state) {
-          var newSlug = state.params.slug;
+        $scope.$root.$on('$routeChangeStart', (event, state) => {
+          const newSlug = state.params.slug;
+
           if (!prevSlug) {
             prevSlug = newSlug;
             return;
@@ -84,14 +92,15 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            setTimeout(function () {
+            setTimeout(() => {
               window.location.href = window.location.href;
             }, 1);
             return;
           }
         });
-        $scope.$root.$on('$routeUpdate', function (event, state) {
-          var newSlug = state.params.slug;
+        $scope.$root.$on('$routeUpdate', (event, state) => {
+          const newSlug = state.params.slug;
+
           if (!prevSlug) {
             prevSlug = newSlug;
             return;
@@ -99,14 +108,16 @@ module.exports = function (app) {
           if (prevSlug !== newSlug) {
             prevSlug = newSlug;
             // and here we go, one more hack
-            setTimeout(function () {
+            setTimeout(() => {
               window.location.href = window.location.href;
             }, 1);
             return;
           }
         });
         function updateGraph() {
-          var validTools = $scope.validTools;
+          const validTools = $scope.validTools;
+          const scrollToPosition = 200;
+
           if (validTools.length === 0) {
             return;
           }
@@ -117,10 +128,12 @@ module.exports = function (app) {
             return;
           }
 
-          scrollTo(document.querySelector('.wrapper'), 0, 200, function () {
+          scrollTo(document.querySelector('.wrapper'), 0, scrollToPosition, () => {
+            let tool = null;
+
             $scope.activeTool = $routeParams.slug;
             // do not put data in $scope
-            var tool = angular.copy($scope.tools[$scope.activeTool]);
+            tool = angular.copy($scope.tools[$scope.activeTool]);
 
             Vizabi.clearInstances();
 
@@ -134,20 +147,28 @@ module.exports = function (app) {
         }
 
         function scrollTo(element, to, duration, cb) {
+          let difference = null;
+          let perTick = null;
+          const numberTimeout = 10;
+          const numberPerTick = 10;
+
           if (duration < 0) {
             return;
           }
-          var difference = to - element.scrollTop;
-          var perTick = difference / duration * 10;
 
-          setTimeout(function () {
+          difference = to - element.scrollTop;
+          perTick = difference / duration * numberPerTick;
+
+          setTimeout(() => {
+            const numberDurationMinus = 10;
+
             element.scrollTop += perTick;
             if (element.scrollTop === to) {
               cb();
               return;
             }
-            scrollTo(element, to, duration - 10, cb);
-          }, 10);
+            scrollTo(element, to, duration - numberDurationMinus, cb);
+          }, numberTimeout);
         }
       }]);
 };
