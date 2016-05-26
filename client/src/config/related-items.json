@@ -139,7 +139,8 @@
           "trails",
           "lock",
           "moreoptions",
-          "fullscreen"
+          "fullscreen",
+          "presentation"
         ],
         "dialogs": {
           "popup": [
