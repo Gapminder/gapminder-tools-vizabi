@@ -72,6 +72,6 @@
     "local-web-server": "1.2.1",
     "lodash": "3.10.1",
     "swfobject": "2.2.1",
-    "vizabi": "0.13.11"
+    "vizabi": "0.13.11-2"
   }
 }
