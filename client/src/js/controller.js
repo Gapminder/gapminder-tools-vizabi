@@ -10,6 +10,15 @@ module.exports = function (app) {
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         var placeholder = document.getElementById('vizabi-placeholder');
 
+        $scope.embedVizabi = false;
+        if ($location.search().embedded === 'true') {
+          $scope.embedVizabi = true;
+        }
+        $scope.embedded = function () {
+          $location.search('embedded', 'true');
+          $scope.embedVizabi = true;
+        };
+
         $scope.shareLink = function () {
           function getJSON(url, param, callback, err) {
             var request = new XMLHttpRequest();
