@@ -8,12 +8,13 @@
   {% for (var prop in o.htmlWebpackPlugin.files.css) { %}
   <link href="{%= o.htmlWebpackPlugin.files.css[prop] %}" rel="stylesheet" type="text/css">
   {% } %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link href="./favicon.ico" rel="shortcut icon">
 </head>
 <body ng-controller="gapminderToolsCtrl" ng-class="{loading : loading}" class="{{ bodyClass }}" ng-cloak>
 <div class="wrapper" ng-class="{hidden : loadingError}">
   <!--Header-->
-  <div class="header">
+  <div class="header" ng-class="{hidden : embedVizabi}">
     <a class="header-title" href="http://www.gapminder.org">
       GAPMINDER TOOLS
     </a>
@@ -25,7 +26,7 @@
     <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
     <!--social-->
     <ul class="social-list desktop">
-      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank"><i class="fa fa-envelope-square"></i></a></li>
+      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank" class="yellow-box"><i class="fa fa-envelope-o"></i></a></li>
       <li>
         <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank">
           <i class="fa fa-twitter-square"></i>
@@ -35,6 +36,9 @@
       <li><button ng-click="shareLink()" class="ico-plane">
         <svg width="13" height="13" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1764 11q33 24 27 64l-256 1536q-5 29-32 45-14 8-31 8-11 0-24-5l-527-215-298 327q-18 21-47 21-14 0-23-4-19-7-30-23.5t-11-36.5v-452l-472-193q-37-14-40-55-3-39 32-59l1664-960q35-21 68 2zm-342 1499l221-1323-1434 827 336 137 863-639-478 797z"/></svg>
       </button></li>
+      <li>
+        <button ng-click="embedded()" class="yellow-box"><i class="fa fa-code" aria-hidden="true"></i></button>
+      </li>
     </ul>
   </div>
 
@@ -43,9 +47,9 @@
 
   <!--social-->
 
-  <div class="wrap-social">
+  <div class="wrap-social" ng-class="{hidden : embedVizabi}">
     <ul class="social-list mobile">
-      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank"><i class="fa fa-envelope-square"></i></a></li>
+      <li><a href="mailto:?subject=Gapminder&amp;body=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank" class="yellow-box"><i class="fa fa-envelope-o"></i></a></li>
       <li>
         <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fwww.gapminder.org%2Ftools%2F" target="_blank">
           <i class="fa fa-twitter-square"></i>
@@ -55,17 +59,20 @@
       <li><button ng-click="shareLink()" class="ico-plane">
         <svg width="13" height="13" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1764 11q33 24 27 64l-256 1536q-5 29-32 45-14 8-31 8-11 0-24-5l-527-215-298 327q-18 21-47 21-14 0-23-4-19-7-30-23.5t-11-36.5v-452l-472-193q-37-14-40-55-3-39 32-59l1664-960q35-21 68 2zm-342 1499l221-1323-1434 827 336 137 863-639-478 797z"/></svg>
       </button></li>
+      <li>
+        <button ng-click="embedded()" class="yellow-box"><i class="fa fa-code" aria-hidden="true"></i></button>
+      </li>
     </ul>
   </div>
 
   <!--link report problem -->
-   <div class="wrap-report-problem">
+   <div class="wrap-report-problem" ng-class="{hidden : embedVizabi}">
      <a class="report-problem indent" href="https://getsatisfaction.com/gapminder/#problem" target="_blank">Report problem</a>
      <a class="report-problem" ng-class="{hidden : !isFlashAvailable()}" href="http://www.gapminder.org/world/?use_gapminder_world" target="_blank">Old bubble chart</a>
    </div>
 
   <!--More-->
-  <div class="more">
+  <div class="more" ng-class="{hidden : embedVizabi}">
 
     <div class="about">
       <h2 class="heading-2">See also</h2>
