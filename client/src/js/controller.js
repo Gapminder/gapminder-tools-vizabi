@@ -8,7 +8,25 @@ module.exports = function (app) {
     .controller('gapminderToolsCtrl', [
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
+        window.addEventListener("hashchange", updateLinksToShareSocial, false);
         var placeholder = document.getElementById('vizabi-placeholder');
+        var bitlyShortenerUrl = 'https://api-ssl.bitly.com/v3/shorten';
+
+        /* eslint-disable max-len */
+        var socialClassToUrl = {
+          twitter: 'https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=',
+          facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
+          mail: 'mailto:?subject=Gapminder&body='
+        };
+        /* eslint-enable max-len */
+
+        var socialClasses = Object.keys(socialClassToUrl);
+
+        var socialLinksSelector = socialClasses.map(function (className) {
+          return '.' + className;
+        }).join(', ');
+
+        var socialLinks = document.querySelectorAll(socialLinksSelector);
 
         $scope.embedVizabi = false;
         if ($location.search().embedded === 'true') {
@@ -19,45 +37,64 @@ module.exports = function (app) {
           $scope.embedVizabi = true;
         };
 
-        $scope.shareLink = function () {
-          function getJSON(url, param, callback, err) {
-            var request = new XMLHttpRequest();
-            var pars = [];
-            for (var i in param) {
-              if (param.hasOwnProperty(i)) {
-                pars.push(i + '=' + param[i]);
-              }
-            }
-            request.open('GET', url + '?' + pars.join('&'), true);
-            request.onload = function () {
-              if (request.status >= 200 && request.status < 400) {
-                var data = JSON.parse(request.responseText);
-                if (callback) {
-                  callback(data);
-                }
-              } else if (err) {
-                err();
-              }
-            };
-            request.onerror = function () {
-              if (err) {
-                err();
-              }
-            };
-            request.send();
-          }
-
-          // BITLY
-          var address = 'https://api-ssl.bitly.com/v3/shorten';
-          var params = {
+        function makeParamsForUrlShortening() {
+          return {
             access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
             longUrl: encodeURIComponent(document.URL)
           };
-          getJSON(address, params, function (response) {
-            if (response.status_code === '200') {
+        }
+
+        function getJSON(url, param, callback, err) {
+          var request = new XMLHttpRequest();
+          var pars = [];
+          for (var i in param) {
+            if (param.hasOwnProperty(i)) {
+              pars.push(i + '=' + param[i]);
+            }
+          }
+          request.open('GET', url + '?' + pars.join('&'), true);
+          request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+              var data = JSON.parse(request.responseText);
+              if (callback) {
+                callback(data);
+              }
+            } else if (err) {
+              err();
+            }
+          };
+          request.onerror = function () {
+            if (err) {
+              err();
+            }
+          };
+          request.send();
+        }
+
+        // BITLY
+        $scope.shareLink = function () {
+          var params = makeParamsForUrlShortening();
+
+          getJSON(bitlyShortenerUrl, params, function (response) {
+            if (response.status_code === 200) {
               prompt('Copy the following link: ', response.data.url);
             } else {
               prompt('Copy the following link: ', window.location);
+            }
+          });
+        };
+
+        function updateLinksToShareSocial() {
+          var params = makeParamsForUrlShortening();
+          getJSON(bitlyShortenerUrl, params, function (response) {
+            if (response.status_code === 200) {
+              socialClasses.forEach(function (className) {
+                Array.prototype.forEach.call(socialLinks, function (link) {
+                  if (link.classList.contains(className)) {
+                    link.href = socialClassToUrl[className] + response.data.url;
+                  }
+                });
+              });
             }
           });
         };
