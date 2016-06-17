@@ -39,7 +39,7 @@ module.exports = function (app) {
 
         function makeParamsForUrlShortening() {
           return {
-            access_token: '8765eb3be5b975830e72af4e0949022cb53d9596',
+            access_token: 'c5c5bdef4905a307a3a64664b1d06add09c48eb8',
             longUrl: encodeURIComponent(document.URL)
           };
         }
