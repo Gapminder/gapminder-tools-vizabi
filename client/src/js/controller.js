@@ -2,6 +2,7 @@
 
 var Vizabi = require('vizabi');
 var swfobject = require('swfobject');
+var _ = require('lodash');
 
 module.exports = function (app) {
   app
@@ -11,6 +12,9 @@ module.exports = function (app) {
         window.addEventListener("hashchange", updateLinksToShareSocial, false);
         var placeholder = document.getElementById('vizabi-placeholder');
         var bitlyShortenerUrl = 'https://api-ssl.bitly.com/v3/shorten';
+
+        var initializeLinksToShareSocial = _.once(updateLinksToShareSocial);
+        initializeLinksToShareSocial();
 
         /* eslint-disable max-len */
         var socialClassToUrl = {
