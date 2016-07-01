@@ -65,7 +65,7 @@
   "dependencies": {
     "URLON": "1.0.1",
     "angular": "1.4.7",
-    "angular-route": "1.4.7",
+    "angular-route": "1.5.5",
     "angular-touch": "1.4.7",
     "bluebird": "3.3.5",
     "d3": "3.5.6",
