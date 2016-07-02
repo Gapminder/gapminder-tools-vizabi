@@ -38,7 +38,8 @@ module.exports = function (app) {
         }
         $scope.embedded = function () {
           $location.search('embedded', 'true');
-          $scope.embedVizabi = true;
+          prompt('Copy link', $location.absUrl());
+          $location.search('embedded', null);
         };
 
         function makeParamsForUrlShortening() {
@@ -101,7 +102,7 @@ module.exports = function (app) {
               });
             }
           });
-        };
+        }
 
         $scope.isFlashAvailable = function () {
           var swfVersion = swfobject.getFlashPlayerVersion();
