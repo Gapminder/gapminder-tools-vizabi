@@ -47,7 +47,7 @@
     "file-loader": "0.8.4",
     "html-loader": "0.3.0",
     "html-webpack-plugin": "1.6.1",
-    "image-webpack-loader": "1.6.2",
+    "image-webpack-loader": "2.0.0",
     "imagemin": "3.2.1",
     "imports-loader": "valorkin/imports-loader",
     "jasmine": "2.4.1",
