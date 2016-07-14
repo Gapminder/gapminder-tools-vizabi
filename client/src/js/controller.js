@@ -1,7 +1,7 @@
 'use strict';
 
 var Vizabi = require('vizabi');
-var swfobject = require('swfobject');
+var FlashDetect = require('./flash-detect');
 var _ = require('lodash');
 
 module.exports = function (app) {
@@ -9,7 +9,7 @@ module.exports = function (app) {
     .controller('gapminderToolsCtrl', [
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
-        window.addEventListener("hashchange", updateLinksToShareSocial, false);
+        window.addEventListener('hashchange', updateLinksToShareSocial, false);
         var placeholder = document.getElementById('vizabi-placeholder');
         var bitlyShortenerUrl = 'https://api-ssl.bitly.com/v3/shorten';
 
@@ -105,12 +105,7 @@ module.exports = function (app) {
         }
 
         $scope.isFlashAvailable = function () {
-          var swfVersion = swfobject.getFlashPlayerVersion();
-
-          if (swfVersion && (swfVersion.major || swfVersion.minor || swfVersion.release)) {
-            return true;
-          }
-          return false;
+          return FlashDetect.installed;
         };
 
         $scope.loadingError = false;
