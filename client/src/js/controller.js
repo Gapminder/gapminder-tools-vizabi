@@ -9,28 +9,10 @@ module.exports = function (app) {
     .controller('gapminderToolsCtrl', [
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
-        window.addEventListener('hashchange', updateLinksToShareSocial, false);
         var placeholder = document.getElementById('vizabi-placeholder');
         var bitlyShortenerUrl = 'https://api-ssl.bitly.com/v3/shorten';
 
-        var initializeLinksToShareSocial = _.once(updateLinksToShareSocial);
-        initializeLinksToShareSocial();
-
-        /* eslint-disable max-len */
-        var socialClassToUrl = {
-          twitter: 'https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=',
-          facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-          mail: 'mailto:?subject=Gapminder&body='
-        };
-        /* eslint-enable max-len */
-
-        var socialClasses = Object.keys(socialClassToUrl);
-
-        var socialLinksSelector = socialClasses.map(function (className) {
-          return '.' + className;
-        }).join(', ');
-
-        var socialLinks = document.querySelectorAll(socialLinksSelector);
+        setUpSocialLinkHandlers();
 
         $scope.embedVizabi = false;
         if ($location.search().embedded === 'true') {
@@ -88,21 +70,6 @@ module.exports = function (app) {
             }
           });
         };
-
-        function updateLinksToShareSocial() {
-          var params = makeParamsForUrlShortening();
-          getJSON(bitlyShortenerUrl, params, function (response) {
-            if (response.status_code === 200) {
-              socialClasses.forEach(function (className) {
-                Array.prototype.forEach.call(socialLinks, function (link) {
-                  if (link.classList.contains(className)) {
-                    link.href = socialClassToUrl[className] + response.data.url;
-                  }
-                });
-              });
-            }
-          });
-        }
 
         $scope.isFlashAvailable = function () {
           return FlashDetect.installed;
@@ -194,6 +161,46 @@ module.exports = function (app) {
             }
             scrollTo(element, to, duration - 10, cb);
           }, 10);
+        }
+
+        function setUpSocialLinkHandlers() {
+          /* eslint-disable max-len */
+          var socialClassToUrl = {
+            twitter: 'https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.gapminder.org&amp;related=Gapminder&amp;text=Gapminder&amp;tw_p=tweetbutton&amp;url=',
+            facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
+            mail: 'mailto:?subject=Gapminder&body='
+          };
+          /* eslint-enable max-len */
+
+          var socialLinksSelector = Object.keys(socialClassToUrl).map(function (className) {
+            return '.' + className;
+          }).join(', ');
+
+          var socialLinks = document.querySelectorAll(socialLinksSelector);
+
+          socialLinks.forEach(function (socialLink) {
+            socialLink.addEventListener('click', function (event) {
+              event.preventDefault();
+
+              var shareLinkWindow = window.open('');
+              var params = makeParamsForUrlShortening();
+              getJSON(bitlyShortenerUrl, params, function (response) {
+                var shortenedUrl = null;
+
+                if (response.status_code === 200) {
+                  shortenedUrl = response.data.url;
+                } else {
+                  shortenedUrl = window.location;
+                }
+
+                var selectedClassName = _.find(socialLink.classList, function (className) {
+                  return socialClassToUrl[className];
+                });
+
+                shareLinkWindow.location.href = socialClassToUrl[selectedClassName] + shortenedUrl;
+              });
+            });
+          });
         }
       }]);
 };
