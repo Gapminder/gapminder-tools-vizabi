@@ -176,9 +176,7 @@ module.exports = function (app) {
             return '.' + className;
           }).join(', ');
 
-          var socialLinks = document.querySelectorAll(socialLinksSelector);
-
-          socialLinks.forEach(function (socialLink) {
+          _.toArray(document.querySelectorAll(socialLinksSelector)).forEach(function (socialLink) {
             socialLink.addEventListener('click', function (event) {
               event.preventDefault();
 
