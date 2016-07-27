@@ -1,25 +1,21 @@
 'use strict';
 
 module.exports = function (app) {
-  app.run(function () {
-    var locationPath = window.location.pathname || '';
-
-    if (locationPath === '/' || locationPath.indexOf('/tools/') !== 0) {
-      window.location.href = HOME_URL;
-    }
-  });
 
   app
+    // configuration
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+
       $routeProvider
-        .when('/:slug', {
+        .when('/tools/', {
           controller: 'gapminderToolsCtrl',
           reloadOnSearch: false
-        });
+        })
+        .otherwise(HOME_URL);
 
-      $locationProvider.html5Mode({
-        enabled: true,
-        requireBase: false
-      });
-    }]);
+      $locationProvider.html5Mode(true);
+
+    }])
+    // launch
+    .run();
 };
