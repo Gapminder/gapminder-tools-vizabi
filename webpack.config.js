@@ -135,17 +135,9 @@ var wConfig = {
     hot: true,
     inline: true,
     historyApiFallback: {
-      index: config.index,
+      index: config.index
       // logger: console.log.bind(console),
       // verbose: true,
-      rewrites: [
-        {
-          from: /^\/$/,
-          to: function () {
-            return '/tools/';
-          }
-        }
-      ]
     },
     devtool: 'eval'
   }
