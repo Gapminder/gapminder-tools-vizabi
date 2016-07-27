@@ -8,7 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var WSurl = require('./ws-detect')(process.env);
-var HomeUrl = '/tools/bubbles';
+var HomeUrl = '/tools/#_chart-type=bubbles';
 
 var config = {
   template: 'index.html',
@@ -140,7 +140,7 @@ var wConfig = {
       // verbose: true,
       rewrites: [
         {
-          from: /^\/$|^\/tools.*$/,
+          from: /^\/$/,
           to: function () {
             return '/tools/';
           }
