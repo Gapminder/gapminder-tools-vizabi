@@ -14,8 +14,8 @@ var config = {
   template: 'index.html',
   index: 'index.html',
   src: './client/src',
-  dest: './client/dist/tools',
-  publicPath: '/tools/'
+  dest: './client/dist',
+  publicPath: '/'
 };
 
 var isProduction = process.env.NODE_ENV === 'production';
