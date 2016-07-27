@@ -46,7 +46,7 @@
     "tool": "MountainChart",
     "slug": "mountain",
     "category": "Tools",
-    "image": "/tools/public/images/tools/mountainchart.png",
+    "image": "/public/images/tools/mountainchart.png",
     "title": "Mountain Chart",
     "relateditems": [
       {
@@ -244,7 +244,7 @@
       }
     ],
     "slug": "bubbles",
-    "image": "/tools/public/images/tools/bubblechart.png",
+    "image": "/public/images/tools/bubblechart.png",
     "category": "Tools",
     "title": "Bubble Chart",
     "__v": 4
@@ -300,7 +300,7 @@
     "tool": "BubbleMap",
     "slug": "map",
     "category": "Tools",
-    "image": "/tools/public/images/tools/bubblemap.png",
+    "image": "/public/images/tools/bubblemap.png",
     "title": "Bubble Map",
     "relateditems": [
       {
