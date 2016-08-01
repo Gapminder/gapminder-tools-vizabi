@@ -107,7 +107,7 @@
       <div class="menu"></div>
       <ul class="menu-primary">
         <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
-          <a href ng-hide="activeTool == key" ng-href="#_chart-type={{::key}}">
+          <a href ng-hide="activeTool == key" ng-href="/tools/#_chart-type={{::key}}">
             <span class="title">{{::tool.title}}</span>
             <img class="image" ng-src="{{::tool.image}}">
           </a>
