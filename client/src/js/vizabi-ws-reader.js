@@ -20,8 +20,8 @@ Vizabi._globals.ext_resources = {
   preloadPath: 'api/vizabi/',
   dataPath: 'api/graphs/stats/vizabi-tools',
   //conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json'
-  conceptpropsPath: 'https://waffle-server-dev-new-ddf.gapminderdev.org/api/vizabi/metadata.json',
-  translationPath: 'https://waffle-server-dev-new-ddf.gapminderdev.org/api/vizabi/translation/en.json'
+  conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json',
+  translationPath: WS_SERVER + '/api/vizabi/translation/en.json'
 };
 
 require('vizabi/build/dist/vizabi.css');
