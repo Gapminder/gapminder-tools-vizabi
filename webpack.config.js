@@ -8,14 +8,14 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var WSurl = require('./ws-detect')(process.env);
-var HomeUrl = '/tools/bubbles';
+var HomeUrl = '/tools/#_chart-type=bubbles';
 
 var config = {
   template: 'index.html',
   index: 'index.html',
   src: './client/src',
-  dest: './client/dist/tools',
-  publicPath: '/tools/'
+  dest: './client/dist',
+  publicPath: '/'
 };
 
 var isProduction = process.env.NODE_ENV === 'production';
@@ -135,17 +135,9 @@ var wConfig = {
     hot: true,
     inline: true,
     historyApiFallback: {
-      index: config.index,
+      index: config.index
       // logger: console.log.bind(console),
       // verbose: true,
-      rewrites: [
-        {
-          from: /^\/$|^\/tools.*$/,
-          to: function () {
-            return '/tools/';
-          }
-        }
-      ]
     },
     devtool: 'eval'
   }

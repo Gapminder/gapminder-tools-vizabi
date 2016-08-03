@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="gapminderTools">
 <head>
-  <base href="/tools/">
+  <base href="/">
   <title>Gapminder Tools</title>
   <meta charset="utf-8">
+  <meta http-equiv="expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   {% for (var prop in o.htmlWebpackPlugin.files.css) { %}
   <link href="{%= o.htmlWebpackPlugin.files.css[prop] %}" rel="stylesheet" type="text/css">
@@ -106,7 +107,7 @@
       <div class="menu"></div>
       <ul class="menu-primary">
         <li class="menu-item" ng-repeat="(key, tool) in tools track by $index">
-          <a href ng-hide="activeTool == key" ng-href="{{::key}}">
+          <a href ng-hide="activeTool == key" ng-href="#_chart-type={{::key}}">
             <span class="title">{{::tool.title}}</span>
             <img class="image" ng-src="{{::tool.image}}">
           </a>
