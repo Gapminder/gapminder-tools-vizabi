@@ -32,9 +32,9 @@
     "bstack-tunnel": ".config/tools/bstack-local.js",
     "update-webdriver": "./node_modules/protractor/bin/webdriver-manager update",
     "selenium-server-standalone": "./node_modules/protractor/bin/webdriver-manager start",
-    "pre:e2e-local": "npm run update-webdriver && npm run selenium-server-standalone",
-    "e2e-bstack": ".config/tools/wait4tunnel.js && ./node_modules/.bin/protractor ./.config/protractor-browserstack.conf.js",
-    "e2e-local": "./node_modules/.bin/protractor ./.config/protractor-local.conf.js"
+    "pree2e:local": "npm run update-webdriver && npm run selenium-server-standalone",
+    "e2e:bstack": ".config/tools/wait4tunnel.js && ./node_modules/.bin/protractor ./.config/protractor-browserstack.conf.js",
+    "e2e:local": "./node_modules/.bin/protractor ./.config/protractor-local.conf.js"
   },
   "devDependencies": {
     "browserstack-wrapper": "1.0.0",
