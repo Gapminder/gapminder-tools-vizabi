@@ -5,7 +5,7 @@ var Vizabi = require('vizabi');
 var FlashDetect = require('./flash-detect');
 var _ = require('lodash');
 
-const BITLY_SHORTENER_URL = 'https://api-ssl.bitly.com/v3/shorten';
+var BITLY_SHORTENER_URL = 'https://api-ssl.bitly.com/v3/shorten';
 
 module.exports = function (app) {
   app
@@ -20,8 +20,8 @@ module.exports = function (app) {
 
         // change hash handler
         $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
-          const chartTypePrevious = getChartType(urlPrevious);
-          const chartTypeCurrent = getChartType(urlCurrent);
+          var chartTypePrevious = getChartType(urlPrevious);
+          var chartTypeCurrent = getChartType(urlCurrent);
 
           if (!isChartTypeValid(chartTypeCurrent)) {
             if (isChartTypesLoaded()) {
@@ -40,12 +40,12 @@ module.exports = function (app) {
         });
 
         // validate route
-        const locationPath = $location.path() || '';
-        const locationHash = $location.hash() || '';
-        const REQUIRED_PATH = '/tools';
-        const REQUIRED_PARAM = 'chart-type';
+        var locationPath = $location.path() || '';
+        var locationHash = $location.hash() || '';
+        var REQUIRED_PATH = '/tools';
+        var REQUIRED_PARAM = 'chart-type';
 
-        const shouldNavigateToHome =
+        var shouldNavigateToHome =
           locationPath.indexOf(REQUIRED_PATH) === -1 ||
           locationHash.indexOf(REQUIRED_PARAM) === -1;
 
@@ -109,12 +109,12 @@ module.exports = function (app) {
 
         // additional
         function getChartType(url) {
-          const hash = url.split('#')[1] || '';
-          const hashEncoded = encodeURI(decodeURIComponent(hash));
+          var hash = url.split('#')[1] || '';
+          var hashEncoded = encodeURI(decodeURIComponent(hash));
           if (!hashEncoded) {
             return false;
           }
-          const urlModel = Urlon.parse(hashEncoded);
+          var urlModel = Urlon.parse(hashEncoded);
           return urlModel['chart-type'] || false;
         }
 
