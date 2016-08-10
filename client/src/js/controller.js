@@ -45,11 +45,29 @@ module.exports = function (app) {
         var REQUIRED_PATH = '/tools';
         var REQUIRED_PARAM = 'chart-type';
 
+        var deprecatedQueryPaths = ['bubbles', 'mountain', 'map'];
+        var deprecatedQueryPathParts = locationPath.split("/");
+        var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 3 &&
+          deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[2]) !== -1;
+
         var shouldNavigateToHome =
           locationPath.indexOf(REQUIRED_PATH) === -1 ||
           locationHash.indexOf(REQUIRED_PARAM) === -1;
 
-        if (shouldNavigateToHome) {
+        if(deprecatedQueryDetected) {
+
+          var deprecatedQueryChart = deprecatedQueryPathParts[2];
+          var hashEncoded = encodeURI(decodeURIComponent(locationHash));
+
+          if (hashEncoded) {
+            var urlModel = Urlon.parse(hashEncoded);
+            urlModel['chart-type'] = deprecatedQueryChart;
+            var deprecatedQueryRedirect = REQUIRED_PATH + '#' + Urlon.stringify(urlModel);
+            $location.url(deprecatedQueryRedirect);
+          }
+        }
+
+        if (shouldNavigateToHome && !deprecatedQueryDetected) {
           // invalid URL, redirect to Home
           $location.url(HOME_URL);
         }
