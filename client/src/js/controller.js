@@ -56,12 +56,11 @@ module.exports = function (app) {
           var deprecatedQueryChart = deprecatedQueryPathParts[2];
           var hashEncoded = encodeURI(decodeURIComponent(locationHash));
 
-          if (hashEncoded) {
-            var urlModel = Urlon.parse(hashEncoded);
-            urlModel['chart-type'] = deprecatedQueryChart;
-            var deprecatedQueryRedirect = REQUIRED_PATH + '#' + Urlon.stringify(urlModel);
-            $location.url(deprecatedQueryRedirect);
-          }
+          var urlModel = hashEncoded ? Urlon.parse(hashEncoded) : {};
+          urlModel['chart-type'] = deprecatedQueryChart;
+
+          var deprecatedQueryRedirect = REQUIRED_PATH + '/#' + Urlon.stringify(urlModel);
+          $location.url(deprecatedQueryRedirect);
         }
 
         if (shouldNavigateToHome && !deprecatedQueryDetected) {
