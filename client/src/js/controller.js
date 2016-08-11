@@ -46,16 +46,13 @@ module.exports = function (app) {
         var REQUIRED_PARAM = 'chart-type';
 
         var deprecatedQueryPaths = ['bubbles', 'mountain', 'map'];
-        var deprecatedQueryPathParts = locationPath.split("/");
+        var deprecatedQueryPathParts = locationPath.split('/');
         var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 3 &&
           deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[2]) !== -1;
-
         var shouldNavigateToHome =
-          locationPath.indexOf(REQUIRED_PATH) === -1 ||
-          locationHash.indexOf(REQUIRED_PARAM) === -1;
-
-        if(deprecatedQueryDetected) {
-
+          locationPath.indexOf(REQUIRED_PATH) === -1 || locationHash.indexOf(REQUIRED_PARAM) === -1;
+        
+        if (deprecatedQueryDetected) {
           var deprecatedQueryChart = deprecatedQueryPathParts[2];
           var hashEncoded = encodeURI(decodeURIComponent(locationHash));
 
@@ -128,12 +125,12 @@ module.exports = function (app) {
         // additional
         function getChartType(url) {
           var hash = url.split('#')[1] || '';
-          var hashEncoded = encodeURI(decodeURIComponent(hash));
-          if (!hashEncoded) {
+          var _hashEncoded = encodeURI(decodeURIComponent(hash));
+          if (!_hashEncoded) {
             return false;
           }
-          var urlModel = Urlon.parse(hashEncoded);
-          return urlModel['chart-type'] || false;
+          var _urlModel = Urlon.parse(_hashEncoded);
+          return _urlModel['chart-type'] || false;
         }
 
         function isChartTypesLoaded() {
