@@ -73,6 +73,6 @@
     "local-web-server": "1.2.1",
     "lodash": "3.10.1",
     "vizabi-ws-reader": "0.0.7",
-    "vizabi": "0.15.1-0"
+    "vizabi": "0.15.2-1"
   }
 }
