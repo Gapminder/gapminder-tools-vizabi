@@ -15,11 +15,11 @@ Vizabi.Reader.extend("waffle", wsReader);
 
 
 // Setup WS location from webpack variable "WS_SERVER"
+
 Vizabi._globals.ext_resources = {
   host: WS_SERVER + '/',
   preloadPath: 'api/vizabi/',
-  dataPath: 'api/graphs/stats/vizabi-tools',
-  //conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json'
+  dataPath: '/api/ddf/',
   conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json',
   translationPath: WS_SERVER + '/api/vizabi/translation/en.json'
 };

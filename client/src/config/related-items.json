@@ -5,7 +5,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/graphs/stats/vizabi-tools",
+        "path": "/api/ddf/",
         "splash": true
       },
       "ui": {
@@ -128,7 +128,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/graphs/stats/vizabi-tools",
+        "path": "/api/ddf/",
         "splash": true
       },
       "ui": {
@@ -262,7 +262,7 @@
       },
       "data": {
         "reader": "waffle",
-        "path": "/api/graphs/stats/vizabi-tools",
+        "path": "/api/ddf/",
         "splash": false
       },
       "ui": {
