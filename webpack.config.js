@@ -97,7 +97,7 @@ var wConfig = {
       WS_SERVER: JSON.stringify(WSurl),
       HOME_URL: JSON.stringify(HomeUrl)
     }),
-    new ExtractTextPlugin('[name]-[hash:6].css'),
+    new ExtractTextPlugin('public/css/[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
       filename: config.index,
       template: path.join(config.src, config.template),
