@@ -123,7 +123,7 @@ module.exports = function (app) {
 
         // additional
         function getChartType(url) {
-          var hash = url.split('#')[1] || '';
+          var hash = url.split('/#')[1] || '';
           var _hashEncoded = encodeURI(decodeURIComponent(hash));
           if (!_hashEncoded) {
             return false;
