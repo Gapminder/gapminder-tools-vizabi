@@ -26,7 +26,7 @@ module.exports = function (app) {
         // change hash handler
         $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
           if (!_.includes(urlCurrent, REQUIRED_PATH)) {
-            if (urlCurrent != urlPrevious) {
+            if (urlCurrent !== urlPrevious) {
               window.location.href = urlCurrent;
             }
             return;
