@@ -18,8 +18,20 @@ module.exports = function (app) {
         $scope.validTools = [];
         $scope.relatedItems = [];
 
+        var locationPath = $location.path() || '';
+        var locationHash = $location.hash() || '';
+        var REQUIRED_PARAM = 'chart-type';
+        var REQUIRED_PATH = '/tools';
+
         // change hash handler
         $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
+          if (!_.includes(urlCurrent, REQUIRED_PATH)) {
+            if (urlCurrent != urlPrevious) {
+              window.location.href = urlCurrent;
+            }
+            return;
+          }
+
           var chartTypePrevious = getChartType(urlPrevious);
           var chartTypeCurrent = getChartType(urlCurrent);
 
@@ -39,19 +51,13 @@ module.exports = function (app) {
           }
         });
 
-        // validate route
-        var locationPath = $location.path() || '';
-        var locationHash = $location.hash() || '';
-        var REQUIRED_PATH = '/tools';
-        var REQUIRED_PARAM = 'chart-type';
-
         var deprecatedQueryPaths = ['bubbles', 'mountain', 'map'];
         var deprecatedQueryPathParts = locationPath.split('/');
         var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 3 &&
           deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[2]) !== -1;
         var shouldNavigateToHome =
           locationPath.indexOf(REQUIRED_PATH) === -1 || locationHash.indexOf(REQUIRED_PARAM) === -1;
-        
+
         if (deprecatedQueryDetected) {
           var deprecatedQueryChart = deprecatedQueryPathParts[2];
           var hashEncoded = encodeURI(decodeURIComponent(locationHash));
