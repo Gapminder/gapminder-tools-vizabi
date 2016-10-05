@@ -9,7 +9,7 @@ var Vizabi = require('vizabi');
 
 var WSReader = require('vizabi-ws-reader').WSReader;
 var wsReader = new WSReader().getReader();
-Vizabi.Reader.extend("waffle", wsReader);
+Vizabi.Reader.extend('waffle', wsReader);
 
 // End :: WSReader Integration
 

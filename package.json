@@ -65,7 +65,7 @@
     "webpack-dev-server": "1.12.1"
   },
   "dependencies": {
-    "URLON": "1.0.1",
+    "URLON": "2.0.0",
     "angular": "1.4.7",
     "angular-route": "1.4.7",
     "angular-touch": "1.4.7",
