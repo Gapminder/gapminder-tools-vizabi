@@ -1,14 +1,29 @@
 'use strict';
 
+var _ = require('lodash');
 var Vizabi = require('vizabi');
 var urlon = require('URLON');
 var Promise = require('bluebird');
 
+var updateModelDebounced = _.debounce(function updateModel(newModelHash, callback) {
+  if (window.location.hash !== newModelHash) {
+    callback({hash: newModelHash});
+  }
+});
+
+function replaceWordBySymbol(inputString) {
+  return inputString.replace(/_slash_/g, '/').replace(/%2F/g, '/');
+}
+
 module.exports = function (app) {
   app
-    .factory('vizabiFactory', [
-      function () {
+    .factory('vizabiFactory', ['$rootScope',
+      function ($rootScope) {
         return {
+          emit: function (data) {
+            $rootScope.$broadcast('onModelChanged', data);
+          },
+
           /**
            * Render Vizabi
            * @param {String} tool name of the tool
@@ -17,6 +32,8 @@ module.exports = function (app) {
            * @return {Object} Vizabi
            */
           render: function (tool, placeholder, model) {
+            var that = this;
+
             var loc = window.location.toString();
             var hash = null;
             var initialModel = Vizabi.utils.deepClone(model);
@@ -26,18 +43,21 @@ module.exports = function (app) {
             }
 
             if (hash) {
-              var str = encodeURI(decodeURIComponent(hash));
+              var str = encodeURI(decodeURIComponent(replaceWordBySymbol(hash)));
+
               var urlModel = urlon.parse(str);
+
               Vizabi.utils.deepExtend(model, urlModel);
             }
 
             model.bind = model.bind || {};
-            model.bind.persistentChange = onPersistentChange;
-
-            function onPersistentChange(evt, minModel) {
+            model.bind.persistentChange = function (evt, minModel) {
               var minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
-              window.location.hash = urlon.stringify(minModelDiff);
-            }
+
+              var modelDiffHash = urlon.stringify(minModelDiff);
+
+              updateModelDebounced(modelDiffHash, that.emit);
+            };
 
             return Vizabi(tool, placeholder, model);
           }

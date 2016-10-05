@@ -18,38 +18,15 @@ module.exports = function (app) {
         $scope.validTools = [];
         $scope.relatedItems = [];
 
+        var tempHash = '';
+        var currHash = '';
+        var modelWasChanged = false;
+        var historyLength = 0;
+
         var locationPath = $location.path() || '';
         var locationHash = $location.hash() || '';
         var REQUIRED_PARAM = 'chart-type';
         var REQUIRED_PATH = '/tools';
-
-        // change hash handler
-        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
-          if (!_.includes(urlCurrent, REQUIRED_PATH)) {
-            if (urlCurrent !== urlPrevious) {
-              window.location.href = urlCurrent;
-            }
-            return;
-          }
-
-          var chartTypePrevious = getChartType(urlPrevious);
-          var chartTypeCurrent = getChartType(urlCurrent);
-
-          if (!isChartTypeValid(chartTypeCurrent)) {
-            if (isChartTypesLoaded()) {
-              // invalid URL, redirect to Home
-              $location.url(HOME_URL);
-            }
-            return;
-          }
-
-          $scope.chartType = chartTypeCurrent;
-
-          // reload chart if type was changed
-          if (chartTypePrevious !== chartTypeCurrent) {
-            updateGraph();
-          }
-        });
 
         var deprecatedQueryPaths = ['bubbles', 'mountain', 'map'];
         var deprecatedQueryPathParts = locationPath.split('/');
@@ -60,6 +37,7 @@ module.exports = function (app) {
 
         if (deprecatedQueryDetected) {
           var deprecatedQueryChart = deprecatedQueryPathParts[2];
+
           var hashEncoded = encodeURI(decodeURIComponent(locationHash));
 
           var urlModel = hashEncoded ? Urlon.parse(hashEncoded) : {};
@@ -94,10 +72,78 @@ module.exports = function (app) {
         // setup scope and handlers
         controllerImplementation();
 
-        return;
+        $scope.$root.$on('onModelChanged', function (e, data) {
+          currHash = data.hash;
+
+          tempHash = currHash;
+
+          window.location.hash = replaceSymbolByWord(currHash);
+        });
+
+        function replaceSymbolByWord(inputString) {
+          return inputString.replace(/\//g, '_slash_').replace(/%2F/g, '_slash_');
+        }
+
+        function replaceWordBySymbol(inputString) {
+          return inputString.replace(/_slash_/g, '/').replace(/%2F/g, '/');
+        }
+
+        function getHash(url) {
+          var loc = url;
+          var hash = null;
+
+          if (loc.indexOf('#') >= 0) {
+            hash = loc.substring(loc.indexOf('#') + 1);
+          }
+
+          return encodeURI(decodeURIComponent(replaceWordBySymbol(hash)));
+        }
+
+        // change hash handler
+        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
+          currHash = getHash(urlCurrent);
+
+          if (modelWasChanged === true && historyLength < window.history.length) {
+            modelWasChanged = false;
+          } else {
+            if (currHash !== tempHash) {
+              updateGraph();
+
+              modelWasChanged = true;
+            }
+
+            historyLength = window.history.length;
+          }
+
+          historyLength = window.history.length;
+
+          tryToUpdateGraphic(urlCurrent, urlPrevious);
+        });
+
+        function tryToUpdateGraphic(urlCurrent, urlPrevious) {
+          var urlPreviousVar = replaceWordBySymbol(urlPrevious);
+          var urlCurrentVar = replaceWordBySymbol(urlCurrent);
+
+          var chartTypePrevious = getChartType(urlPreviousVar);
+          var chartTypeCurrent = getChartType(urlCurrentVar);
+
+          // invalid URL, redirect to Home
+          if (!isChartTypeValid(chartTypeCurrent)) {
+            if (isChartTypesLoaded()) {
+              $location.url(HOME_URL);
+            }
+            return;
+          }
+
+          $scope.chartType = chartTypeCurrent;
+
+          // reload chart if type was changed
+          if (chartTypePrevious !== chartTypeCurrent) {
+            updateGraph();
+          }
+        }
 
         // business logic
-
         function controllerImplementation() {
           $scope.embedVizabi = $location.search().embedded === 'true';
 
@@ -134,6 +180,7 @@ module.exports = function (app) {
           if (!_hashEncoded) {
             return false;
           }
+
           var _urlModel = Urlon.parse(_hashEncoded);
           return _urlModel['chart-type'] || false;
         }
@@ -141,6 +188,7 @@ module.exports = function (app) {
         function isChartTypesLoaded() {
           return !!$scope.validTools.length;
         }
+
         function isChartTypeValid(chartType) {
           if (!chartType || !isChartTypesLoaded()) {
             return false;
