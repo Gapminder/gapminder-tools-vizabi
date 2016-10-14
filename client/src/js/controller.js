@@ -58,7 +58,7 @@ module.exports = function (app) {
           $scope.validTools = Object.keys($scope.tools);
 
           // detect chart type
-          $scope.chartType = getChartType($location.url());
+          $scope.chartType = getChartType(replaceWordBySymbol($location.url()));
 
           // load vizabi chart if type is Ok
           if (isChartTypeValid($scope.chartType)) {
