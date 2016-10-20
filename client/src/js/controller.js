@@ -17,18 +17,22 @@ module.exports = function (app) {
         $scope.tools = {};
         $scope.validTools = [];
         $scope.relatedItems = [];
+        $scope.availableCharts = ['bubbles', 'mountain', 'map'];
+        $scope.vizabiInstances = {};
+        $scope.vizabiModel = {};
+        $scope.vizabiTools = {};
 
-        var tempHash = '';
-        var currHash = '';
-        var modelWasChanged = false;
-        var historyLength = 0;
+        var updateFlagModel = false;
+        var updateFlagUrl = false;
+
+        // backward compatibility :: start
 
         var locationPath = $location.path() || '';
         var locationHash = $location.hash() || '';
         var REQUIRED_PARAM = 'chart-type';
         var REQUIRED_PATH = '/tools';
 
-        var deprecatedQueryPaths = ['bubbles', 'mountain', 'map'];
+        var deprecatedQueryPaths = $scope.availableCharts;
         var deprecatedQueryPathParts = locationPath.split('/');
         var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 3 &&
           deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[2]) !== -1;
@@ -37,31 +41,30 @@ module.exports = function (app) {
 
         if (deprecatedQueryDetected) {
           var deprecatedQueryChart = deprecatedQueryPathParts[2];
-
-          var hashEncoded = encodeURI(decodeURIComponent(locationHash));
-
-          var urlModel = hashEncoded ? Urlon.parse(hashEncoded) : {};
+          var urlModel = getModelFromUrl(locationHash);
           urlModel['chart-type'] = deprecatedQueryChart;
-
-          var deprecatedQueryRedirect = REQUIRED_PATH + '/#' + Urlon.stringify(urlModel);
-          $location.url(deprecatedQueryRedirect);
+          var urlModelUpdated = Urlon.stringify(urlModel);
+          var deprecatedQueryRedirect = REQUIRED_PATH + '/#' + replaceSymbolByWord(urlModelUpdated);
+          //$location.url(deprecatedQueryRedirect);
+          window.location = deprecatedQueryRedirect;
         }
 
         if (shouldNavigateToHome && !deprecatedQueryDetected) {
           // invalid URL, redirect to Home
-          $location.url(HOME_URL);
+          //$location.url(HOME_URL);
+          window.location = HOME_URL;
         }
 
+        // backward compatibility :: end
+
         // preload items
+
         vizabiItems.getItems().then(function (items) {
           $scope.tools = items;
           $scope.validTools = Object.keys($scope.tools);
 
-          // detect chart type
-          $scope.chartType = getChartType(replaceWordBySymbol($location.url()));
-
           // load vizabi chart if type is Ok
-          if (isChartTypeValid($scope.chartType)) {
+          if (isChartTypeValid()) {
             updateGraph();
           } else {
             // invalid URL, redirect to Home
@@ -70,119 +73,125 @@ module.exports = function (app) {
         });
 
         // setup scope and handlers
+
         controllerImplementation();
 
         $scope.$root.$on('onModelChanged', function (e, data) {
-          currHash = data.hash;
 
-          tempHash = currHash;
-
-          window.location.hash = replaceSymbolByWord(currHash);
-        });
-
-        function replaceSymbolByWord(inputString) {
-          return inputString.replace(/\//g, '_slash_').replace(/%2F/g, '_slash_');
-        }
-
-        function replaceWordBySymbol(inputString) {
-          return inputString.replace(/_slash_/g, '/').replace(/%2F/g, '/');
-        }
-
-        function getHash(url) {
-          var loc = url;
-          var hash = null;
-
-          if (loc.indexOf('#') >= 0) {
-            hash = loc.substring(loc.indexOf('#') + 1);
-          }
-
-          return encodeURI(decodeURIComponent(replaceWordBySymbol(hash)));
-        }
-
-        // change hash handler
-        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
-          currHash = getHash(urlCurrent);
-
-          if (modelWasChanged === true && historyLength < window.history.length) {
-            modelWasChanged = false;
-          } else {
-            if (currHash !== tempHash) {
-              updateGraph();
-
-              modelWasChanged = true;
-            }
-
-            historyLength = window.history.length;
-          }
-
-          historyLength = window.history.length;
-
-          tryToUpdateGraphic(urlCurrent, urlPrevious);
-        });
-
-        function tryToUpdateGraphic(urlCurrent, urlPrevious) {
-          var urlPreviousVar = replaceWordBySymbol(urlPrevious);
-          var urlCurrentVar = replaceWordBySymbol(urlCurrent);
-
-          var chartTypePrevious = getChartType(urlPreviousVar);
-          var chartTypeCurrent = getChartType(urlCurrentVar);
-
-          // invalid URL, redirect to Home
-          if (!isChartTypeValid(chartTypeCurrent)) {
-            if (isChartTypesLoaded()) {
-              $location.url(HOME_URL);
-            }
+          // skip flow for update from url
+          if(updateFlagUrl) {
+            updateFlagUrl = false;
             return;
           }
 
-          $scope.chartType = chartTypeCurrent;
+          // set incoming update type
+          updateFlagModel = true;
 
-          // reload chart if type was changed
-          if (chartTypePrevious !== chartTypeCurrent) {
-            updateGraph();
-          }
-        }
+          // update state in url
+          window.location.hash = replaceSymbolByWord(data.hash);
+        });
 
-        // business logic
-        function controllerImplementation() {
-          $scope.embedVizabi = $location.search().embedded === 'true';
+        // change hash handler
+        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
 
-          $scope.embedded = function () {
-            $location.search('embedded', 'true');
-            prompt('Copy link', $location.absUrl());
-            $location.search('embedded', null);
-          };
+          // set incoming update type
+          updateFlagUrl = !updateFlagModel ? true : updateFlagUrl;
 
-          setUpSocialLinkHandlers();
-
-          // BITLY
-          $scope.shareLink = function () {
-            var params = makeParamsForUrlShortening();
-
-            getJSON(BITLY_SHORTENER_URL, params, function (response) {
-              if (response.status_code === 200) {
-                prompt('Copy the following link: ', response.data.url);
-              } else {
-                prompt('Copy the following link: ', window.location);
-              }
-            });
-          };
-
-          $scope.isFlashAvailable = function () {
-            return FlashDetect.installed;
-          };
-        }
+          _updateChart(urlCurrent, urlPrevious);
+        });
 
         // additional
-        function getChartType(url) {
-          var hash = url.split('/#')[1] || '';
-          var _hashEncoded = encodeURI(decodeURIComponent(hash));
-          if (!_hashEncoded) {
-            return false;
+
+        function updateGraph() {
+          scrollTo(document.querySelector('.wrapper'), 0, 200, function () {
+            var chartType = getChartType();
+            if(!chartType) {
+              return;
+            }
+
+            $scope.activeTool = chartType;
+
+            // hide all
+            $scope.availableCharts.forEach(function(item){
+              document.getElementById('vizabi-placeholder-' + item).style.display = "none";
+            });
+
+            // show current
+            var placeholder = document.getElementById('vizabi-placeholder-' + $scope.chartType);
+            placeholder.style.display = "block";
+
+            updateVizabiInstance(placeholder);
+
+            $scope.relatedItems = $scope.vizabiTools[$scope.chartType].relateditems;
+            $scope.$apply();
+
+            // send to google analytics
+            $window.ga('send', 'pageview', {page: $location.url()});
+          });
+        }
+
+        function updateVizabiInstance (placeholder) {
+
+          var chartType = getChartType();
+
+          // create instance if not exists
+          if(!$scope.vizabiInstances[chartType]) {
+            $scope.vizabiTools[chartType] = angular.copy($scope.tools[$scope.activeTool]);
+            // create new instance
+            $scope.vizabiInstances[chartType] = vizabiFactory.render(
+              $scope.vizabiTools[chartType].tool,
+              placeholder,
+              $scope.vizabiTools[chartType].opts);
+            // store base default model
+            $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].getModel();
+          } else {
+            if(!updateFlagModel) {
+              var urlModel = getModelFromUrl($location.hash());
+              var updatedModel = {};
+
+              Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlModel);
+              $scope.vizabiInstances[chartType].setModel(updatedModel);
+            }
+          }
+          updateFlagModel = false;
+        }
+
+        // internal
+
+        function _updateChart(urlCurrent, urlPrevious) {
+
+          // invalid URL, redirect to Home
+          if (!isChartTypeValid()) {
+            if (isChartTypesLoaded()) {
+              $location.url(HOME_URL);
+            }
+            updateFlagUrl = false;
+            updateFlagModel = false;
+            return;
           }
 
-          var _urlModel = Urlon.parse(_hashEncoded);
-          return _urlModel['chart-type'] || false;
+          updateGraph();
+        }
+
+        function getChartType(url) {
+          var hash = url ? (url.split('/#')[1] || '') : $location.hash();
+
+          if (!hash) {
+            $scope.chartType = false;
+          } else {
+            var model = getModelFromUrl(hash);
+            $scope.chartType = model['chart-type'] || false;
+          }
+
+          return $scope.chartType;
+        }
+
+        function getModelFromUrl(hash) {
+          hash = replaceWordBySymbol(hash);
+          if(hash) {
+            return Urlon.parse(hash);
+          }
+          return {};
         }
 
         function isChartTypesLoaded() {
@@ -190,6 +199,7 @@ module.exports = function (app) {
         }
 
         function isChartTypeValid(chartType) {
+          chartType = chartType || getChartType();
           if (!chartType || !isChartTypesLoaded()) {
             return false;
           }
@@ -201,6 +211,14 @@ module.exports = function (app) {
             access_token: 'c5c5bdef4905a307a3a64664b1d06add09c48eb8',
             longUrl: encodeURIComponent(document.URL)
           };
+        }
+
+        function replaceSymbolByWord(inputString) {
+          return inputString.replace(/\//g, '_slash_').replace(/%2F/g, '_slash_');
+        }
+
+        function replaceWordBySymbol(inputString) {
+          return inputString.replace(/_slash_/g, '/').replace(/%2F/g, '/');
         }
 
         function getJSON(url, param, callback, err) {
@@ -230,24 +248,6 @@ module.exports = function (app) {
           request.send();
         }
 
-        function updateGraph() {
-          scrollTo(document.querySelector('.wrapper'), 0, 200, function () {
-            $scope.activeTool = $scope.chartType;
-            var placeholder = document.getElementById('vizabi-placeholder');
-            // do not put data in $scope
-            var tool = angular.copy($scope.tools[$scope.activeTool]);
-
-            Vizabi.clearInstances();
-
-            $scope.viz = vizabiFactory.render(tool.tool, placeholder, tool.opts);
-            $scope.relatedItems = tool.relateditems;
-            $scope.$apply();
-
-            // send to google analytics
-            $window.ga('send', 'pageview', {page: $location.url()});
-          });
-        }
-
         function scrollTo(element, to, duration, cb) {
           if (duration < 0) {
             return;
@@ -263,6 +263,37 @@ module.exports = function (app) {
             }
             scrollTo(element, to, duration - 10, cb);
           }, 10);
+        }
+
+        // business logic
+
+        function controllerImplementation() {
+          $scope.embedVizabi = $location.search().embedded === 'true';
+
+          $scope.embedded = function () {
+            $location.search('embedded', 'true');
+            prompt('Copy link', $location.absUrl());
+            $location.search('embedded', null);
+          };
+
+          setUpSocialLinkHandlers();
+
+          // BITLY
+          $scope.shareLink = function () {
+            var params = makeParamsForUrlShortening();
+
+            getJSON(BITLY_SHORTENER_URL, params, function (response) {
+              if (response.status_code === 200) {
+                prompt('Copy the following link: ', response.data.url);
+              } else {
+                prompt('Copy the following link: ', window.location);
+              }
+            });
+          };
+
+          $scope.isFlashAvailable = function () {
+            return FlashDetect.installed;
+          };
         }
 
         function setUpSocialLinkHandlers() {

@@ -17,8 +17,8 @@ function replaceWordBySymbol(inputString) {
 
 module.exports = function (app) {
   app
-    .factory('vizabiFactory', ['$rootScope',
-      function ($rootScope) {
+    .factory('vizabiFactory', ['$rootScope', '$location',
+      function ($rootScope, $location) {
         return {
           emit: function (data) {
             $rootScope.$broadcast('onModelChanged', data);
@@ -33,29 +33,19 @@ module.exports = function (app) {
            */
           render: function (tool, placeholder, model) {
             var that = this;
-
-            var loc = window.location.toString();
-            var hash = null;
+            var hash = $location.hash() || '';
             var initialModel = Vizabi.utils.deepClone(model);
 
-            if (loc.indexOf('#') >= 0) {
-              hash = loc.substring(loc.indexOf('#') + 1);
-            }
-
             if (hash) {
-              var str = encodeURI(decodeURIComponent(replaceWordBySymbol(hash)));
-
-              var urlModel = urlon.parse(str);
-
+              var urlSafe = replaceWordBySymbol(hash);
+              var urlModel = urlon.parse(urlSafe);
               Vizabi.utils.deepExtend(model, urlModel);
             }
 
             model.bind = model.bind || {};
             model.bind.persistentChange = function (evt, minModel) {
               var minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
-
               var modelDiffHash = urlon.stringify(minModelDiff);
-
               updateModelDebounced(modelDiffHash, that.emit);
             };
 
