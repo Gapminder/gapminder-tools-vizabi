@@ -77,9 +77,8 @@ module.exports = function (app) {
         controllerImplementation();
 
         $scope.$root.$on('onModelChanged', function (e, data) {
-
           // skip flow for update from url
-          if(updateFlagUrl) {
+          if (updateFlagUrl) {
             updateFlagUrl = false;
             return;
           }
@@ -92,10 +91,10 @@ module.exports = function (app) {
         });
 
         // change hash handler
-        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
 
+        $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
           // set incoming update type
-          updateFlagUrl = !updateFlagModel ? true : updateFlagUrl;
+          updateFlagUrl = updateFlagModel ? updateFlagUrl : true;
 
           _updateChart(urlCurrent, urlPrevious);
         });
@@ -105,20 +104,20 @@ module.exports = function (app) {
         function updateGraph() {
           scrollTo(document.querySelector('.wrapper'), 0, 200, function () {
             var chartType = getChartType();
-            if(!chartType) {
+            if (!chartType) {
               return;
             }
 
             $scope.activeTool = chartType;
 
             // hide all
-            $scope.availableCharts.forEach(function(item){
-              document.getElementById('vizabi-placeholder-' + item).style.display = "none";
+            $scope.availableCharts.forEach(function (item) {
+              document.getElementById('vizabi-placeholder-' + item).style.display = 'none';
             });
 
             // show current
             var placeholder = document.getElementById('vizabi-placeholder-' + $scope.chartType);
-            placeholder.style.display = "block";
+            placeholder.style.display = 'block';
 
             updateVizabiInstance(placeholder);
 
@@ -130,12 +129,19 @@ module.exports = function (app) {
           });
         }
 
-        function updateVizabiInstance (placeholder) {
-
+        function updateVizabiInstance(placeholder) {
           var chartType = getChartType();
 
           // create instance if not exists
-          if(!$scope.vizabiInstances[chartType]) {
+          if ($scope.vizabiInstances[chartType]) {
+            if (!updateFlagModel) {
+              var urlVizabiModel = getModelFromUrl($location.hash());
+              var updatedModel = {};
+
+              Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel);
+              $scope.vizabiInstances[chartType].setModel(updatedModel);
+            }
+          } else {
             $scope.vizabiTools[chartType] = angular.copy($scope.tools[$scope.activeTool]);
             // create new instance
             $scope.vizabiInstances[chartType] = vizabiFactory.render(
@@ -144,22 +150,13 @@ module.exports = function (app) {
               $scope.vizabiTools[chartType].opts);
             // store base default model
             $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].getModel();
-          } else {
-            if(!updateFlagModel) {
-              var urlModel = getModelFromUrl($location.hash());
-              var updatedModel = {};
-
-              Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlModel);
-              $scope.vizabiInstances[chartType].setModel(updatedModel);
-            }
           }
           updateFlagModel = false;
         }
 
         // internal
 
-        function _updateChart(urlCurrent, urlPrevious) {
-
+        function _updateChart() {
           // invalid URL, redirect to Home
           if (!isChartTypeValid()) {
             if (isChartTypesLoaded()) {
@@ -173,22 +170,22 @@ module.exports = function (app) {
           updateGraph();
         }
 
-        function getChartType(url) {
-          var hash = url ? (url.split('/#')[1] || '') : $location.hash();
-
-          if (!hash) {
-            $scope.chartType = false;
-          } else {
+        function getChartType(urlParam) {
+          var url = urlParam ? urlParam.split('/#')[1] : false;
+          var hash = url ? url : $location.hash();
+          if (hash) {
             var model = getModelFromUrl(hash);
             $scope.chartType = model['chart-type'] || false;
+          } else {
+            $scope.chartType = false;
           }
 
           return $scope.chartType;
         }
 
-        function getModelFromUrl(hash) {
-          hash = replaceWordBySymbol(hash);
-          if(hash) {
+        function getModelFromUrl(hashParam) {
+          var hash = replaceWordBySymbol(hashParam);
+          if (hash) {
             return Urlon.parse(hash);
           }
           return {};
@@ -198,8 +195,8 @@ module.exports = function (app) {
           return !!$scope.validTools.length;
         }
 
-        function isChartTypeValid(chartType) {
-          chartType = chartType || getChartType();
+        function isChartTypeValid(chartTypeParam) {
+          var chartType = chartTypeParam || getChartType();
           if (!chartType || !isChartTypesLoaded()) {
             return false;
           }
