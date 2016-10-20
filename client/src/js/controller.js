@@ -52,7 +52,10 @@ module.exports = function (app) {
         if (shouldNavigateToHome && !deprecatedQueryDetected) {
           // invalid URL, redirect to Home
           //$location.url(HOME_URL);
-          window.location = HOME_URL;
+          //window.location = HOME_URL;
+
+          $location.url('/tools/');
+          $location.hash('_chart-type=bubbles');
         }
 
         // backward compatibility :: end
@@ -68,7 +71,9 @@ module.exports = function (app) {
             updateGraph();
           } else {
             // invalid URL, redirect to Home
-            $location.url(HOME_URL);
+            // $location.url(HOME_URL);
+            $location.url('/tools/');
+            $location.hash('_chart-type=bubbles');
           }
         });
 
@@ -160,7 +165,8 @@ module.exports = function (app) {
           // invalid URL, redirect to Home
           if (!isChartTypeValid()) {
             if (isChartTypesLoaded()) {
-              $location.url(HOME_URL);
+              //$location.url(HOME_URL);
+              window.location = HOME_URL;
             }
             updateFlagUrl = false;
             updateFlagModel = false;
