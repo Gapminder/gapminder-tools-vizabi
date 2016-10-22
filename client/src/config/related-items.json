@@ -232,7 +232,10 @@
       },
       "state": {
         "entities": {
-          "dim": "geo"
+          "dim": "geo",
+          "show": {
+            "is--country": true
+          }      
         },
         "entities_minimap": {
           "dim": "geo",
@@ -263,6 +266,8 @@
             "scaleType": "log",
             "domainMax": 150000,
             "domainMin": 300,
+            "zoomedMax": 150000,
+            "zoomedMin": 300,
             "which": "income_per_person_gdppercapita_ppp_inflation_adjusted"
           },
           "size": {
@@ -270,10 +275,10 @@
             "which": "population_total",
             "domainMin": 15,
             "domainMax": 1400000000,
+            "scaleType": "linear",
             "allow": {
               "scales": ["linear"]
-            },
-            "extent": [0, 0.85]
+            }
           },
           "color": {
             "use": "property",
