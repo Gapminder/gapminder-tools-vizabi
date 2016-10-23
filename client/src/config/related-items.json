@@ -32,11 +32,8 @@
             "is--country": true
           }
         },
-        "entities_minimap": {
-          "dim": "geo",
-          "show": {
-            "is--world_4region": true
-          }
+        "entities_colorlegend": {
+          "dim": "geo"
         },
         "entities_group": {
           "dim": "geo",
@@ -86,9 +83,7 @@
             "use": "property",
             "which": "world_4region",
             "scaleType": "ordinal",
-            "allow": {
-              "names": ["!name"]
-            }
+            "colorlegend": "marker_colorlegend"
           },
           "stack": {
             "use": "constant",
@@ -101,8 +96,8 @@
             "merge": false
           }
         },
-        "marker_minimap":{
-          "space": ["entities_minimap"],
+        "marker_colorlegend":{
+          "space": ["entities_colorlegend"],
             "type": "geometry",
             "shape": "svg",
             "label": {
@@ -237,11 +232,8 @@
             "is--country": true
           }      
         },
-        "entities_minimap": {
-          "dim": "geo",
-          "show": {
-            "is--world_4region": true
-          }
+        "entities_colorlegend": {
+          "dim": "geo"
         },
         "entities_tags": {
           "dim": "tag"
@@ -253,6 +245,10 @@
         },
         "marker": {
           "space": ["entities", "time"],
+          "label": {
+            "use": "property",
+            "which": "name"
+          },
           "axis_y": {
             "use": "indicator",
             "which": "life_expectancy_years",
@@ -282,11 +278,12 @@
           },
           "color": {
             "use": "property",
-            "which": "world_4region"
+            "which": "world_4region",
+            "colorlegend": "marker_colorlegend"
           }
         },
-        "marker_minimap":{
-          "space": ["entities_minimap"],
+        "marker_colorlegend":{
+          "space": ["entities_colorlegend"],
           "label": {
             "use": "property",
             "which": "name"
@@ -416,11 +413,8 @@
             "is--country": true
           }
         },
-        "entities_minimap": {
-          "dim": "geo",
-          "show": {
-            "is--world_4region": true
-          }
+        "entities_colorlegend": {
+          "dim": "geo"
         },
         "entities_tags": {
           "dim": "tag"
@@ -437,8 +431,7 @@
             "scaleType": "linear",
             "allow": {
               "scales": ["linear"]
-            },
-            "extent": [0, 0.85]
+            }
           },
           "lat": {
             "use": "property",
@@ -454,13 +447,11 @@
             "use": "property",
             "which": "world_4region",
             "scaleType": "ordinal",
-            "allow": {
-              "names": ["!name"]
-            }
+            "colorlegend": "marker_colorlegend"
           }
         },
-        "marker_minimap":{
-          "space": ["entities_minimap"],
+        "marker_colorlegend":{
+          "space": ["entities_colorlegend"],
             "type": "geometry",
             "shape": "svg",
             "label": {
