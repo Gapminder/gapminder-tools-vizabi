@@ -147,15 +147,18 @@ module.exports = function (app) {
               $scope.vizabiTools[chartType].tool,
               placeholder,
               $scope.vizabiTools[chartType].opts);
-            // store base default model
-            $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].getModel();
+
+            // store base default model, only first time
+            if (!$scope.vizabiModel[chartType]) {
+              $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].getModel();
+            }
           }
           updateFlagModel = false;
         }
 
         // internal
 
-        function _updateChart() {
+        function _updateChart(urlCurrent, urlPrevious) {
           // invalid URL, redirect to Home
           if (!isChartTypeValid()) {
             if (isChartTypesLoaded()) {
@@ -164,6 +167,14 @@ module.exports = function (app) {
             updateFlagUrl = false;
             updateFlagModel = false;
             return;
+          }
+
+          // detect chart switching
+          const chartCurrent = getChartType(urlCurrent);
+          const chartPrev = getChartType(urlPrevious);
+
+          if (chartCurrent !== chartPrev) {
+            delete $scope.vizabiInstances[chartPrev];
           }
 
           updateGraph();
