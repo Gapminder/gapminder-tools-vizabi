@@ -104,6 +104,10 @@
               "use": "property",
               "which": "name"
             },
+            "rank": {
+              "use": "property",
+              "which": "rank"
+            },
             "geoshape": {
               "use": "property",
               "which": "shape_lores_svg"
@@ -288,6 +292,10 @@
             "use": "property",
             "which": "name"
           },
+          "rank": {
+            "use": "property",
+            "which": "rank"
+          },
           "geoshape": {
             "use": "property",
             "which": "shape_lores_svg"
@@ -457,6 +465,10 @@
             "label": {
               "use": "property",
               "which": "name"
+            },
+            "rank": {
+              "use": "property",
+              "which": "rank"
             },
             "geoshape": {
               "use": "property",
