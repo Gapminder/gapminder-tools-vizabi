@@ -16,8 +16,8 @@
       },
       "state": {
         "time": {
-          "start": "1800",
-          "end": "2015",
+          "startOrigin": "1800",
+          "endOrigin": "2015",
           "value": "2015"
         },
         "entities": {
@@ -100,11 +100,11 @@
               "use": "property",
               "which": "name"
             },
-            "rank": {
+            "hook_rank": {
               "use": "property",
               "which": "rank"
             },
-            "geoshape": {
+            "hook_geoshape": {
               "use": "property",
               "which": "shape_lores_svg"
             }
@@ -115,13 +115,17 @@
             "use": "property",
             "which": "name"
           },
-          "parent": {
+          "hook_parent": {
             "use": "property",
             "which": "parent"
           }
         }
       },
       "ui": {
+        "datawarning": {
+          "doubtDomain": [1800, 1950, 2015],
+          "doubtRange": [1.0, 0.8, 0.6]
+        },
         "buttons": ["colors","find","stack","show","moreoptions","fullscreen","presentation"],
         "dialogs": {
           "popup": ["colors","find","stack","show","moreoptions"],
@@ -235,8 +239,8 @@
           "dim": "tag"
         },
         "time": {
-          "start": "1800",
-          "end": "2015",
+          "startOrigin": "1800",
+          "endOrigin": "2015",
           "value": "2015"
         },
         "marker": {
@@ -284,11 +288,11 @@
             "use": "property",
             "which": "name"
           },
-          "rank": {
+          "hook_rank": {
             "use": "property",
             "which": "rank"
           },
-          "geoshape": {
+          "hook_geoshape": {
             "use": "property",
             "which": "shape_lores_svg"
           }
@@ -299,13 +303,17 @@
             "use": "property",
             "which": "name"
           },
-          "parent": {
+          "hook_parent": {
             "use": "property",
             "which": "parent"
           }
         }
       },
       "ui": {
+        "datawarning": {
+          "doubtDomain": [1800, 1950, 2015],
+          "doubtRange": [1.0, 0.3, 0.2]
+        },
         "buttons": ["colors","find","size","trails","lock","moreoptions","fullscreen","presentation"],
         "dialogs": {
           "popup": ["colors","find","size","zoom","moreoptions"],
@@ -403,8 +411,8 @@
       },
       "state": {
         "time": {
-          "start": "1800",
-          "end": "2015",
+          "startOrigin": "1800",
+          "endOrigin": "2015",
           "value": "2015"
         },
         "entities": {
@@ -432,16 +440,18 @@
             "use": "indicator",
             "which": "population_total",
             "scaleType": "linear",
+            "domainMin": 15,
+            "domainMax": 1400000000,
             "allow": {
               "scales": ["linear"]
             }
           },
-          "lat": {
+          "hook_lat": {
             "use": "property",
             "which": "latitude",
             "_important": true
           },
-          "lng": {
+          "hook_lng": {
             "use": "property",
             "which": "longitude",
             "_important": true
@@ -461,11 +471,11 @@
               "use": "property",
               "which": "name"
             },
-            "rank": {
+            "hook_rank": {
               "use": "property",
               "which": "rank"
             },
-            "geoshape": {
+            "hook_geoshape": {
               "use": "property",
               "which": "shape_lores_svg"
             }
@@ -476,13 +486,17 @@
             "use": "property",
             "which": "name"
           },
-          "parent": {
+          "hook_parent": {
             "use": "property",
             "which": "parent"
           }
         }
       },
       "ui": {
+        "datawarning": {
+          "doubtDomain": [1800, 1950, 2015],
+          "doubtRange": [1.0, 0.3, 0.2]
+        },
         "buttons": ["colors","find","size","moreoptions","fullscreen","presentation"],
         "dialogs": {
           "popup": ["colors","find","size","moreoptions"],
