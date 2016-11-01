@@ -65,14 +65,14 @@
     "webpack-dev-server": "1.12.1"
   },
   "dependencies": {
-    "URLON": "2.0.0",
-    "angular": "1.4.7",
-    "angular-route": "1.4.7",
-    "angular-touch": "1.4.7",
-    "bluebird": "3.3.5",
-    "d3": "3.5.6",
-    "lodash": "3.10.1",
-    "vizabi-ws-reader": "0.0.18",
-    "vizabi": "0.16.2-8"
+    "urlon": "2.0.1",
+    "angular": "1.5.8",
+    "angular-route": "1.5.8",
+    "angular-touch": "1.5.8",
+    "bluebird": "3.4.6",
+    "d3": "3.5.12",
+    "lodash": "4.16.6",
+    "vizabi-ws-reader": "0.0.19",
+    "vizabi": "0.17.2-1"
   }
 }
