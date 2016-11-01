@@ -51,7 +51,7 @@
     "image-webpack-loader": "1.6.2",
     "imagemin": "3.2.1",
     "imports-loader": "valorkin/imports-loader",
-    "jasmine": "2.4.1",
+    "jasmine": "2.5.2",
     "jasmine-spec-reporter": "2.4.0",
     "json-loader": "0.5.4",
     "lite-server": "2.2.2",
