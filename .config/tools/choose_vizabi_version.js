@@ -4,7 +4,7 @@
 
 var shell = require('shelljs');
 var ignored_branches = ['master', 'development'];
-var current_branch = shell.exec('git rev-parse --abbrev-ref HEAD').output.trim();
+var current_branch = shell.exec('git rev-parse --abbrev-ref HEAD').stdout.trim();
 
 var travis_br = process.env.TRAVIS_BRANCH;
 
