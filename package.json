@@ -43,7 +43,7 @@
     "compression-webpack-plugin": "0.3.2",
     "css-loader": "0.25.0",
     "eslint": "3.9.1",
-    "eslint-config-valorsoft": "0.1.0",
+    "eslint-config-valorsoft": "0.0.13",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.9.0",
     "html-loader": "0.4.4",
