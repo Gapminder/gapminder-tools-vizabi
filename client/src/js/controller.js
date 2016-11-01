@@ -1,6 +1,6 @@
 'use strict';
 
-var Urlon = require('URLON');
+var Urlon = require('urlon');
 var Vizabi = require('vizabi');
 var FlashDetect = require('./flash-detect');
 var _ = require('lodash');

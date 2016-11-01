@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var Vizabi = require('vizabi');
-var urlon = require('URLON');
+var urlon = require('urlon');
 var Promise = require('bluebird');
 
 var updateModelDebounced = _.debounce(function updateModel(newModelHash, callback) {
