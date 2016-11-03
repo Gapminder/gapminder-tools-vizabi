@@ -39,7 +39,7 @@
   "devDependencies": {
     "browserstack-wrapper": "1.0.0",
     "browserstacktunnel-wrapper": "2.0.0",
-    "clean-webpack-plugin": "0.1.13",
+    "clean-webpack-plugin": "0.1.14",
     "compression-webpack-plugin": "0.3.2",
     "css-loader": "0.25.0",
     "eslint": "2.10.2",
