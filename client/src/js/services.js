@@ -44,9 +44,14 @@ module.exports = function (app) {
             }
 
             model.bind = model.bind || {};
+            model.bind.ready = function () {
+              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
+              var modelDiffHash = urlon.stringify(minModelDiff);
+              updateModelDebounced(modelDiffHash, that.emit);
+            };
+            
             model.bind.persistentChange = function () {
-              var minModel = vizabiInstance.getPersistentMinimalModel(initialModel);
-              var minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
               var modelDiffHash = urlon.stringify(minModelDiff);
               updateModelDebounced(modelDiffHash, that.emit);
             };
