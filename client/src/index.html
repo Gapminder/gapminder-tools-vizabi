@@ -25,6 +25,17 @@
     </div>
     <ul class="nav navbar-nav navbar-nav-left desktop" nav-expandable="" items="expandedItems"></ul>
     <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
+
+    <!--translations-->
+    <div class="lang-wrapper">
+      <div class="lang-current" ng-bind="language.text" ng-click="languageState = !languageState">...</div>
+      <ul ng-class="languageState ? 'selected' : '' ">
+        <li ng-repeat="languageItem in languageList track by languageItem.key" ng-click="changeLanguage(languageItem)">
+          {{languageItem.text}}
+        </li>
+      </ul>
+    </div>
+
     <!--social-->
     <ul class="social-list desktop">
       <li>
