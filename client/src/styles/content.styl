@@ -76,18 +76,20 @@
   position: relative
   color: #425663
   font-size: 14px
-  padding: 2px 6px 1px 10px
+  padding: 1px 6px 1px 10px
   border: 1px solid #ffca34
   border-radius: 4px
   cursor: pointer
   .lang-current
     display block
+    padding-right 25px
     &:after
       content '\25BC'
       padding 0px 0px 0px 4px
       border-left 1px solid #ffca34
-      margin 0 0 0 6px
       color #ffca34
+      position absolute
+      right 4px
   ul
     display none
     position absolute
@@ -95,7 +97,7 @@
     z-index 10
     left -1px
     border 1px solid #ffca34
-    top 6px
+    top 4px
     border-top none
     background #fff
     padding 8px 0 2px 0
@@ -111,6 +113,21 @@
     display block
   &:after
     clear both
+
+  +for_breakpoint(medium)
+    margin-right 100px
+    margin-left -85px
+
+  +for_breakpoint(small)
+    &.desktop
+      display none
+
+    &.mobile
+      float none
+      display inline-block
+      margin 0 0px 10px 10px
+      .lang-current
+        min-width 100px;
 
 /* wrap-report-problem */
 .wrap-report-problem
