@@ -153,8 +153,8 @@ module.exports = function (app) {
             $scope.vizabiTools[chartType] = angular.copy($scope.tools[$scope.activeTool]);
             // setup language
             $scope.vizabiTools[chartType].opts.language = {
-              id: $scope.language.key, 
-              filePath: "https://raw.githubusercontent.com/vizabi/vizabi/develop/src/assets/translation/"
+              id: $scope.language.key,
+              filePath: '/public/translation/'
             };
 
             // create new instance
