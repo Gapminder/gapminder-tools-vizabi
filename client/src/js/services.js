@@ -32,10 +32,8 @@ module.exports = function (app) {
            * @return {Object} Vizabi
            */
           render: function (tool, placeholder, model) {
-            var that = this;
-            var vizabiInstance = {};
             var hash = $location.hash() || '';
-            var initialModel = Vizabi.utils.deepClone(model);
+            var vizabiObj = {instance: null};
 
             if (hash) {
               var urlSafe = replaceWordBySymbol(hash);
@@ -43,21 +41,38 @@ module.exports = function (app) {
               Vizabi.utils.deepExtend(model, urlModel);
             }
 
+            this.bindModelChange(model, vizabiObj);
+            vizabiObj.instance = Vizabi(tool, placeholder, model);
+
+            return vizabiObj;
+          },
+
+          bindModelChange: function (model, vizabiObj) {
+            var that = this;
+            var initialModel = Vizabi.utils.deepClone(model);
+
             model.bind = model.bind || {};
+
             model.bind.ready = function () {
-              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
-              var modelDiffHash = urlon.stringify(minModelDiff);
-              updateModelDebounced(modelDiffHash, that.emit);
-            };
-            
-            model.bind.persistentChange = function () {
-              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
+              var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
+              // fix url state
+              minModelDiff['chart-type'] = initialModel['chart-type'];
               var modelDiffHash = urlon.stringify(minModelDiff);
               updateModelDebounced(modelDiffHash, that.emit);
             };
 
-            vizabiInstance = Vizabi(tool, placeholder, model);
-            return vizabiInstance;
+            model.bind.persistentChange = function () {
+              var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
+              // fix url state
+              minModelDiff['chart-type'] = initialModel['chart-type'];
+              var modelDiffHash = urlon.stringify(minModelDiff);
+              updateModelDebounced(modelDiffHash, that.emit);
+            };
+          },
+
+          unbindModelChange: function (model) {
+            model.off('persistentChange');
+            model.off('ready');
           }
         };
       }]);

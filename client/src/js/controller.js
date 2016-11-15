@@ -30,7 +30,7 @@ module.exports = function (app) {
 
         $scope.languageState = false;
         $scope.language = detectLanguage();
-        $scope.languageList = $scope.languages.filter(f => f.key!==$scope.language.key);
+        $scope.languageList = $scope.languages.filter(f => f.key !== $scope.language.key);
 
         var updateFlagModel = false;
         var updateFlagUrl = false;
@@ -149,7 +149,7 @@ module.exports = function (app) {
               var updatedModel = {};
 
               Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel);
-              $scope.vizabiInstances[chartType].setModel(updatedModel);
+              $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
             }
           } else {
             $scope.vizabiTools[chartType] = angular.copy($scope.tools[$scope.activeTool]);
@@ -167,7 +167,7 @@ module.exports = function (app) {
 
             // store base default model, only first time
             if (!$scope.vizabiModel[chartType]) {
-              $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].getModel();
+              $scope.vizabiModel[chartType] = $scope.vizabiInstances[chartType].instance.getModel();
             }
           }
           updateFlagModel = false;
@@ -191,6 +191,7 @@ module.exports = function (app) {
           const chartPrev = getChartType(urlPrevious);
 
           if (chartCurrent !== chartPrev) {
+            vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
             delete $scope.vizabiInstances[chartPrev];
           }
 
@@ -371,7 +372,7 @@ module.exports = function (app) {
         $scope.changeLanguage = function (languageItem) {
           $scope.language = languageItem;
           $scope.languageState = false;
-          $scope.languageList = $scope.languages.filter(f => f.key!==$scope.language.key);
+          $scope.languageList = $scope.languages.filter(f => f.key !== $scope.language.key);
 
           var chartType = getChartType();
           var urlVizabiModel = getModelFromUrl($location.hash());
@@ -379,7 +380,7 @@ module.exports = function (app) {
           var updatedModel = {};
 
           Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel, langModel);
-          $scope.vizabiInstances[chartType].setModel(updatedModel);
+          $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
         };
       }]);
 };
