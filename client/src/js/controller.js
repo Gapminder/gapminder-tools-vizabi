@@ -22,13 +22,15 @@ module.exports = function (app) {
         $scope.vizabiModel = {};
         $scope.vizabiTools = {};
 
-        $scope.languageList = [
+        $scope.languages = [
           {key: 'en', text: 'English'},
           {key: 'se', text: 'Svenska'}
         ];
+        $scope.languageList = $scope.languages.concat();
 
         $scope.languageState = false;
         $scope.language = detectLanguage();
+        $scope.languageList = $scope.languages.filter(f => f.key!==$scope.language.key);
 
         var updateFlagModel = false;
         var updateFlagUrl = false;
@@ -369,6 +371,7 @@ module.exports = function (app) {
         $scope.changeLanguage = function (languageItem) {
           $scope.language = languageItem;
           $scope.languageState = false;
+          $scope.languageList = $scope.languages.filter(f => f.key!==$scope.language.key);
 
           var chartType = getChartType();
           var urlVizabiModel = getModelFromUrl($location.hash());
