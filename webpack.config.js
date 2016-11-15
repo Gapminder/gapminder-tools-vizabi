@@ -7,6 +7,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var WSurl = require('./ws-detect')(process.env);
 var HomeUrl = '/tools/#_chart-type=bubbles';
 
@@ -20,14 +21,14 @@ var config = {
 
 var isProduction = process.env.NODE_ENV === 'production';
 
-var absSrc = path.join(__dirname, config.src);
-var absDest = path.join(__dirname, config.dest);
+var absSrc = fromRoot(config.src);
+var absDest = fromRoot(config.dest);
 var wConfig = {
   debug: true,
   profile: true,
   cache: true,
   devtool: isProduction ? 'sourcemaps' : 'eval',
-  context: path.join(__dirname, config.src),
+  context: absSrc,
   entry: {
     'vizabi-tools': './js/app.js',
     angular: ['angular', 'angular-route', 'angular-touch', 'd3']
@@ -109,7 +110,13 @@ var wConfig = {
       template: path.join(config.src, '404.html'),
       chunks: ['angular', 'vizabi-tools'],
       minify: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: fromRoot('./node_modules/vizabi/build/dist/assets/translation'),
+        to: fromRoot('./client/dist/public/translation')
+      }
+    ])
   ],
   pushPlugins: function () {
     if (!isProduction) {
@@ -142,6 +149,10 @@ var wConfig = {
     devtool: 'eval'
   }
 };
+
+function fromRoot(filepath) {
+  return path.join(__dirname, filepath);
+}
 
 wConfig.pushPlugins();
 

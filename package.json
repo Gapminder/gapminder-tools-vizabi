@@ -41,6 +41,7 @@
     "browserstacktunnel-wrapper": "2.0.0",
     "clean-webpack-plugin": "0.1.13",
     "compression-webpack-plugin": "0.3.2",
+    "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.25.0",
     "eslint": "2.10.2",
     "eslint-config-valorsoft": "0.0.13",
@@ -65,14 +66,14 @@
     "webpack-dev-server": "1.16.2"
   },
   "dependencies": {
-    "urlon": "2.0.1",
     "angular": "1.5.8",
     "angular-route": "1.5.8",
     "angular-touch": "1.5.8",
     "bluebird": "3.4.6",
     "d3": "3.5.12",
     "lodash": "4.16.6",
-    "vizabi-ws-reader": "0.0.19",
-    "vizabi": "0.17.2-2"
+    "urlon": "2.0.1",
+    "vizabi": "0.17.3-25",
+    "vizabi-ws-reader": "0.0.19"
   }
 }

@@ -33,6 +33,7 @@ module.exports = function (app) {
            */
           render: function (tool, placeholder, model) {
             var that = this;
+            var vizabiInstance = {};
             var hash = $location.hash() || '';
             var initialModel = Vizabi.utils.deepClone(model);
 
@@ -43,13 +44,20 @@ module.exports = function (app) {
             }
 
             model.bind = model.bind || {};
-            model.bind.persistentChange = function (evt, minModel) {
-              var minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+            model.bind.ready = function () {
+              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
+              var modelDiffHash = urlon.stringify(minModelDiff);
+              updateModelDebounced(modelDiffHash, that.emit);
+            };
+            
+            model.bind.persistentChange = function () {
+              var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
               var modelDiffHash = urlon.stringify(minModelDiff);
               updateModelDebounced(modelDiffHash, that.emit);
             };
 
-            return Vizabi(tool, placeholder, model);
+            vizabiInstance = Vizabi(tool, placeholder, model);
+            return vizabiInstance;
           }
         };
       }]);
