@@ -30,7 +30,9 @@ module.exports = function (app) {
 
         $scope.languageState = false;
         $scope.language = detectLanguage();
-        $scope.languageList = $scope.languages.filter(f => f.key !== $scope.language.key);
+        $scope.languageList = $scope.languages.filter(function (f) {
+          return f.key !== $scope.language.key;
+        });
 
         var updateFlagModel = false;
         var updateFlagUrl = false;
@@ -372,7 +374,9 @@ module.exports = function (app) {
         $scope.changeLanguage = function (languageItem) {
           $scope.language = languageItem;
           $scope.languageState = false;
-          $scope.languageList = $scope.languages.filter(f => f.key !== $scope.language.key);
+          $scope.languageList = $scope.languages.filter(function (f) {
+            return f.key !== $scope.language.key;
+          });
 
           var chartType = getChartType();
           var urlVizabiModel = getModelFromUrl($location.hash());
