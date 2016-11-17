@@ -49,7 +49,7 @@ module.exports = function (app) {
               var modelDiffHash = urlon.stringify(minModelDiff);
               updateModelDebounced(modelDiffHash, that.emit);
             };
-            
+
             model.bind.persistentChange = function () {
               var minModelDiff = vizabiInstance.getPersistentMinimalModel(initialModel);
               var modelDiffHash = urlon.stringify(minModelDiff);
