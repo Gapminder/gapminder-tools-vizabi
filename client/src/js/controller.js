@@ -24,7 +24,12 @@ module.exports = function (app) {
 
         $scope.languages = [
           {key: 'en', text: 'English'},
-          {key: 'se', text: 'Svenska'}
+          {key: 'sv-SE', text: 'Svenska'},
+          {key: 'ar-SA', text: 'العربية'},
+          {key: 'ru-RU', text: 'Русский'},
+          {key: 'fr-FR', text: 'Français'},
+          {key: 'zh-CN', text: '中國傳統的'},
+          {key: 'es-ES', text: 'Español'}
         ];
         $scope.languageList = $scope.languages.concat();
 
