@@ -105,6 +105,11 @@ module.exports = function (app) {
         // change hash handler
 
         $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
+          if (!_.includes(urlCurrent, '/tools')) {
+            window.location.href = urlCurrent;
+            return;
+          }
+
           // set incoming update type
           updateFlagUrl = updateFlagModel ? updateFlagUrl : true;
 
