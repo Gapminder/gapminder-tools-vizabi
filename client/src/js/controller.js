@@ -106,7 +106,6 @@ module.exports = function (app) {
 
         $scope.$root.$on('$locationChangeSuccess', function (event, urlCurrent, urlPrevious) {
           if (!_.includes(urlCurrent, '/tools')) {
-            window.location.href = urlCurrent;
             return;
           }
 
