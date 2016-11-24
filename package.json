@@ -68,7 +68,7 @@
   "dependencies": {
     "angular": "1.5.8",
     "angular-route": "1.5.8",
-    "angular-touch": "1.5.8",
+    "angular-touch": "1.5.9",
     "bluebird": "3.4.6",
     "d3": "3.5.12",
     "lodash": "4.16.6",
