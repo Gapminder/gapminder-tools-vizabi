@@ -22,21 +22,20 @@ module.exports = function (app) {
         $scope.vizabiModel = {};
         $scope.vizabiTools = {};
 
-        $scope.languages = [
+        $scope.locales = [
           {key: 'en', text: 'English'},
-          {key: 'sv-SE', text: 'Svenska'},
+          {key: 'sv', text: 'Svenska'},
           {key: 'ar-SA', text: 'العربية'},
-          {key: 'ru-RU', text: 'Русский'},
+          {key: 'ru', text: 'Русский'},
           {key: 'fr-FR', text: 'Français'},
           {key: 'zh-CN', text: '中國傳統的'},
           {key: 'es-ES', text: 'Español'}
         ];
-        $scope.languageList = $scope.languages.concat();
 
-        $scope.languageState = false;
-        $scope.language = detectLanguage();
-        $scope.languageList = $scope.languages.filter(function (f) {
-          return f.key !== $scope.language.key;
+        $scope.localeState = false;
+        $scope.locale = detectLocale();
+        $scope.localeList = $scope.locales.filter(function (f) {
+          return f.key !== $scope.locale.key;
         });
 
         var updateFlagModel = false;
@@ -164,9 +163,9 @@ module.exports = function (app) {
             }
           } else {
             $scope.vizabiTools[chartType] = angular.copy($scope.tools[$scope.activeTool]);
-            // setup language
-            $scope.vizabiTools[chartType].opts.language = {
-              id: $scope.language.key,
+            // setup locale
+            $scope.vizabiTools[chartType].opts.locale = {
+              id: $scope.locale.key,
               filePath: '/public/translation/'
             };
 
@@ -257,14 +256,14 @@ module.exports = function (app) {
           return inputString.replace(/_slash_/g, '/').replace(/%2F/g, '/');
         }
 
-        function detectLanguage() {
+        function detectLocale() {
           const modelFromUrl = getModelFromUrl($location.hash());
-          if (modelFromUrl.language) {
-            return _.find($scope.languageList, function (langItem) {
-              return langItem.key === modelFromUrl.language.id;
+          if (modelFromUrl.locale) {
+            return _.find($scope.locales, function (localeItem) {
+              return localeItem.key === modelFromUrl.locale.id;
             });
           }
-          return _.first($scope.languageList);
+          return _.first($scope.locales);
         }
 
         function getJSON(url, param, callback, err) {
@@ -380,19 +379,19 @@ module.exports = function (app) {
           });
         }
 
-        $scope.changeLanguage = function (languageItem) {
-          $scope.language = languageItem;
-          $scope.languageState = false;
-          $scope.languageList = $scope.languages.filter(function (f) {
-            return f.key !== $scope.language.key;
+        $scope.changeLocale = function (localeItem) {
+          $scope.locale = localeItem;
+          $scope.localeState = false;
+          $scope.localeList = $scope.locales.filter(function (f) {
+            return f.key !== $scope.locale.key;
           });
 
           var chartType = getChartType();
           var urlVizabiModel = getModelFromUrl($location.hash());
-          var langModel = {language: {id: $scope.language.key}};
+          var localeModel = {locale: {id: $scope.locale.key}};
           var updatedModel = {};
 
-          Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel, langModel);
+          Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel, localeModel);
           $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
         };
       }]);
