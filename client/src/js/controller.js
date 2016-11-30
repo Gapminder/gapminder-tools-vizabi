@@ -394,5 +394,9 @@ module.exports = function (app) {
           Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel, localeModel);
           $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
         };
+
+        $scope.getPageClass = function () {
+          return $scope.locale ? 'page-lang-' + $scope.locale.key : '';
+        };
       }]);
 };
