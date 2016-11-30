@@ -257,13 +257,26 @@ module.exports = function (app) {
         }
 
         function detectLocale() {
+          let foundLang = false;
+
           const modelFromUrl = getModelFromUrl($location.hash());
+          const readyLang = _.first($scope.locales);
+
           if (modelFromUrl.locale) {
-            return _.find($scope.locales, function (localeItem) {
+            foundLang = _.find($scope.locales, function (localeItem) {
               return localeItem.key === modelFromUrl.locale.id;
             });
           }
-          return _.first($scope.locales);
+
+          const browserLang = getBrowserLang();
+          if (!foundLang && browserLang) {
+            foundLang = _.find($scope.locales, function (localeItem) {
+              return localeItem.key === browserLang;
+            });
+          }
+
+          // detected or default
+          return foundLang ? foundLang : readyLang;
         }
 
         function getJSON(url, param, callback, err) {
@@ -398,5 +411,28 @@ module.exports = function (app) {
         $scope.getPageClass = function () {
           return $scope.locale ? 'page-lang-' + $scope.locale.key : '';
         };
+
+        function getBrowserLang() {
+          if (typeof window === 'undefined' || typeof window.navigator === 'undefined') {
+            return false;
+          }
+
+          let browserLang = window.navigator.languages ? window.navigator.languages[0] : null;
+
+          browserLang = browserLang ||
+            window.navigator.language ||
+            window.navigator.browserLanguage ||
+            window.navigator.userLanguage;
+
+          if (browserLang.indexOf('-') !== -1) {
+            browserLang = browserLang.split('-')[0];
+          }
+
+          if (browserLang.indexOf('_') !== -1) {
+            browserLang = browserLang.split('_')[0];
+          }
+
+          return browserLang;
+        }
       }]);
 };
