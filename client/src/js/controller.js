@@ -24,12 +24,12 @@ module.exports = function (app) {
 
         $scope.locales = [
           {key: 'en', text: 'English'},
-          {key: 'sv', text: 'Svenska'},
-          {key: 'ar-SA', text: 'العربية'},
-          {key: 'ru', text: 'Русский'},
-          {key: 'fr-FR', text: 'Français'},
-          {key: 'zh-CN', text: '中國傳統的'},
-          {key: 'es-ES', text: 'Español'}
+          {key: 'ar-SA', text: 'العربية'}
+          //{key: 'sv', text: 'Svenska'},
+          //{key: 'ru', text: 'Русский'},
+          //{key: 'fr-FR', text: 'Français'},
+          //{key: 'zh-CN', text: '中國傳統的'},
+          //{key: 'es-ES', text: 'Español'}
         ];
 
         $scope.localeState = false;
