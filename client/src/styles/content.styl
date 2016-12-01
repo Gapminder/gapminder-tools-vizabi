@@ -97,11 +97,12 @@
     z-index 200
     left -1px
     border 1px solid #ffca34
-    top 4px
+    top 18px
     border-top none
     background #fff
     padding 8px 0 2px 0
     width 100%
+    margin 0
     li
       text-align right
       padding 4px 8px
@@ -111,6 +112,7 @@
         border-bottom none
   ul.selected
     display block
+    box-sizing content-box
   &:after
     clear both
   &.mobile
@@ -126,10 +128,13 @@
 
     &.mobile
       float none
-      display inline-block
-      margin 0 0px 10px 10px
+      display none
+      margin 10px 0px 10px 10px
       .locale-current
         min-width 100px;
+
+    &.opened
+      display inline-block
 
 /* wrap-report-problem */
 .wrap-report-problem

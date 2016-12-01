@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link href="./favicon.ico" rel="shortcut icon">
 </head>
-<body ng-controller="gapminderToolsCtrl" ng-class="getPageClass()" ng-cloak>
+<body ng-controller="gapminderToolsCtrl" ng-class="getPageClass()" ng-cloak ng-click="documentClickHandler($event)">
 <div class="wrapper" ng-class="{hidden : loadingError}">
   <!--Header-->
   <div class="header" ng-class="{hidden : embedVizabi}">
@@ -23,8 +23,27 @@
     <div class="menu-mobile" ng-click="navCollapsed = !navCollapsed"  ng-class="navCollapsed ? 'open' : '' ">
       <div class="icon"></div>
     </div>
-    <ul class="nav navbar-nav navbar-nav-left desktop" nav-expandable="" items="expandedItems"></ul>
-    <ul class="nav navbar-nav navbar-nav-left mobile" ng-if="navCollapsed" nav-expandable="" items="expandedItems"></ul>
+
+    <ul class="nav navbar-nav navbar-nav-left desktop">
+      <li class="nav-expandable" nav-expandable="" items="expandedItems"></li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-nav-left mobile" ng-class="!navCollapsed ? 'hidden' : ''">
+      <li class="nav-expandable" ng-class="!navCollapsed ? 'hidden' : ''">
+          <div class="nav-expandable-item">
+            <!--translations-->
+            <div class="locale-wrapper mobile" ng-class="navCollapsed ? 'opened' : ''">
+              <div class="locale-current" ng-bind="locale.text" ng-click="localeState = !localeState">...</div>
+              <ul ng-class="localeState ? 'selected' : '' ">
+                <li ng-repeat="localeItem in localeList track by localeItem.key" ng-click="changeLocale(localeItem)">
+                  {{localeItem.text}}
+                </li>
+              </ul>
+            </div>
+          </div>
+      </li>
+      <li class="nav-expandable" ng-class="!navCollapsed ? 'hidden' : ''" nav-expandable="" items="expandedItems"></li>
+    </ul>
 
     <!--translations-->
     <div class="locale-wrapper desktop">

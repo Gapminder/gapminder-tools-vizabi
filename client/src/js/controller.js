@@ -93,11 +93,6 @@ module.exports = function (app) {
 
         controllerImplementation();
 
-        $scope.$root.$on('hideMobileMenu', function () {
-          $scope.navCollapsed = false;
-        });
-
-
         $scope.$root.$on('onModelChanged', function (e, data) {
           // skip flow for update from url
           if (updateFlagUrl) {
@@ -401,6 +396,8 @@ module.exports = function (app) {
         $scope.changeLocale = function (localeItem) {
           $scope.locale = localeItem;
           $scope.localeState = false;
+          $scope.navCollapsed = false;
+
           $scope.localeList = $scope.locales.filter(function (f) {
             return f.key !== $scope.locale.key;
           });
@@ -411,7 +408,9 @@ module.exports = function (app) {
           var updatedModel = {};
 
           Vizabi.utils.deepExtend(updatedModel, $scope.vizabiModel[chartType], urlVizabiModel, localeModel);
-          $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
+          setTimeout(function () {
+            $scope.vizabiInstances[chartType].instance.setModel(updatedModel);
+          }, 100);
         };
 
         $scope.getPageClass = function () {
@@ -440,5 +439,21 @@ module.exports = function (app) {
 
           return browserLang;
         }
+
+        $scope.documentClickHandler = function ($event) {
+          const element = $event.target;
+
+          const elemLangMobile = document.getElementsByClassName('locale-wrapper mobile')[0];
+          const elemLangMobileVisible = elemLangMobile && window.getComputedStyle(elemLangMobile).display !== 'none';
+
+          const elemLangDesktop = document.getElementsByClassName('locale-wrapper desktop')[0];
+          //const elemLangDesktopVisible = elemLangDesktop && window.getComputedStyle(elemLangDesktop).display!='none';
+
+          const elemLangActive = elemLangMobileVisible ? elemLangMobile : elemLangDesktop;
+
+          if (!elemLangActive.contains(element)) {
+            $scope.localeState = false;
+          }
+        };
       }]);
 };

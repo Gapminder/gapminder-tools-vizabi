@@ -36,12 +36,17 @@
     margin 14px -180px 0 140px
 
     +for_breakpoint(small)
-      float none
-      display inline-block
-      margin 0 0px 10px 10px
 
       &.desktop
         display none
+
+      &.mobile
+        float none
+        display none
+        margin 10px 0px 10px 10px
+
+      &.opened
+        display inline-block
 
   .social-list
     float left
