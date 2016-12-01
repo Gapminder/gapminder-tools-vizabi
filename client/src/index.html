@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link href="./favicon.ico" rel="shortcut icon">
 </head>
-<body ng-controller="gapminderToolsCtrl" ng-class="{loading : loading}" class="{{ bodyClass }}" ng-cloak>
+<body ng-controller="gapminderToolsCtrl" ng-class="getPageClass()" ng-cloak>
 <div class="wrapper" ng-class="{hidden : loadingError}">
   <!--Header-->
   <div class="header" ng-class="{hidden : embedVizabi}">
