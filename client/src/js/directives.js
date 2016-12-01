@@ -17,8 +17,20 @@ module.exports = function (app) {
           items: '='
         },
 
-        controller: ['$scope', function ($scope) {
-          $scope.items = menuFactory.getMenu();
+        controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
+          const languageItem = {
+            menu_label: 'Language',
+            children: []
+          };
+
+          $scope.$parent.localeList.forEach(function (item) {
+            languageItem.children.push({
+              menu_label: item.text,
+              handler: $scope.$parent.changeLocale.bind(null, item)
+            });
+          });
+
+          $scope.items = menuFactory.getMenu(languageItem);
 
           /**
            * Checks if a menu item has an icon.
@@ -26,7 +38,7 @@ module.exports = function (app) {
            * @returns {boolean} true if Icon exists
            */
           $scope.hasIcon = function (item) {
-            return angular.isDefined(item) && item;
+            return angular.isDefined(item) && item.icon_url;
           };
 
           /**
@@ -46,6 +58,18 @@ module.exports = function (app) {
               }
             }
             $scope.toggleSubmenu[index] = !$scope.toggleSubmenu[index];
+          };
+
+          $scope.defaultHandler = function ($event, handler) {
+            if (!handler) {
+              return true;
+            }
+
+            $event.preventDefault();
+            handler();
+
+            $rootScope.$broadcast('hideMobileMenu');
+            return false;
           };
         }],
 
