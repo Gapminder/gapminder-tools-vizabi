@@ -107,16 +107,6 @@
       </ul>
     </div>
 
-    <!--translations-->
-    <div class="locale-wrapper mobile">
-      <div class="locale-current" ng-bind="locale.text" ng-click="localeState = !localeState">...</div>
-      <ul ng-class="localeState ? 'selected' : '' ">
-        <li ng-repeat="localeItem in localeList track by localeItem.key" ng-click="changeLocale(localeItem)">
-          {{localeItem.text}}
-        </li>
-      </ul>
-    </div>
-
   </div>
 
   <!--link report problem -->

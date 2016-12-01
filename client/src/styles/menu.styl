@@ -10,7 +10,7 @@
 
   .nav-expandable-item
     display inline-block
-    
+
     +for_breakpoint(small)
       display block
       border-bottom 1px solid #f2f2f2
@@ -142,7 +142,6 @@
               display inline
               margin-left 0
 
-
       &.nav-expanded-columns-plain
         .nav-expanded-columns-inner .expanded-column-item
           .column-item-icon
@@ -181,3 +180,13 @@
             .column-item-description
               color $color-grey-medium
               font-size 15px
+
+            &.no-icon
+              .column-item-heading,
+              .column-item-description
+                margin-left 0
+
+&.desktop
+  .nav-expandable-item
+    &.item-index-0
+      display none

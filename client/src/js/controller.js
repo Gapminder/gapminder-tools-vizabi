@@ -13,6 +13,7 @@ module.exports = function (app) {
       '$scope', '$route', '$routeParams', '$location', 'vizabiItems', 'vizabiFactory', '$window',
       function ($scope, $route, $routeParams, $location, vizabiItems, vizabiFactory, $window) {
         // definition
+        $scope.navCollapsed = false;
         $scope.loadingError = false;
         $scope.tools = {};
         $scope.validTools = [];
@@ -91,6 +92,11 @@ module.exports = function (app) {
         // setup scope and handlers
 
         controllerImplementation();
+
+        $scope.$root.$on('hideMobileMenu', function () {
+          $scope.navCollapsed = false;
+        });
+
 
         $scope.$root.$on('onModelChanged', function (e, data) {
           // skip flow for update from url

@@ -107,10 +107,14 @@ module.exports = function (app) {
         return {
           /**
            * Get All Items
+           * @param {Object} additional extra item
            * @returns {Object} menu items
            */
-          getMenu: function () {
-            return require('../config/menu-items.json').children;
+          getMenu: function (additional) {
+            const menuItems = require('../config/menu-items.json').children;
+            const menuItemsClone = _.cloneDeep(menuItems);
+            menuItemsClone.unshift(additional);
+            return menuItemsClone;
           },
 
           /**
