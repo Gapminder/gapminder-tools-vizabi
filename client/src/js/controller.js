@@ -258,7 +258,7 @@ module.exports = function (app) {
         }
 
         function detectLocale() {
-          let foundLang = false;
+          var foundLang = false;
 
           const modelFromUrl = getModelFromUrl($location.hash());
           const readyLang = _.first($scope.locales);
@@ -422,7 +422,7 @@ module.exports = function (app) {
             return false;
           }
 
-          let browserLang = window.navigator.languages ? window.navigator.languages[0] : null;
+          var browserLang = window.navigator.languages ? window.navigator.languages[0] : null;
 
           browserLang = browserLang ||
             window.navigator.language ||
