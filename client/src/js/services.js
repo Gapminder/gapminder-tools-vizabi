@@ -55,18 +55,22 @@ module.exports = function (app) {
 
             model.bind.ready = function () {
               var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
-              // fix url state
-              minModelDiff['chart-type'] = initialModel['chart-type'];
-              var modelDiffHash = urlon.stringify(minModelDiff);
-              updateModelDebounced(modelDiffHash, that.emit);
+              if(!Vizabi.utils.isEmpty(minModelDiff)) {
+                // fix url state
+                minModelDiff['chart-type'] = initialModel['chart-type'];
+                var modelDiffHash = urlon.stringify(minModelDiff);
+                updateModelDebounced(modelDiffHash, that.emit);
+              }
             };
 
             model.bind.persistentChange = function () {
               var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
-              // fix url state
-              minModelDiff['chart-type'] = initialModel['chart-type'];
-              var modelDiffHash = urlon.stringify(minModelDiff);
-              updateModelDebounced(modelDiffHash, that.emit);
+              if(!Vizabi.utils.isEmpty(minModelDiff)) {
+                // fix url state
+                minModelDiff['chart-type'] = initialModel['chart-type'];
+                var modelDiffHash = urlon.stringify(minModelDiff);
+                updateModelDebounced(modelDiffHash, that.emit);
+              }
             };
           },
 
