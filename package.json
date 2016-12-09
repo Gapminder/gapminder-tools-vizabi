@@ -66,7 +66,7 @@
     "webpack-dev-server": "1.16.2"
   },
   "dependencies": {
-    "angular": "1.5.8",
+    "angular": "1.5.9",
     "angular-route": "1.5.8",
     "angular-touch": "1.5.8",
     "bluebird": "3.4.6",
