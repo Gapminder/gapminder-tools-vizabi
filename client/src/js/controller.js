@@ -47,28 +47,28 @@ module.exports = function (app) {
         var locationPath = $location.path() || '';
         var locationHash = $location.hash() || '';
         var REQUIRED_PARAM = 'chart-type';
-        var REQUIRED_PATH = '/tools';
 
         var deprecatedQueryPaths = $scope.availableCharts;
         var deprecatedQueryPathParts = locationPath.split('/');
-        var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 3 &&
-          deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[2]) !== -1;
-        var shouldNavigateToHome =
-          locationPath.indexOf(REQUIRED_PATH) === -1 || locationHash.indexOf(REQUIRED_PARAM) === -1;
+        var deprecatedQueryDetected = deprecatedQueryPathParts.length >= 2 &&
+          deprecatedQueryPaths.indexOf(deprecatedQueryPathParts[1]) !== -1;
+        var shouldNavigateToHome = locationHash.indexOf(REQUIRED_PARAM) === -1;
 
         if (deprecatedQueryDetected) {
-          var deprecatedQueryChart = deprecatedQueryPathParts[2];
+          var deprecatedQueryChart = deprecatedQueryPathParts[1];
           var urlModel = getModelFromUrl(locationHash);
           urlModel['chart-type'] = deprecatedQueryChart;
           var urlModelUpdated = Urlon.stringify(urlModel);
-          var deprecatedQueryRedirect = REQUIRED_PATH + '/#' + replaceSymbolByWord(urlModelUpdated);
+          var deprecatedQueryRedirect = '/#' + replaceSymbolByWord(urlModelUpdated);
           //$location.url(deprecatedQueryRedirect);
-          window.location = deprecatedQueryRedirect;
+          $location.url(deprecatedQueryRedirect);
+          //return window.location = deprecatedQueryRedirect;
         }
 
-        if (shouldNavigateToHome && !deprecatedQueryDetected) {
+        if (shouldNavigateToHome) {
           // invalid URL, redirect to Home
-          window.location = HOME_URL;
+          $location.url(HOME_URL);
+          //return window.location = HOME_URL;
         }
 
         // backward compatibility :: end
@@ -85,7 +85,8 @@ module.exports = function (app) {
             updateGraph();
           } else {
             // invalid URL, redirect to Home
-            window.location = HOME_URL;
+            window.location = '/tools' + HOME_URL;
+            window.location.reload();
           }
         });
 
@@ -167,7 +168,7 @@ module.exports = function (app) {
             // setup locale
             $scope.vizabiTools[chartType].opts.locale = {
               id: $scope.locale.key,
-              filePath: '/public/translation/'
+              filePath: '/tools/public/translation/'
             };
 
             // create new instance
@@ -190,7 +191,8 @@ module.exports = function (app) {
           // invalid URL, redirect to Home
           if (!isChartTypeValid()) {
             if (isChartTypesLoaded()) {
-              window.location = HOME_URL;
+              window.location = '/tools' + HOME_URL;
+              window.location.reload();
             }
             updateFlagUrl = false;
             updateFlagModel = false;

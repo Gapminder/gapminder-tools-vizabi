@@ -9,14 +9,14 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var WSurl = require('./ws-detect')(process.env);
-var HomeUrl = '/tools/#_chart-type=bubbles';
+var HomeUrl = '/#_chart-type=bubbles';
 
 var config = {
   template: 'index.html',
   index: 'index.html',
   src: './client/src',
-  dest: './client/dist',
-  publicPath: '/'
+  dest: './client/dist/tools/',
+  publicPath: '/tools/'
 };
 
 var isProduction = process.env.NODE_ENV === 'production';
@@ -114,7 +114,7 @@ var wConfig = {
     new CopyWebpackPlugin([
       {
         from: fromRoot('./node_modules/vizabi/build/dist/assets/translation'),
-        to: fromRoot('./client/dist/public/translation')
+        to: fromRoot('./client/dist/tools/public/translation')
       }
     ])
   ],
@@ -134,20 +134,7 @@ var wConfig = {
       })
     ]);
   },
-  stats: {colors: true, progress: true, children: false},
-  devServer: {
-    contentBase: config.dest,
-    publicPath: config.publicPath,
-    noInfo: true,
-    hot: true,
-    inline: true,
-    historyApiFallback: {
-      index: config.index
-      // logger: console.log.bind(console),
-      // verbose: true,
-    },
-    devtool: 'eval'
-  }
+  stats: {colors: true, progress: true, children: false}
 };
 
 function fromRoot(filepath) {

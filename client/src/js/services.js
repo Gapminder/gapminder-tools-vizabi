@@ -55,7 +55,7 @@ module.exports = function (app) {
 
             model.bind.ready = function () {
               var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
-              if(!Vizabi.utils.isEmpty(minModelDiff)) {
+              if (!Vizabi.utils.isEmpty(minModelDiff)) {
                 // fix url state
                 minModelDiff['chart-type'] = initialModel['chart-type'];
                 var modelDiffHash = urlon.stringify(minModelDiff);
@@ -65,7 +65,7 @@ module.exports = function (app) {
 
             model.bind.persistentChange = function () {
               var minModelDiff = vizabiObj.instance.getPersistentMinimalModel(initialModel);
-              if(!Vizabi.utils.isEmpty(minModelDiff)) {
+              if (!Vizabi.utils.isEmpty(minModelDiff)) {
                 // fix url state
                 minModelDiff['chart-type'] = initialModel['chart-type'];
                 var modelDiffHash = urlon.stringify(minModelDiff);

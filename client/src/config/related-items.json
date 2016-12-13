@@ -4,7 +4,7 @@
     "tool": "MountainChart",
     "slug": "mountain",
     "category": "Tools",
-    "image": "/public/images/chart/mountainchart.png",
+    "image": "/tools/public/images/chart/mountainchart.png",
     "title": "Mountain Chart",
     "description": "This graph shows the amount of people in the world across each income level.",
     "__v": 5,
@@ -211,7 +211,7 @@
     "_id": "55f71e8ccdedc1ff074e9f6d",
     "tool": "BubbleChart",
     "slug": "bubbles",
-    "image": "/public/images/chart/bubblechart.png",
+    "image": "/tools/public/images/chart/bubblechart.png",
     "category": "Tools",
     "title": "Bubble Chart",
     "description": "This graph shows how long people live and how much money they earn. Click the play button to see how countries have developed since 1800.",
@@ -227,7 +227,7 @@
           "dim": "geo",
           "show": {
             "is--country": true
-          }      
+          }
         },
         "entities_colorlegend": {
           "dim": "geo",
@@ -400,7 +400,7 @@
     "tool": "BubbleMap",
     "slug": "map",
     "category": "Tools",
-    "image": "/public/images/chart/bubblemap.png",
+    "image": "/tools/public/images/chart/bubblemap.png",
     "title": "Bubble Map",
     "description": "This graph shows the population on a map",
     "opts": {
