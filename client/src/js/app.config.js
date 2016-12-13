@@ -5,11 +5,10 @@ module.exports = function (app) {
     // configuration
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
       $routeProvider
-        .when('/tools/', {
+        .when('/', {
           controller: 'gapminderToolsCtrl',
           reloadOnSearch: false
-        })
-        .otherwise(HOME_URL);
+        });
 
       $locationProvider.html5Mode(true);
     }])
