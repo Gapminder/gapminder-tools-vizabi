@@ -22,3 +22,5 @@ require('../public/images/icons/menu/workshops.png');
 require('../public/images/chart/bubblechart.png');
 require('../public/images/chart/mountainchart.png');
 require('../public/images/chart/bubblemap.png');
+require('../public/images/chart/barrankchart.png');
+require('../public/images/chart/linechart.png');
