@@ -582,7 +582,7 @@
     "tool": "BarRankChart",
     "slug": "barrank",
     "category": "Tools",
-    "image": "/public/images/chart/barrankchart.png",
+    "image": "/tools/public/images/chart/barrankchart.png",
     "title": "Bar Rank",
     "description": "This graph shows the population on a map",
     "opts": {
@@ -762,7 +762,7 @@
     "tool": "LineChart",
     "slug": "linechart",
     "category": "Tools",
-    "image": "/public/images/chart/linechart.png",
+    "image": "/tools/public/images/chart/linechart.png",
     "title": "Line chart",
     "description": "This graph shows how a trend changes across the years",
     "opts": {
