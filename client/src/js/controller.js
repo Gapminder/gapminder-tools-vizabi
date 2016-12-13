@@ -65,7 +65,7 @@ module.exports = function (app) {
           //return window.location = deprecatedQueryRedirect;
         }
 
-        if (shouldNavigateToHome) {
+        if (shouldNavigateToHome && !deprecatedQueryDetected) {
           // invalid URL, redirect to Home
           $location.url(HOME_URL);
           //return window.location = HOME_URL;
