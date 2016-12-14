@@ -55,12 +55,12 @@
           },
           "axis_y": {
             "use": "indicator",
-            "which": "population_total",
+            "which": "sg_population",
             "scaleType": "linear"
           },
           "axis_x": {
             "use": "indicator",
-            "which": "income_per_person_gdppercapita_ppp_inflation_adjusted",
+            "which": "sg_gdp_p_cap_const_ppp2011_dollar",
             "scaleType": "log",
             "domainMin": 0.11,
             "domainMax": 500,
@@ -72,7 +72,7 @@
           },
           "axis_s": {
             "use": "indicator",
-            "which": "inequality_index_gini",
+            "which": "sg_gini",
             "scaleType": "linear"
           },
           "color": {
