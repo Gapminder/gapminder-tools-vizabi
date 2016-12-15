@@ -6,8 +6,8 @@ module.exports = function (processEnv) {
 
   var DEFAULT_WS_HOST_URLS = {
     local: 'http://localhost',
-    production: 'https://waffle-server.gapminderdev.org',
-    stage: 'https://waffle-server-stage.gapminderdev.org',
+    production: 'https://waffle-server.gapminder.org',
+    stage: 'https://waffle-server-poc.gapminder.org',
     development: 'https://waffle-server-dev.gapminderdev.org'
   };
 
