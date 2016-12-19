@@ -118,7 +118,9 @@ module.exports = function (app) {
           // set incoming update type
           updateFlagUrl = updateFlagModel ? updateFlagUrl : true;
 
-          if(updateFlagUrl) $scope.locale = detectLocale();
+          if (updateFlagUrl) {
+            $scope.locale = detectLocale();
+          }
           _updateChart(urlCurrent, urlPrevious);
         });
 
