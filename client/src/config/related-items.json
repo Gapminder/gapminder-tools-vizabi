@@ -33,9 +33,7 @@
             "is--country": true
           }
         },
-        "entities_colorlegend": {
-          "opacityRegular": 0.8,
-          "opacityHighlightDim": 0.3,      
+        "entities_colorlegend": {  
           "dim": "world_4region"
         },
         "entities_tags": {
@@ -50,6 +48,7 @@
         },
         "marker": {
           "space": ["entities", "time"],
+          "opacityRegular": 0.8,
           "label": {
             "use": "property",
             "which": "name"
@@ -94,8 +93,8 @@
         },
         "marker_colorlegend": {
           "space": ["entities_colorlegend"],
-          "type": "geometry",
-          "shape": "svg",
+          "opacityRegular": 0.8,
+          "opacityHighlightDim": 0.3, 
           "label": {
             "use": "property",
             "which": "name"
@@ -230,8 +229,6 @@
           }      
         },
         "entities_colorlegend": {
-          "opacityRegular": 0.8,
-          "opacityHighlightDim": 0.3,
           "dim": "world_4region"
         },
         "entities_tags": {
@@ -284,6 +281,8 @@
         },
         "marker_colorlegend":{
           "space": ["entities_colorlegend"],
+          "opacityRegular": 0.8,
+          "opacityHighlightDim": 0.3,
           "label": {
             "use": "property",
             "which": "name"
@@ -423,8 +422,6 @@
           }
         },
         "entities_colorlegend": {
-          "opacityRegular": 0.8,
-          "opacityHighlightDim": 0.3,      
           "dim": "world_4region"
         },
         "entities_tags": {
@@ -465,20 +462,20 @@
         },
         "marker_colorlegend":{
           "space": ["entities_colorlegend"],
-            "type": "geometry",
-            "shape": "svg",
-            "label": {
-              "use": "property",
-              "which": "name"
-            },
-            "hook_rank": {
-              "use": "property",
-              "which": "rank"
-            },
-            "hook_geoshape": {
-              "use": "property",
-              "which": "shape_lores_svg"
-            }
+          "opacityRegular": 0.8,
+          "opacityHighlightDim": 0.3,
+          "label": {
+            "use": "property",
+            "which": "name"
+          },
+          "hook_rank": {
+            "use": "property",
+            "which": "rank"
+          },
+          "hook_geoshape": {
+            "use": "property",
+            "which": "shape_lores_svg"
+          }
         },
         "marker_tags": {
           "space": ["entities_tags"],
@@ -605,8 +602,6 @@
           }
         },
         "entities_colorlegend": {
-          "opacityRegular": 0.8,
-          "opacityHighlightDim": 0.3,  
           "dim": "world_4region"
         },
         "entities_tags": {
@@ -647,6 +642,8 @@
         },
         "marker_colorlegend": {
           "space": ["entities_colorlegend"],
+          "opacityRegular": 0.8,
+          "opacityHighlightDim": 0.3,
           "label": {
             "use": "property",
             "which": "name"
@@ -785,8 +782,6 @@
           }
         },
         "entities_colorlegend": {
-          "opacityRegular": 0.8,
-          "opacityHighlightDim": 0.3,  
           "dim": "world_4region"
         },
         "marker": {
@@ -832,6 +827,8 @@
         },
         "marker_colorlegend": {
           "space": ["entities_colorlegend"],
+          "opacityRegular": 0.8,
+          "opacityHighlightDim": 0.3,
           "label": {
             "use": "property",
             "which": "name"
