@@ -73,7 +73,7 @@
     "angular-touch": "1.6.0",
     "bluebird": "3.4.6",
     "d3": "3.5.12",
-    "lodash": "4.17.2",
+    "lodash": "4.17.3",
     "urlon": "2.0.1",
     "vizabi": "0.18.1-41",
     "vizabi-ws-reader": "0.1.2"
