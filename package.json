@@ -59,7 +59,7 @@
     "lite-server": "2.2.2",
     "local-web-server": "1.2.6",
     "protractor": "4.0.13",
-    "shelljs": "0.7.5",
+    "shelljs": "0.7.6",
     "style-loader": "0.13.1",
     "stylus": "0.54.5",
     "stylus-loader": "2.4.0",
