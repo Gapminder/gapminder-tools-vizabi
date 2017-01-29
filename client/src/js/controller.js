@@ -203,8 +203,8 @@ module.exports = function (app) {
           }
 
           // detect chart switching
-          const chartCurrent = getChartType(urlCurrent);
-          const chartPrev = getChartType(urlPrevious);
+          var chartCurrent = getChartType(urlCurrent);
+          var chartPrev = getChartType(urlPrevious);
 
           if (chartCurrent !== chartPrev) {
             vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
@@ -265,8 +265,8 @@ module.exports = function (app) {
         function detectLocale() {
           var foundLang = false;
 
-          const modelFromUrl = getModelFromUrl($location.hash());
-          const readyLang = _.first($scope.locales);
+          var modelFromUrl = getModelFromUrl($location.hash());
+          var readyLang = _.first($scope.locales);
 
           if (modelFromUrl.locale) {
             foundLang = _.find($scope.locales, function (localeItem) {
@@ -274,7 +274,7 @@ module.exports = function (app) {
             });
           }
 
-          const browserLang = getBrowserLang();
+          var browserLang = getBrowserLang();
           if (!foundLang && browserLang) {
             foundLang = _.find($scope.locales, function (localeItem) {
               return localeItem.key === browserLang;
@@ -450,15 +450,15 @@ module.exports = function (app) {
         }
 
         $scope.documentClickHandler = function ($event) {
-          const element = $event.target;
+          var element = $event.target;
 
-          const elemLangMobile = document.getElementsByClassName('locale-wrapper mobile')[0];
-          const elemLangMobileVisible = elemLangMobile && window.getComputedStyle(elemLangMobile).display !== 'none';
+          var elemLangMobile = document.getElementsByClassName('locale-wrapper mobile')[0];
+          var elemLangMobileVisible = elemLangMobile && window.getComputedStyle(elemLangMobile).display !== 'none';
 
-          const elemLangDesktop = document.getElementsByClassName('locale-wrapper desktop')[0];
-          //const elemLangDesktopVisible = elemLangDesktop && window.getComputedStyle(elemLangDesktop).display!='none';
+          var elemLangDesktop = document.getElementsByClassName('locale-wrapper desktop')[0];
+          //var elemLangDesktopVisible = elemLangDesktop && window.getComputedStyle(elemLangDesktop).display!='none';
 
-          const elemLangActive = elemLangMobileVisible ? elemLangMobile : elemLangDesktop;
+          var elemLangActive = elemLangMobileVisible ? elemLangMobile : elemLangDesktop;
 
           if (!elemLangActive.contains(element)) {
             $scope.localeState = false;
