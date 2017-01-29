@@ -13,9 +13,7 @@ module.exports = function (app) {
     .directive('navExpandable', ['menuFactory', function (menuFactory) {
       return {
         restrict: 'A',
-        scope: {
-          items: '='
-        },
+        scope: {items: '='},
 
         controller: ['$scope', function ($scope) {
           $scope.items = menuFactory.getMenu();

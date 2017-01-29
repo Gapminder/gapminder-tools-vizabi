@@ -32,7 +32,9 @@
     "lines-around-comment": 0,
     "new-cap": 0,
     "global-require": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "no-prototype-builtins": 0,
+    "max-lines":0
   },
   "extends": "./node_modules/eslint-config-valorsoft/.eslintrc.json"
 }

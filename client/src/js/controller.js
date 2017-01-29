@@ -371,11 +371,12 @@ module.exports = function (app) {
 
           var socialLinksSelector = Object.keys(socialClassToUrl)
             .filter(function (className) {
-              return className !== 'mail'
+              return className !== 'mail';
             })
             .map(function (className) {
               return '.' + className;
-            }).join(', ');
+            })
+            .join(', ');
 
           _.toArray(document.querySelectorAll(socialLinksSelector)).forEach(function (socialLink) {
             socialLink.addEventListener('click', function (event) {
