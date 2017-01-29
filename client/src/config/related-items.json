@@ -11,8 +11,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/ddf/",
-        "splash": true
+        "path": "/api/ddf/"
       },
       "state": {
         "time": {
@@ -130,7 +129,8 @@
           "popup": ["colors","find","stack","show","moreoptions"],
           "sidebar": ["colors","find","stack"],
           "moreoptions": ["opacity","speed","stack","axesmc","colors","presentation","about"]
-        }
+        },
+        "splash": true
       }
     },
     "relateditems": [
@@ -218,8 +218,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/ddf/",
-        "splash": true
+        "path": "/api/ddf/"
       },
       "state": {
         "entities": {
@@ -318,7 +317,8 @@
           "popup": ["colors","find","size","zoom","moreoptions"],
           "sidebar": ["colors","find","size","zoom"],
           "moreoptions": ["opacity","speed","axes","size","colors","label","zoom","presentation","about"]
-        }
+        },
+        "splash": true
       }
     },
     "relateditems": [
@@ -405,8 +405,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/ddf/",
-        "splash": false
+        "path": "/api/ddf/"
       },
       "state": {
         "time": {
@@ -599,8 +598,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/ddf/",
-        "splash": true
+        "path": "/api/ddf/"
       },
       "state": {
         "time": {
@@ -693,7 +691,8 @@
           "popup": ["colors","find","axes","show","moreoptions"],
           "sidebar": ["colors","find"],
           "moreoptions": ["opacity","speed","colors","presentation","about"]
-        }
+        },
+        "splash": true
       }
     },
     "relateditems": [
@@ -779,8 +778,7 @@
     "opts": {
       "data": {
         "reader": "waffle",
-        "path": "/api/ddf/",
-        "splash": false
+        "path": "/api/ddf/"
       },
       "state": {
         "time": {
@@ -878,7 +876,8 @@
           "popup": ["colors","find","show","moreoptions"],
           "sidebar": ["colors","show"],
           "moreoptions": ["opacity","speed","axes","colors","presentation","about"]
-        }
+        },
+        "splash": false
       }
     },
     "relateditems": [
