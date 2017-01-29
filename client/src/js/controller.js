@@ -369,9 +369,13 @@ module.exports = function (app) {
           };
           /* eslint-enable max-len */
 
-          var socialLinksSelector = Object.keys(socialClassToUrl).map(function (className) {
-            return '.' + className;
-          }).join(', ');
+          var socialLinksSelector = Object.keys(socialClassToUrl)
+            .filter(function (className) {
+              return className !== 'mail'
+            })
+            .map(function (className) {
+              return '.' + className;
+            }).join(', ');
 
           _.toArray(document.querySelectorAll(socialLinksSelector)).forEach(function (socialLink) {
             socialLink.addEventListener('click', function (event) {
