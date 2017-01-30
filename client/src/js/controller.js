@@ -22,6 +22,7 @@ module.exports = function (app) {
         $scope.vizabiInstances = {};
         $scope.vizabiModel = {};
         $scope.vizabiTools = {};
+        $scope.vizabiSharedModel = {};
 
         $scope.locales = [
           {key: 'en', text: 'English'},
@@ -174,6 +175,9 @@ module.exports = function (app) {
               filePath: '/tools/public/translation/'
             };
 
+            // add shared model state
+            Vizabi.utils.deepExtend($scope.vizabiTools[chartType].opts, $scope.vizabiSharedModel);
+
             // create new instance
             $scope.vizabiInstances[chartType] = vizabiFactory.render(
               $scope.vizabiTools[chartType].tool,
@@ -207,6 +211,11 @@ module.exports = function (app) {
           var chartPrev = getChartType(urlPrevious);
 
           if (chartCurrent !== chartPrev) {
+            // save shared chart model state
+            var vizabiInstanceModel = _.cloneDeep($scope.vizabiInstances[chartPrev].instance.getModel());
+            var vizabiModelMarkerSelected = _.get(vizabiInstanceModel, ['state', 'marker', 'select'], []);
+            _.set($scope.vizabiSharedModel, ['state', 'marker', 'select'], vizabiModelMarkerSelected);
+
             vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
             delete $scope.vizabiInstances[chartPrev];
           }
