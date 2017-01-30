@@ -43,6 +43,10 @@ module.exports = function (app) {
         var updateFlagModel = false;
         var updateFlagUrl = false;
 
+        var sharedPathDefault = ['state', 'marker', 'select'];
+        var sharedPathLineChart = ['state', 'entities', 'show', '--dim--', '$in'];
+        var sharedPathDim = ['state', 'entities', 'dim'];
+
         // backward compatibility :: start
 
         var locationPath = $location.path() || '';
@@ -213,8 +217,30 @@ module.exports = function (app) {
           if (chartCurrent !== chartPrev) {
             // save shared chart model state
             var vizabiInstanceModel = _.cloneDeep($scope.vizabiInstances[chartPrev].instance.getModel());
-            var vizabiModelMarkerSelected = _.get(vizabiInstanceModel, ['state', 'marker', 'select'], []);
-            _.set($scope.vizabiSharedModel, ['state', 'marker', 'select'], vizabiModelMarkerSelected);
+            var vizabiModelDim = _.get(vizabiInstanceModel, sharedPathDim, 'geo');
+
+            // update path with real dim
+            var sharedPathLineChartDim = _.map(sharedPathLineChart, function (item) {
+              return item === '--dim--' ? vizabiModelDim : item;
+            });
+
+            var vizabiModelPathFrom = chartPrev === 'linechart' ? sharedPathLineChartDim : sharedPathDefault;
+            var vizabiModelPathTo = chartCurrent === 'linechart' ? sharedPathLineChartDim : sharedPathDefault;
+
+            _.unset($scope.vizabiSharedModel, _.slice(sharedPathDefault, 0, 2));
+            _.unset($scope.vizabiSharedModel, _.slice(sharedPathLineChartDim, 0, 2));
+
+            var vizabiModelSelected = _.get(vizabiInstanceModel, vizabiModelPathFrom, []);
+            var vizabiModelSelectedRestructured = _.map(vizabiModelSelected, function (item) {
+              if (chartPrev === 'linechart') {
+                var result = {};
+                result[vizabiModelDim] = item;
+                return result;
+              }
+              return chartCurrent === 'linechart' ? item[vizabiModelDim] : item;
+            });
+
+            _.set($scope.vizabiSharedModel, vizabiModelPathTo, vizabiModelSelectedRestructured);
 
             vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
             delete $scope.vizabiInstances[chartPrev];
