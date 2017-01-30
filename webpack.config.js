@@ -101,15 +101,15 @@ var wConfig = {
     new ExtractTextPlugin('public/css/[name]-[hash:6].css'),
     new HtmlWebpackPlugin({
       filename: config.index,
-      template: path.join(config.src, config.template),
+      template: config.template,
       chunks: ['angular', 'vizabi-tools'],
-      minify: true
+      minify: {removeAttributeQuotes: true}
     }),
     new HtmlWebpackPlugin({
       filename: '404.html',
-      template: path.join(config.src, '404.html'),
+      template: '404.html',
       chunks: ['angular', 'vizabi-tools'],
-      minify: true
+      minify: {removeAttributeQuotes: true}
     }),
     new CopyWebpackPlugin([
       {
