@@ -683,8 +683,8 @@
         },
         "buttons": ["colors","find","show","moreoptions","fullscreen","presentation"],
         "dialogs": {
-          "popup": ["colors","find","axes","show","moreoptions"],
-          "sidebar": ["colors","find"],
+          "popup": ["timedisplay", "colors","find","axes","show","moreoptions"],
+          "sidebar": ["timedisplay", "colors","find"],
           "moreoptions": ["opacity","speed","colors","presentation","about"]
         },
         "splash": true
