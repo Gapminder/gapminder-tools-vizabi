@@ -22,6 +22,7 @@ module.exports = function (app) {
         $scope.vizabiInstances = {};
         $scope.vizabiModel = {};
         $scope.vizabiTools = {};
+        $scope.vizabiSharedModel = {};
 
         $scope.locales = [
           {key: 'en', text: 'English'},
@@ -41,6 +42,10 @@ module.exports = function (app) {
 
         var updateFlagModel = false;
         var updateFlagUrl = false;
+
+        var sharedPathDefault = ['state', 'marker', 'select'];
+        var sharedPathLineChart = ['state', 'entities', 'show', '--dim--', '$in'];
+        var sharedPathDim = ['state', 'entities', 'dim'];
 
         // backward compatibility :: start
 
@@ -174,6 +179,9 @@ module.exports = function (app) {
               filePath: '/tools/public/translation/'
             };
 
+            // add shared model state
+            Vizabi.utils.deepExtend($scope.vizabiTools[chartType].opts, $scope.vizabiSharedModel);
+
             // create new instance
             $scope.vizabiInstances[chartType] = vizabiFactory.render(
               $scope.vizabiTools[chartType].tool,
@@ -207,6 +215,33 @@ module.exports = function (app) {
           var chartPrev = getChartType(urlPrevious);
 
           if (chartCurrent !== chartPrev) {
+            // save shared chart model state
+            var vizabiInstanceModel = _.cloneDeep($scope.vizabiInstances[chartPrev].instance.getModel());
+            var vizabiModelDim = _.get(vizabiInstanceModel, sharedPathDim, 'geo');
+
+            // update path with real dim
+            var sharedPathLineChartDim = _.map(sharedPathLineChart, function (item) {
+              return item === '--dim--' ? vizabiModelDim : item;
+            });
+
+            var vizabiModelPathFrom = chartPrev === 'linechart' ? sharedPathLineChartDim : sharedPathDefault;
+            var vizabiModelPathTo = chartCurrent === 'linechart' ? sharedPathLineChartDim : sharedPathDefault;
+
+            _.unset($scope.vizabiSharedModel, _.slice(sharedPathDefault, 0, 2));
+            _.unset($scope.vizabiSharedModel, _.slice(sharedPathLineChartDim, 0, 2));
+
+            var vizabiModelSelected = _.get(vizabiInstanceModel, vizabiModelPathFrom, []);
+            var vizabiModelSelectedRestructured = _.map(vizabiModelSelected, function (item) {
+              if (chartPrev === 'linechart') {
+                var result = {};
+                result[vizabiModelDim] = item;
+                return result;
+              }
+              return chartCurrent === 'linechart' ? item[vizabiModelDim] : item;
+            });
+
+            _.set($scope.vizabiSharedModel, vizabiModelPathTo, vizabiModelSelectedRestructured);
+
             vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
             delete $scope.vizabiInstances[chartPrev];
           }
@@ -369,9 +404,14 @@ module.exports = function (app) {
           };
           /* eslint-enable max-len */
 
-          var socialLinksSelector = Object.keys(socialClassToUrl).map(function (className) {
-            return '.' + className;
-          }).join(', ');
+          var socialLinksSelector = Object.keys(socialClassToUrl)
+            .filter(function (className) {
+              return className !== 'mail';
+            })
+            .map(function (className) {
+              return '.' + className;
+            })
+            .join(', ');
 
           _.toArray(document.querySelectorAll(socialLinksSelector)).forEach(function (socialLink) {
             socialLink.addEventListener('click', function (event) {

@@ -493,6 +493,11 @@
           "doubtDomain": [1800, 1950, 2015],
           "doubtRange": [1.0, 0.3, 0.2]
         },
+        "map": {
+          "offset": {
+            "bottom": -0.12
+          }
+        },
         "buttons": ["colors","find","size","moreoptions","fullscreen","presentation"],
         "dialogs": {
           "popup": ["colors","find","size","moreoptions"],
