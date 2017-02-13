@@ -240,7 +240,9 @@ module.exports = function (app) {
               return chartCurrent === 'linechart' ? item[vizabiModelDim] : item;
             });
 
-            _.set($scope.vizabiSharedModel, vizabiModelPathTo, vizabiModelSelectedRestructured);
+            if (!_.isEmpty(vizabiModelSelectedRestructured)) {
+              _.set($scope.vizabiSharedModel, vizabiModelPathTo, vizabiModelSelectedRestructured);
+            }
 
             vizabiFactory.unbindModelChange($scope.vizabiInstances[chartPrev].instance.model);
             delete $scope.vizabiInstances[chartPrev];
