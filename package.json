@@ -72,10 +72,10 @@
     "angular-route": "1.6.1",
     "angular-touch": "1.6.1",
     "bluebird": "3.4.7",
-    "d3": "3.5.12",
+    "d3": "^4.5.0",
     "lodash": "4.17.4",
     "urlon": "2.0.1",
-    "vizabi": "0.18.3-45",
+    "vizabi": "0.19.1-12",
     "vizabi-ws-reader": "0.1.2"
   }
 }
