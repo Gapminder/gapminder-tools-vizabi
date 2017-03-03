@@ -71,7 +71,7 @@
     "angular": "1.6.1",
     "angular-route": "1.6.1",
     "angular-touch": "1.6.1",
-    "bluebird": "3.4.7",
+    "bluebird": "3.5.0",
     "d3": "3.5.12",
     "lodash": "4.17.4",
     "urlon": "2.0.1",
