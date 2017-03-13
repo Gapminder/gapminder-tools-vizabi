@@ -57,7 +57,7 @@
     "jasmine-spec-reporter": "3.2.0",
     "json-loader": "0.5.4",
     "lite-server": "2.2.2",
-    "local-web-server": "1.2.6",
+    "local-web-server": "1.2.7",
     "protractor": "5.0.0",
     "shelljs": "0.7.6",
     "style-loader": "0.13.1",
