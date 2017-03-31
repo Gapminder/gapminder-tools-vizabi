@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "angular": "1.6.1",
-    "angular-route": "1.6.1",
+    "angular-route": "1.6.4",
     "angular-touch": "1.6.1",
     "bluebird": "3.4.7",
     "d3": "3.5.12",
