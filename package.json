@@ -76,6 +76,6 @@
     "lodash": "4.17.4",
     "urlon": "2.0.1",
     "vizabi": "0.18.3-45",
-    "vizabi-ws-reader": "0.1.2"
+    "vizabi-ws-reader": "0.2.0"
   }
 }
